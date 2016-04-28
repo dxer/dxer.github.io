@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/03/11/hive02/</loc>
+    
+    <lastmod>2016-04-28T10:43:14.167Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2016/03/07/zookeeper01/</loc>
     
-    <lastmod>2016-04-28T10:34:57.389Z</lastmod>
+    <lastmod>2016-04-28T10:39:34.349Z</lastmod>
     
   </url>
   
@@ -19,13 +26,6 @@
     <loc>http://dxer.github.io/2015/05/07/redis-persistence/</loc>
     
     <lastmod>2016-04-28T10:33:59.527Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2016/03/11/hive02/</loc>
-    
-    <lastmod>2016-04-25T01:20:46.887Z</lastmod>
     
   </url>
   

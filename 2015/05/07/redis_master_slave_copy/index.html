@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> redis学习 - 主从拷贝 · dxer's Blog</title><meta name="description" content="redis学习 - 主从拷贝 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">redis学习 - 主从拷贝</h1><div class="post-info">May 7, 2015</div><div class="post-content"><h5 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h5><ol>
+<li>同一个Master可以拥有多个Slaves。</li>
+<li>Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&gt;Slave-&gt;Slave模式；<a id="more"></a></li>
+<li>Master以非阻塞的方式同步数据至slave，这将意味着Master会继续处理一个或多个slave的读写请求；<br>4.Slave端同步数据也可以修改为非阻塞是的方式，当slave在执行新的同步时，它仍可以用旧的数据信息来提供查询；否则，当slave与master失去联系时，slave会返回一个错误给客户端；</li>
+<li>主从复制具有可扩展性，即多个slave专门提供只读查询与数据的冗余，Master端专门提供写操作；</li>
+<li>通过配置禁用Master数据持久化机制，将其数据持久化操作交给Slaves完成，避免在Master中要有独立的进程来完成此操作。</li>
+</ol>
+<h6 id="Redis主从拷贝的过程"><a href="#Redis主从拷贝的过程" class="headerlink" title="Redis主从拷贝的过程"></a>Redis主从拷贝的过程</h6><p>slave连接上master之后，slave发送一个SYNC命令到master，master接收到命令之后，无论是第一次同步建立的连接，还是连接断开后的重新连接，master会开启BGSAVE操作，启动一个后台进程，保存一份当前master内存快照，并且开始保存从调用BGSAVE之后的所有写命令，master生成完快照之后，发送内存快照rdb文件给slave。slave接收到master发送过来的rdb文件之后，将清空所有旧数据，加载接收到的rdb文件到内存中，发送完rdb文件给slave之后，开始发送刚刚保存的写操作日志给slave，slave执行这些写操作，至此，主从数据保存一致。发送完写日志之后，master会增量发送之后的写操作给slave，使主从一致。</p>
+<blockquote>
+<p>ps: 当master和slave的连接断开时，slave可以自动重新建立连接。如果master同时收到多个slave发来的同步连接命令，只会使用启动一个进程来写内存快照，然后发送给所有的slave</p>
+</blockquote>
+<h6 id="Master-write-Slave-read机制"><a href="#Master-write-Slave-read机制" class="headerlink" title="Master write, Slave read机制"></a>Master write, Slave read机制</h6><p>redis的主从复制，通过程序实现数据的读写分离，让master负责处理些请求，slave负责处理读请求，通过扩展slave处理更多的并发请求，减轻master端的负载。</p>
+<blockquote>
+<p>ps:在程序中判断用户的读写请求，将write请求发送给master，read请求发送给slave处理</p>
+</blockquote>
+<h6 id="redis主从拷贝配置"><a href="#redis主从拷贝配置" class="headerlink" title="redis主从拷贝配置"></a>redis主从拷贝配置</h6><p>开启主从复制，最简单的方式，连接上从机redis，执行slaveof &lt;主机host&gt; &lt;主机端口&gt;，另外也可以在从机的配置文件中加入slaveof &lt;主机host&gt; &lt;主机端口&gt;，这样从机启动的时候，就会自动连接主机，并且同步数据。</p>
+<blockquote>
+<p>slaveof 192.168.100.126 6379 # 配置主机信息<br>masterauth <master-password> # 如果主机设置了密码，配置密码<br>slave-serve-stale-data yes # 配置当从机正在和主机进行同步的时候是否响应，如果配置是，有可能客户端会读到旧数据，如果配置否，当请求读数据的时候，将会报错SYNC with master in progress<br>slave-read-only yes # 从机是否只读。这边设置可写，不会同步到主机，<br>repl-ping-slave-period 10 # 从机发送ping命令到主机的间隔时间。<br>repl-timeout 60 # 主机响应超时时间，这个包括传输超时，IO超时，ping超时，注意这边时间必须大于上面的间隔时间，要不然会一直报超时错误。<br>repl-disable-tcp-nodelay no # 是否禁用TCP NODELAY。官方对这个配置用法的建议是：<br># By default we optimize for low latency, but in very high traffic conditions<br># or when the master and slaves are many hops away, turning this to “yes” may<br># be a good idea.<br># 默认情况下，我们优化目的是为了低延迟，但是在高传输条件或者主从机分布在路由很多跳之外的，建议禁用掉tcp-nodelay。<br>slave-priority 100 # 如果master不能再正常工作，那么会在多个slave中，选择优先值最小的一个slave提升为master，优先值为0表示不能提升为master</master-password></p>
+</blockquote>
+</div></article></div></section><footer><div class="paginator"><a href="/2015/05/07/redis-persistence/" class="prev">PREV</a><a href="/2015/02/26/centos-passwd/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2015/05/07/redis_master_slave_copy/';
+var disqus_title = 'redis学习 - 主从拷贝';
+var disqus_url = 'http://dxer.github.io/2015/05/07/redis_master_slave_copy/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

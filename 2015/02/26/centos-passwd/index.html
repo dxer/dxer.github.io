@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CentOS 6.3忘记root密码的解决办法 · dxer's Blog</title><meta name="description" content="CentOS 6.3忘记root密码的解决办法 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">CentOS 6.3忘记root密码的解决办法</h1><div class="post-info">Feb 26, 2015</div><div class="post-content"><p>忘记linux系统的登陆密码了，悲剧了，查了好多资料，终于搞定了，来和大家分享下具体操作。<br><a id="more"></a><br>在开机启动的时候按键盘上的“E”键会进入如下界面（我的系统是centos 6.3，其他发行版不一定适用哦）。</p>
+<p><img src="/pic/20150226/1.jpg" alt="">  </p>
+<p>注：本机是新装的系统，没有升级之类的操作，故选项只有一个，可能是因为只有一个选项的关系，所以需要按一下“E”键才会出现如上界面。多个应该可以直接用方向键直接选择</p>
+<p>选择相应的内核，再次按“E”，出现下图，选择第二项，再次按“E”键</p>
+<p><img src="/pic/20150226/2.jpg" alt=""></p>
+<p>经过第二步，这个画面可以编辑，在信息的最后加“空格”，然后键入“single”（如图），或者直接输入数字的“1”并回车确定进入下一步。图如下： </p>
+<p><img src="/pic/20150226/3.jpg" alt=""></p>
+<p>操作完第三步，会出现下图，是不是感觉又回到第二步了呢？并不是，这里按键盘的”B”键，进入引导系统。注意，这儿是“B”键</p>
+<p><img src="/pic/20150226/4.jpg" alt=""></p>
+<p>在下面这个画面中的“#”后输入“passwd root”，重新设置root的密码，密码输入一遍，确认输入一遍，共2遍。</p>
+<p><img src="/pic/20150226/5.jpg" alt=""></p>
+<p>注：重置密码成功会有一个修改成功的提示，然后输入reboot重启系统，root密码重置就完成了。</p>
+<p>ok，大功告成。。。</p>
+</div></article></div></section><footer><div class="paginator"><a href="/2015/05/07/redis_master_slave_copy/" class="prev">PREV</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2015/02/26/centos-passwd/';
+var disqus_title = 'CentOS 6.3忘记root密码的解决办法';
+var disqus_url = 'http://dxer.github.io/2015/02/26/centos-passwd/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

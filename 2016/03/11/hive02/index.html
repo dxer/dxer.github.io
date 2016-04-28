@@ -1,0 +1,200 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Hive入门 · dxer's Blog</title><meta name="description" content="Hive入门 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">Hive入门</h1><div class="post-info">Mar 11, 2016</div><div class="post-content"><p>Hive是建立在 Hadoop 上的数据仓库基础构架。它提供了一系列的工具，可以用来进行数据提取转化加载（ETL），这是一种可以存储、查询和分析存储在 Hadoop 中的大规模数据的机制。<br><a id="more"></a></p>
+<h6 id="那什么是数据仓库呢"><a href="#那什么是数据仓库呢" class="headerlink" title="那什么是数据仓库呢?"></a>那什么是数据仓库呢?</h6><p>数据仓库是一个面向主题的，集成的，不可更新的，随时间不变化的数据集合，它用于支持企业或组织的决策分析处理(主要是查询操作),数据仓库实际上就是一个数据库，可以利用数据仓库来保存数据，但是数据仓库有别于我们一般的数据库</p>
+<h6 id="数据仓库的结构和建立过程"><a href="#数据仓库的结构和建立过程" class="headerlink" title="数据仓库的结构和建立过程"></a>数据仓库的结构和建立过程</h6><pre><code>数据源（业务数据系统，文档资料，其他数据）
+数据存储和管理（ETL，抽取Extract，转换Transform，装载Load）
+数据仓库引擎
+前端展示（数据查询，数据报表，数据分析，各类应用）
+</code></pre><h6 id="什么是Hive？"><a href="#什么是Hive？" class="headerlink" title="什么是Hive？"></a>什么是Hive？</h6><ul>
+<li>hive是建立在hadoop hdfs上的数据仓库基础架构,hive中的表和文件其实就是hdfs中的目录和文件</li>
+<li>hive可以用来进行数据提取转化加载（ETL）</li>
+<li>hive定义了简单的类似SQL查询语言（HQL），它允许熟悉SQL的用户查询数据</li>
+<li>hive允许熟悉MapReduce开发者开发自定义的mapper和reducer来处理內建的mapper和reducer无法完成的复杂的分析工作</li>
+<li>hive是SQL解析引擎，它将SQL语句转义成MapReduce Job然后在hadoop上执行</li>
+</ul>
+<h6 id="hive的元数据"><a href="#hive的元数据" class="headerlink" title="hive的元数据"></a>hive的元数据</h6><pre><code>hive将元数据存储在数据库中（metastore），支持mysql和derby（默认）等数据库
+hive中的元数据包括表的名字，表的列和分区及其属性，表的属性（是否为外部表等），表的数据所在目录等
+</code></pre><h6 id="HQL的执行过程"><a href="#HQL的执行过程" class="headerlink" title="HQL的执行过程"></a>HQL的执行过程</h6><p>解释器，编译器，优化器完成HQL查询语句从此法分析，语法分析，编译，优化以及查询计划（plan）的生成。生成的查询计划存储在HDFS中，并在随后又MapReduce调用执行</p>
+<p>HQL执行过程如下：</p>
+<ol>
+<li>HQL select语句</li>
+<li>解释器进行此法分析</li>
+<li>编译器生成HQL的执行计划（类似javac命令，将java文件编译成class文件）</li>
+<li>优化器生成最佳的执行计划</li>
+<li>执行</li>
+</ol>
+<h6 id="hive的三种安装模式"><a href="#hive的三种安装模式" class="headerlink" title="hive的三种安装模式"></a>hive的三种安装模式</h6><ol>
+<li><p>嵌入模式</p>
+<ul>
+<li>元数据信息保存在hive自带的derby数据库中</li>
+<li>只允许创建一个连接</li>
+<li>多用于Demo</li>
+</ul>
+</li>
+<li><p>本地模式</p>
+<ul>
+<li>元数据信息被存储在MySQL数据库中</li>
+<li>MySQL数据库与Hive运行在同一台物理机器上</li>
+<li>多用于开发和测试</li>
+</ul>
+</li>
+<li><p>远程模式</p>
+<ul>
+<li>元数据信息被保存在远程的MySQL数据库中</li>
+<li>多用于实际的生产运行环境</li>
+</ul>
+</li>
+</ol>
+<h6 id="常用的CLI命令"><a href="#常用的CLI命令" class="headerlink" title="常用的CLI命令"></a>常用的CLI命令</h6><ul>
+<li><p>进入CLI</p>
+<ul>
+<li><p>交互模式<br>hive  # 进入命令行交互模式，非静默<br>hive -S # 静默模式，不显示调试信息</p>
+</li>
+<li><p>直接执行一条语句<br>hive -e ‘show tables’;</p>
+</li>
+<li><p>执行一个文件的文件<br>hive -f ~/test.hql</p>
+</li>
+</ul>
+</li>
+<li><p>清屏</p>
+<ul>
+<li>Ctrl + L或者 !clear;</li>
+</ul>
+</li>
+<li><p>查看数据仓库中的表</p>
+<ul>
+<li>show tables;</li>
+</ul>
+</li>
+<li><p>查看数据仓库中内置的函数</p>
+<ul>
+<li>show functions;</li>
+</ul>
+</li>
+<li><p>查看表的结构</p>
+<ul>
+<li>desc 表名</li>
+</ul>
+</li>
+<li><p>查看HDFS上的文件</p>
+<ul>
+<li>dfs -ls 目录</li>
+</ul>
+</li>
+<li><p>执行操作系统的命令</p>
+<ul>
+<li>!命令</li>
+</ul>
+</li>
+<li><p>执行HQL语句</p>
+<ul>
+<li>select <strong><em> from </em></strong></li>
+</ul>
+</li>
+<li><p>执行SQL的脚本</p>
+<ul>
+<li>source SQL文件</li>
+</ul>
+</li>
+</ul>
+<h6 id="hive的数据类型"><a href="#hive的数据类型" class="headerlink" title="hive的数据类型"></a>hive的数据类型</h6><ul>
+<li><p>基本数据类型</p>
+<ul>
+<li>tinyint/smallint/int/bigint：整数类型</li>
+<li>float/double：浮点数类型</li>
+<li>boolean：布尔类型</li>
+<li>string：字符串类型</li>
+</ul>
+</li>
+<li><p>复杂数据类型</p>
+<ul>
+<li>Array：数组类型，由一系列相同数据类型的元素组成</li>
+<li>Map：集合类型，包含key-&gt;value，可以通过key来访问元素</li>
+<li>Struct：结构类型，可以包含不同数据类型的元素，这些元素可以通过“点语法”的方式来得到所需要的元素</li>
+</ul>
+</li>
+<li><p>时间类型</p>
+<ul>
+<li>Date：从Hive0.12.0开始支持</li>
+<li>Timestamp：从Hive0.8.0开始支持</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employees(</span><br><span class="line"><span class="keyword">name</span> <span class="keyword">STRING</span>,</span><br><span class="line">salary <span class="built_in">FLOAT</span>,</span><br><span class="line">subordintes <span class="built_in">ARRAY</span>&lt;<span class="keyword">STRING</span>&gt;,</span><br><span class="line">deucations <span class="keyword">MAP</span>&lt;<span class="keyword">STRING</span>, <span class="built_in">FLOAT</span>&gt;</span><br><span class="line">address <span class="keyword">STRUCT</span>&lt;street:<span class="keyword">STRING</span>, city:<span class="keyword">STRING</span>, state:<span class="keyword">STRING</span>, zip:<span class="built_in">INT</span>&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Hive中的数据都是保存在HDFS中<br>没有专门的数据存储格式<br>存储结构主要包括：数据库，文件，表，视图<br>Hive可以直接加载文本文件<br>创建表的时候，指定Hive数据的列分隔符与行分隔符</p>
+<h6 id="数据库database"><a href="#数据库database" class="headerlink" title="数据库database"></a>数据库database</h6><ul>
+<li>相当于关系数据库中的命名空间（namespace），它的作用是将用户和数据库的应用隔离到不同的数据库或模式中</li>
+</ul>
+<h6 id="表"><a href="#表" class="headerlink" title="表"></a>表</h6><ul>
+<li><p>Table内部表</p>
+<ul>
+<li>与数据库中的Table在概念上是类似的</li>
+<li>每一个Table在Hive中都有一个相应的目录存储数据</li>
+<li>所有的Table数据（不包括External Table）都保存在这个目录中</li>
+<li>删除表的时候，元数据与数据都会被删除</li>
+</ul>
+</li>
+<li><p>Partition分区表</p>
+<ul>
+<li>Partition对应于数据库的Partition列的密集索引</li>
+<li>在Hive中，表中的一个Partition对应于表下的一个目录，多有的Partition的数据都存储在对应的目录中</li>
+<li>在数据量特别大的时候，需要将数据按照一定的条件进行分区，这样在进行查询操作的时候能够降低扫描的数据，从而提高查询的效率（通过执行计划知道）</li>
+<li>Hive把表组织成”分区“，这是一种根据“分区列”（如日期）的值对表的数据进行粗略划分的机制。使用分区可以加快数据分片（slice）的查询速度</li>
+</ul>
+</li>
+<li><p>External Table 外部表</p>
+<ul>
+<li>指向已经存在于HDFS中的数据，也可以创建Patition</li>
+<li>它和内部表在元数据的组织上是相同的，而实际数据的存储则有较大的差异</li>
+<li>外部表只有一个过程，加载数据和创建表同时完成，并不会移动到数据仓库目录中，只是与外部数据建立一个链接。当删除一个外部表是，仅删除该链接</li>
+</ul>
+</li>
+<li><p>Bucket Table 桶表</p>
+<ul>
+<li>桶表是对数据进行哈希取值，然后放到不同文件中存储</li>
+<li>降低系统的热块，从而提高查询的速度</li>
+<li>表和分区可以进一步分为“桶”，它会为数据提供额外的结构以获得更高效的查询处理。例如，可以根据用户ID来划分桶，这则是对数据源数据文件本身来拆分数据。使用桶的表会将源数据文件按一定规律拆分成多个文件，要使用bucket</li>
+</ul>
+</li>
+</ul>
+<h6 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h6><ul>
+<li>视图是一种虚表，是一个逻辑概念，不存数据；可以跨越多张表</li>
+<li>视图建立在已有表的基础上，视图赖以建立的这些表成为基表</li>
+<li>视图可以简化复杂的查询</li>
+</ul>
+<h6 id="内部表和外部表的区别？"><a href="#内部表和外部表的区别？" class="headerlink" title="内部表和外部表的区别？"></a>内部表和外部表的区别？</h6><p>内部表也叫做管理表，Hive会控制着数据的生命周期，默认情况下会将这些表的数据存储在由配置项<code>hive.metastore.warehourse.dir</code>所定义的目录的子目录下<br>当删除一个内部表的时候，Hive也会删除这个表中的数据</p>
+<p>外部表<br>先看一个例子：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> pimaccess(</span><br><span class="line">    accesstime <span class="built_in">BIGINT</span>,</span><br><span class="line">    <span class="keyword">account</span> <span class="keyword">STRING</span>,</span><br><span class="line">    ip <span class="keyword">STRING</span>,</span><br><span class="line">    appkey <span class="keyword">STRING</span>,</span><br><span class="line">    prelinkmannum <span class="built_in">INT</span>,</span><br><span class="line">    aftlinkmannum <span class="built_in">INT</span>,</span><br><span class="line">    pregroupnum <span class="built_in">INT</span>,</span><br><span class="line">    aftgroupnum <span class="built_in">INT</span>,</span><br><span class="line">    resultcode <span class="built_in">INT</span>,</span><br><span class="line">    costtime <span class="built_in">INT</span>,</span><br><span class="line">    requesttype <span class="built_in">INT</span>,</span><br><span class="line">    responsetype <span class="built_in">INT</span>,</span><br><span class="line">    apiname <span class="keyword">STRING</span>,</span><br><span class="line">    requestdata <span class="keyword">STRING</span>,</span><br><span class="line">    responsedata <span class="keyword">STRING</span>,</span><br><span class="line">    rtime <span class="keyword">STRING</span></span><br><span class="line">)<span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span> LOCATION <span class="string">'/pimaccess'</span>;</span><br></pre></td></tr></table></figure>
+<p>在创建表的时候使用<code>EXTENAL</code>关键字，用来告诉Hive这个表是外部表，<code>LOCATION</code>子句则用于告诉Hive数据位于哪个路径下。<br>对于外部表，Hive认为没有完全拥有这份数据，因此在删除该表的时候不会删除掉这份数据，不过描述表的元数据信息会被删除。</p>
+<h6 id="Hive常见的数据导入方式"><a href="#Hive常见的数据导入方式" class="headerlink" title="Hive常见的数据导入方式"></a>Hive常见的数据导入方式</h6><ul>
+<li><p>从本地文件系统中导入</p>
+<ul>
+<li>load data local inpath ‘test.txt’ into table test;</li>
+<li>load data local inpath ‘test.txt’ overwrite into table test;</li>
+</ul>
+</li>
+<li><p>从HDFS上导入</p>
+<ul>
+<li>load data inpath ‘/test.txt’ into table test;</li>
+<li>load data inpath ‘/test.txt’ overwrite into table test;</li>
+</ul>
+</li>
+<li><p>从别的表中查询出相应数据并导入 </p>
+<ul>
+<li>insert into table test partition(age=’25’) select id, name, tel from test;</li>
+</ul>
+</li>
+<li><p>在创建表的时候通过从别的表中查询出相应的记录并插入到所创建的表中</p>
+<ul>
+<li>create table test2 as select id, name, tel from test;</li>
+</ul>
+</li>
+</ul>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/03/10/hive01/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2016/03/11/hive02/';
+var disqus_title = 'Hive入门';
+var disqus_url = 'http://dxer.github.io/2016/03/11/hive02/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

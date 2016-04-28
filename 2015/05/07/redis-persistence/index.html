@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> redis学习 - 数据持久化 · dxer's Blog</title><meta name="description" content="redis学习 - 数据持久化 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">redis学习 - 数据持久化</h1><div class="post-info">May 7, 2015</div><div class="post-content"><p>Redis提供了多种不同级别的持久化方式:</p>
+<ul>
+<li>RDB 持久化可以在指定的时间间隔内产生数据集的时间点快照（point-in-time snapshot）</li>
+<li>AOF持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。AOF文件中的命令全部以Redis协议的格式来保存，新命令会被追加到文件的末尾.Redis还可以在后台对AOF文件进行重写(rewrite)，使得AOF文件的体积不会超过保存数据集状态所需的实际大小。<a id="more"></a></li>
+<li>Redis还可以同时使用AOF和RDB持久化。在这种情况下，当Redis重启时，它会优先使用AOF文件来还原数据集，因为AOF文件保存的数据集通常比RDB文件所保存的数据集更完整。</li>
+<li>可以关闭持久化功能，让数据只在服务器运行时存在。</li>
+</ul>
+<h5 id="RDB的优点"><a href="#RDB的优点" class="headerlink" title="RDB的优点"></a>RDB的优点</h5><ol>
+<li>RDB是一个很紧凑的文件，它保存了redis在某个时间点上的数据集。</li>
+<li>RDB非常适用于灾难恢复，它只有一个文件，并且内容紧凑，可以将它传送到别的数据中心</li>
+<li>可以最大化redis的性能；父进程在保存RDB文件时，唯一要做的就是fork一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无需执行任何磁盘I/O操作</li>
+<li>RDB在恢复大数据集的时候比AOF的速度要快</li>
+</ol>
+<h5 id="RDB的缺点"><a href="#RDB的缺点" class="headerlink" title="RDB的缺点"></a>RDB的缺点</h5><ol>
+<li>因为RDB是保存在某个时间点上的数据集，这样的话，服务器故障可能会丢失数据。</li>
+<li>每次保存RDB的时候，redis要fork一个子进程，并由子进程来进行实际的持久化工作，在数据集比较大的时候，fork可能会非常耗时，可能会造成服务器停止处理客户端请求；如果数据集非常巨大，并且cpu比较紧张的话，那么 这种停止时间设置可能会长达整整1秒。虽然AOF重写也需要进行fork，但无论AOF重写的执行间隔有多长，数据的耐久性都不会有任何损失</li>
+</ol>
+<h5 id="AOF优点"><a href="#AOF优点" class="headerlink" title="AOF优点"></a>AOF优点</h5><ol>
+<li>使用AOF持久化会让redis变得非常耐久，你可以设置不同的fsync策略，比如无fsync，每秒钟一次fsync，或者每次写入命令是fsync。AOF的默认策略为每秒钟fsync一次，在这种配置下，redis仍然可以保持良好的性能，并且就算发生故障停机，也最多只会丢失一秒钟的数据</li>
+<li>AOF文件只是一个日志文件追加操作（append only log），因此对AOF文件的写入不需要进行seek，即使日志因为某些原因而包含了未写入完整命令（比如写入时， 磁盘满了，写入时中途停机等），redis-check-aof工具可以轻易的修复这种问题</li>
+<li>redis可以在AOF文件体积过大时，自动在后台对AOF进行重写，重写后的AOF文件包含了恢复当前数据集所需的最小命令集合。这个重写操作是绝对安全的，因为redis在创建新的AOF过程中，会继续讲命令追加到现有的AOF文件里面，即使重写过程中发生停机，现有的AOF文件也不会丢失，而一旦新AOF文件创建完毕，redis就会从旧文件切换到新AOF文件，并开始对新AOF文件进行追加操作</li>
+<li>AOF文件有序地保存了对数据库执行的所有写入操作，这些写入操作以redis协议的格式保存，因此AOF文件的内容非常容易被人读懂，对文件进行分析也很容易。到处AOF文件也非常简单。</li>
+</ol>
+<h5 id="AOF缺点"><a href="#AOF缺点" class="headerlink" title="AOF缺点"></a>AOF缺点</h5><ol>
+<li>对于相同的数据来说，AOF文件的体积通常要大于RDB文件的体积</li>
+<li>根据所使用的fsync策略。AOF的速度可能会慢于RDB。</li>
+<li>AOF的bug，曾经因为个别命令的原因，导致AOF文件在重新载入是，无法将数据集恢复成保存时的样子。</li>
+</ol>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/03/07/zookeeper01/" class="prev">PREV</a><a href="/2015/05/07/redis_master_slave_copy/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2015/05/07/redis-persistence/';
+var disqus_title = 'redis学习 - 数据持久化';
+var disqus_url = 'http://dxer.github.io/2015/05/07/redis-persistence/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> zookeeper伪集群模式安装和配置 · dxer's Blog</title><meta name="description" content="zookeeper伪集群模式安装和配置 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">zookeeper伪集群模式安装和配置</h1><div class="post-info">Mar 7, 2016</div><div class="post-content"><p>伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。<br>下面来看看zookeeper怎么进行安装的吧。<br><a id="more"></a></p>
+<h6 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h6><p>选择一个稳定版本进行下载，我这里下载的是zookeeper-3.4.6版本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz</span><br></pre></td></tr></table></figure></p>
+<h6 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf  zookeeper-3.4.6.tar.gz</span><br><span class="line"></span><br><span class="line"># 3个实例，复制三份 zk1，zk2，zk3</span><br><span class="line">cp -r zookeeper-3.4.6 zk1</span><br><span class="line">cp -r zookeeper-3.4.6 zk2</span><br><span class="line">cp -r zookeeper-3.4.6 zk3</span><br></pre></td></tr></table></figure>
+<h6 id="创建实例配置文件"><a href="#创建实例配置文件" class="headerlink" title="创建实例配置文件"></a>创建实例配置文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd zookeeper-3.4.6/conf</span><br><span class="line">cp zoo_sample.cfg zoo1.cfg</span><br><span class="line">cp zoo_sample.cfg zoo2.cfg</span><br><span class="line">cp zoo_sample.cfg zoo3.cfg</span><br></pre></td></tr></table></figure>
+<h6 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000  </span><br><span class="line">dataDir=/opt/zk1/data  </span><br><span class="line">clientPort=2181  </span><br><span class="line">initLimit=10  </span><br><span class="line">syncLimit=5  </span><br><span class="line">server.1=127.0.0.1:2881:3881  </span><br><span class="line">server.2=127.0.0.1:2882:3882  </span><br><span class="line">server.3=127.0.0.1:2883:3883</span><br></pre></td></tr></table></figure>
+<ol>
+<li>分别配置三个实例的clientPort端口为2181, 2182, 2183</li>
+<li>分别配置是哪个实例的dataDir目录为<code>/opt/zk1/data</code>，<code>/opt/zk2/data</code>，<code>/opt/zk3/data</code>，并创建这三个目录,没有创建该目录会启动出错</li>
+<li>定义zookeeper集群的各个实例的ip和端口，server.1=127.0.0.1:2881:3881 ,server.2=127.0.0.1:2882:3882,server.3=127.0.0.1:2883:3883 </li>
+</ol>
+<blockquote>
+<p>解释：</p>
+<ul>
+<li><p>dataDir<br>定义zookeeper实例存储持久出具的本地文件系统位置</p>
+</li>
+<li><p>clientPort<br>定义zookeeper客户端连接zookeeper服务端时使用的端口</p>
+</li>
+<li><p>server<br>定义zookeeper集群的各个实例的ip和端口</p>
+</li>
+<li><p>tickTime<br>指定了zookeeper中的基本时间单元（以毫秒为单位）<br>zookeeper集群中，每个服务器都有一个id（数字），服务器id在集群中是唯一的，并且取值范围是1~255，通过一个名为myid的纯文本设置，这个文件保存在dataDir中</p>
+</li>
+<li><p>server.n=hostname:port:port<br>n是服务器id，第一个port是follower用来连接leader的端口，第二个port是用于leader选举</p>
+</li>
+<li><p>clientPort<br>监听client连接的端口号</p>
+</li>
+<li><p>initLimit<br>设定了所有follower与leader进行连接并同步的时间范围。如果在设定的时间段内，半数以上的follower跟随者未能完成同步，leader会宣布放弃领导地位，然后进行另外一次leader选举，如果这种情况经常发生，则表明设定的值太小</p>
+</li>
+<li><p>syncLimit<br>设定了允许一个follower与leader这进行同步的时间。如果在设定的时间段内，一个follower未能完成同步，会自己重启，所有关联到follower的客户端将连接到另一个follower</p>
+</li>
+</ul>
+</blockquote>
+<h6 id="创建dataDir和实例id文件"><a href="#创建dataDir和实例id文件" class="headerlink" title="创建dataDir和实例id文件"></a>创建dataDir和实例id文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/zk1/data  </span><br><span class="line">mkdir -p /opt/zk2/data  </span><br><span class="line">mkdir -p /opt/zk3/data  </span><br><span class="line">echo 1 &gt; /opt/zk1/data/myid  </span><br><span class="line">echo 2 &gt; /opt/zk2/data/myid  </span><br><span class="line">echo 3 &gt; /opt/zk3/data/myid</span><br></pre></td></tr></table></figure>
+<h5 id="启动zookeeper服务"><a href="#启动zookeeper服务" class="headerlink" title="启动zookeeper服务"></a>启动zookeeper服务</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh start zoo1.cfg</span><br><span class="line">bin/zkServer.sh start zoo2.cfg</span><br><span class="line">bin/zkServer.sh start zoo3.cfg</span><br></pre></td></tr></table></figure>
+<h6 id="查看是否启动成功"><a href="#查看是否启动成功" class="headerlink" title="查看是否启动成功"></a>查看是否启动成功</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>看到类似下面的进程就表示3个实例均启动成功<br>13419 QuorumPeerMain<br>13460 QuorumPeerMain<br>13561 Jps<br>13392 QuorumPeerMain<br>如果未成功启动，可以到zookeeper.out文件中查看启动失败的日志信息。</p>
+</blockquote>
+<h5 id="客户端连接"><a href="#客户端连接" class="headerlink" title="客户端连接"></a>客户端连接</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkCli.sh -server 127.0.0.1:2181</span><br></pre></td></tr></table></figure>
+<h5 id="关闭zookeeper"><a href="#关闭zookeeper" class="headerlink" title="关闭zookeeper"></a>关闭zookeeper</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh stop</span><br></pre></td></tr></table></figure>
+<h6 id="重启zookeeper"><a href="#重启zookeeper" class="headerlink" title="重启zookeeper"></a>重启zookeeper</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh restart</span><br></pre></td></tr></table></figure>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/03/10/hive01/" class="prev">PREV</a><a href="/2015/05/07/redis-persistence/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2016/03/07/zookeeper01/';
+var disqus_title = 'zookeeper伪集群模式安装和配置';
+var disqus_url = 'http://dxer.github.io/2016/03/07/zookeeper01/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

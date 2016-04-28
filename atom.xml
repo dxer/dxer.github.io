@@ -1,44 +1,437 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>dxer&#39;s Blog</title>
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
-  <updated>2016-04-28T10:06:31.794Z</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://dxer.github.io/"/>
+  <updated>2016-04-25T01:20:46.887Z</updated>
+  <id>http://dxer.github.io/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>dxer</name>
     
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2016/04/28/hello-world/"/>
-    <id>http://yoursite.com/2016/04/28/hello-world/</id>
-    <published>2016-04-28T10:06:31.777Z</published>
-    <updated>2016-04-28T10:06:31.794Z</updated>
+    <title>Hive入门</title>
+    <link href="http://dxer.github.io/2016/03/11/hive02/"/>
+    <id>http://dxer.github.io/2016/03/11/hive02/</id>
+    <published>2016-03-11T02:14:20.000Z</published>
+    <updated>2016-04-25T01:20:46.887Z</updated>
     
-    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;http://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;http://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;http://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&quot;My New Post&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;http://hexo.io/docs/writing.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;http://hexo.io/docs/server.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Server&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Generate-static-files&quot;&gt;&lt;a href=&quot;#Generate-static-files&quot; class=&quot;headerlink&quot; title=&quot;Generate static files&quot;&gt;&lt;/a&gt;Generate static files&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo generate&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;http://hexo.io/docs/generating.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Generating&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Deploy-to-remote-sites&quot;&gt;&lt;a href=&quot;#Deploy-to-remote-sites&quot; class=&quot;headerlink&quot; title=&quot;Deploy to remote sites&quot;&gt;&lt;/a&gt;Deploy to remote sites&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo deploy&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;http://hexo.io/docs/deployment.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Deployment&lt;/a&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;Hive是建立在 Hadoop 上的数据仓库基础构架。它提供了一系列的工具，可以用来进行数据提取转化加载（ETL），这是一种可以存储、查询和分析存储在 Hadoop 中的大规模数据的机制。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h6 id=&quot;那什么是数据仓库呢&quot;&gt;&lt;a href=&quot;#那什么是数据仓库呢&quot; class=&quot;headerlink&quot; title=&quot;那什么是数据仓库呢?&quot;&gt;&lt;/a&gt;那什么是数据仓库呢?&lt;/h6&gt;&lt;p&gt;数据仓库是一个面向主题的，集成的，不可更新的，随时间不变化的数据集合，它用于支持企业或组织的决策分析处理(主要是查询操作),数据仓库实际上就是一个数据库，可以利用数据仓库来保存数据，但是数据仓库有别于我们一般的数据库&lt;/p&gt;
+&lt;h6 id=&quot;数据仓库的结构和建立过程&quot;&gt;&lt;a href=&quot;#数据仓库的结构和建立过程&quot; class=&quot;headerlink&quot; title=&quot;数据仓库的结构和建立过程&quot;&gt;&lt;/a&gt;数据仓库的结构和建立过程&lt;/h6&gt;&lt;pre&gt;&lt;code&gt;数据源（业务数据系统，文档资料，其他数据）
+数据存储和管理（ETL，抽取Extract，转换Transform，装载Load）
+数据仓库引擎
+前端展示（数据查询，数据报表，数据分析，各类应用）
+&lt;/code&gt;&lt;/pre&gt;&lt;h6 id=&quot;什么是Hive？&quot;&gt;&lt;a href=&quot;#什么是Hive？&quot; class=&quot;headerlink&quot; title=&quot;什么是Hive？&quot;&gt;&lt;/a&gt;什么是Hive？&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;hive是建立在hadoop hdfs上的数据仓库基础架构,hive中的表和文件其实就是hdfs中的目录和文件&lt;/li&gt;
+&lt;li&gt;hive可以用来进行数据提取转化加载（ETL）&lt;/li&gt;
+&lt;li&gt;hive定义了简单的类似SQL查询语言（HQL），它允许熟悉SQL的用户查询数据&lt;/li&gt;
+&lt;li&gt;hive允许熟悉MapReduce开发者开发自定义的mapper和reducer来处理內建的mapper和reducer无法完成的复杂的分析工作&lt;/li&gt;
+&lt;li&gt;hive是SQL解析引擎，它将SQL语句转义成MapReduce Job然后在hadoop上执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&quot;hive的元数据&quot;&gt;&lt;a href=&quot;#hive的元数据&quot; class=&quot;headerlink&quot; title=&quot;hive的元数据&quot;&gt;&lt;/a&gt;hive的元数据&lt;/h6&gt;&lt;pre&gt;&lt;code&gt;hive将元数据存储在数据库中（metastore），支持mysql和derby（默认）等数据库
+hive中的元数据包括表的名字，表的列和分区及其属性，表的属性（是否为外部表等），表的数据所在目录等
+&lt;/code&gt;&lt;/pre&gt;&lt;h6 id=&quot;HQL的执行过程&quot;&gt;&lt;a href=&quot;#HQL的执行过程&quot; class=&quot;headerlink&quot; title=&quot;HQL的执行过程&quot;&gt;&lt;/a&gt;HQL的执行过程&lt;/h6&gt;&lt;p&gt;解释器，编译器，优化器完成HQL查询语句从此法分析，语法分析，编译，优化以及查询计划（plan）的生成。生成的查询计划存储在HDFS中，并在随后又MapReduce调用执行&lt;/p&gt;
+&lt;p&gt;HQL执行过程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;HQL select语句&lt;/li&gt;
+&lt;li&gt;解释器进行此法分析&lt;/li&gt;
+&lt;li&gt;编译器生成HQL的执行计划（类似javac命令，将java文件编译成class文件）&lt;/li&gt;
+&lt;li&gt;优化器生成最佳的执行计划&lt;/li&gt;
+&lt;li&gt;执行&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h6 id=&quot;hive的三种安装模式&quot;&gt;&lt;a href=&quot;#hive的三种安装模式&quot; class=&quot;headerlink&quot; title=&quot;hive的三种安装模式&quot;&gt;&lt;/a&gt;hive的三种安装模式&lt;/h6&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;嵌入模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;元数据信息保存在hive自带的derby数据库中&lt;/li&gt;
+&lt;li&gt;只允许创建一个连接&lt;/li&gt;
+&lt;li&gt;多用于Demo&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;本地模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;元数据信息被存储在MySQL数据库中&lt;/li&gt;
+&lt;li&gt;MySQL数据库与Hive运行在同一台物理机器上&lt;/li&gt;
+&lt;li&gt;多用于开发和测试&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;远程模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;元数据信息被保存在远程的MySQL数据库中&lt;/li&gt;
+&lt;li&gt;多用于实际的生产运行环境&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h6 id=&quot;常用的CLI命令&quot;&gt;&lt;a href=&quot;#常用的CLI命令&quot; class=&quot;headerlink&quot; title=&quot;常用的CLI命令&quot;&gt;&lt;/a&gt;常用的CLI命令&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;进入CLI&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;交互模式&lt;br&gt;hive  # 进入命令行交互模式，非静默&lt;br&gt;hive -S # 静默模式，不显示调试信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;直接执行一条语句&lt;br&gt;hive -e ‘show tables’;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;执行一个文件的文件&lt;br&gt;hive -f ~/test.hql&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;清屏&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ctrl + L或者 !clear;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;查看数据仓库中的表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;show tables;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;查看数据仓库中内置的函数&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;show functions;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;查看表的结构&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;desc 表名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;查看HDFS上的文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dfs -ls 目录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;执行操作系统的命令&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;!命令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;执行HQL语句&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;select &lt;strong&gt;&lt;em&gt; from &lt;/em&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;执行SQL的脚本&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;source SQL文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&quot;hive的数据类型&quot;&gt;&lt;a href=&quot;#hive的数据类型&quot; class=&quot;headerlink&quot; title=&quot;hive的数据类型&quot;&gt;&lt;/a&gt;hive的数据类型&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;基本数据类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tinyint/smallint/int/bigint：整数类型&lt;/li&gt;
+&lt;li&gt;float/double：浮点数类型&lt;/li&gt;
+&lt;li&gt;boolean：布尔类型&lt;/li&gt;
+&lt;li&gt;string：字符串类型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;复杂数据类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Array：数组类型，由一系列相同数据类型的元素组成&lt;/li&gt;
+&lt;li&gt;Map：集合类型，包含key-&amp;gt;value，可以通过key来访问元素&lt;/li&gt;
+&lt;li&gt;Struct：结构类型，可以包含不同数据类型的元素，这些元素可以通过“点语法”的方式来得到所需要的元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;时间类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Date：从Hive0.12.0开始支持&lt;/li&gt;
+&lt;li&gt;Timestamp：从Hive0.8.0开始支持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;TABLE&lt;/span&gt; employees(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;salary &lt;span class=&quot;built_in&quot;&gt;FLOAT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;subordintes &lt;span class=&quot;built_in&quot;&gt;ARRAY&lt;/span&gt;&amp;lt;&lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;&amp;gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;deucations &lt;span class=&quot;keyword&quot;&gt;MAP&lt;/span&gt;&amp;lt;&lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;, &lt;span class=&quot;built_in&quot;&gt;FLOAT&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;address &lt;span class=&quot;keyword&quot;&gt;STRUCT&lt;/span&gt;&amp;lt;street:&lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;, city:&lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;, state:&lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;, zip:&lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;Hive中的数据都是保存在HDFS中&lt;br&gt;没有专门的数据存储格式&lt;br&gt;存储结构主要包括：数据库，文件，表，视图&lt;br&gt;Hive可以直接加载文本文件&lt;br&gt;创建表的时候，指定Hive数据的列分隔符与行分隔符&lt;/p&gt;
+&lt;h6 id=&quot;数据库database&quot;&gt;&lt;a href=&quot;#数据库database&quot; class=&quot;headerlink&quot; title=&quot;数据库database&quot;&gt;&lt;/a&gt;数据库database&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;相当于关系数据库中的命名空间（namespace），它的作用是将用户和数据库的应用隔离到不同的数据库或模式中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&quot;表&quot;&gt;&lt;a href=&quot;#表&quot; class=&quot;headerlink&quot; title=&quot;表&quot;&gt;&lt;/a&gt;表&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Table内部表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;与数据库中的Table在概念上是类似的&lt;/li&gt;
+&lt;li&gt;每一个Table在Hive中都有一个相应的目录存储数据&lt;/li&gt;
+&lt;li&gt;所有的Table数据（不包括External Table）都保存在这个目录中&lt;/li&gt;
+&lt;li&gt;删除表的时候，元数据与数据都会被删除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Partition分区表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Partition对应于数据库的Partition列的密集索引&lt;/li&gt;
+&lt;li&gt;在Hive中，表中的一个Partition对应于表下的一个目录，多有的Partition的数据都存储在对应的目录中&lt;/li&gt;
+&lt;li&gt;在数据量特别大的时候，需要将数据按照一定的条件进行分区，这样在进行查询操作的时候能够降低扫描的数据，从而提高查询的效率（通过执行计划知道）&lt;/li&gt;
+&lt;li&gt;Hive把表组织成”分区“，这是一种根据“分区列”（如日期）的值对表的数据进行粗略划分的机制。使用分区可以加快数据分片（slice）的查询速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;External Table 外部表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指向已经存在于HDFS中的数据，也可以创建Patition&lt;/li&gt;
+&lt;li&gt;它和内部表在元数据的组织上是相同的，而实际数据的存储则有较大的差异&lt;/li&gt;
+&lt;li&gt;外部表只有一个过程，加载数据和创建表同时完成，并不会移动到数据仓库目录中，只是与外部数据建立一个链接。当删除一个外部表是，仅删除该链接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Bucket Table 桶表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;桶表是对数据进行哈希取值，然后放到不同文件中存储&lt;/li&gt;
+&lt;li&gt;降低系统的热块，从而提高查询的速度&lt;/li&gt;
+&lt;li&gt;表和分区可以进一步分为“桶”，它会为数据提供额外的结构以获得更高效的查询处理。例如，可以根据用户ID来划分桶，这则是对数据源数据文件本身来拆分数据。使用桶的表会将源数据文件按一定规律拆分成多个文件，要使用bucket&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&quot;视图&quot;&gt;&lt;a href=&quot;#视图&quot; class=&quot;headerlink&quot; title=&quot;视图&quot;&gt;&lt;/a&gt;视图&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;视图是一种虚表，是一个逻辑概念，不存数据；可以跨越多张表&lt;/li&gt;
+&lt;li&gt;视图建立在已有表的基础上，视图赖以建立的这些表成为基表&lt;/li&gt;
+&lt;li&gt;视图可以简化复杂的查询&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6 id=&quot;内部表和外部表的区别？&quot;&gt;&lt;a href=&quot;#内部表和外部表的区别？&quot; class=&quot;headerlink&quot; title=&quot;内部表和外部表的区别？&quot;&gt;&lt;/a&gt;内部表和外部表的区别？&lt;/h6&gt;&lt;p&gt;内部表也叫做管理表，Hive会控制着数据的生命周期，默认情况下会将这些表的数据存储在由配置项&lt;code&gt;hive.metastore.warehourse.dir&lt;/code&gt;所定义的目录的子目录下&lt;br&gt;当删除一个内部表的时候，Hive也会删除这个表中的数据&lt;/p&gt;
+&lt;p&gt;外部表&lt;br&gt;先看一个例子：&lt;/p&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;external&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;exists&lt;/span&gt; pimaccess(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    accesstime &lt;span class=&quot;built_in&quot;&gt;BIGINT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;account&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ip &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    appkey &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    prelinkmannum &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    aftlinkmannum &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    pregroupnum &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    aftgroupnum &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    resultcode &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    costtime &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    requesttype &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    responsetype &lt;span class=&quot;built_in&quot;&gt;INT&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    apiname &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    requestdata &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    responsedata &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    rtime &lt;span class=&quot;keyword&quot;&gt;STRING&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;span class=&quot;keyword&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;FORMAT&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;DELIMITED&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;FIELDS&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;TERMINATED&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&#39;\t&#39;&lt;/span&gt; LOCATION &lt;span class=&quot;string&quot;&gt;&#39;/pimaccess&#39;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在创建表的时候使用&lt;code&gt;EXTENAL&lt;/code&gt;关键字，用来告诉Hive这个表是外部表，&lt;code&gt;LOCATION&lt;/code&gt;子句则用于告诉Hive数据位于哪个路径下。&lt;br&gt;对于外部表，Hive认为没有完全拥有这份数据，因此在删除该表的时候不会删除掉这份数据，不过描述表的元数据信息会被删除。&lt;/p&gt;
+&lt;h6 id=&quot;Hive常见的数据导入方式&quot;&gt;&lt;a href=&quot;#Hive常见的数据导入方式&quot; class=&quot;headerlink&quot; title=&quot;Hive常见的数据导入方式&quot;&gt;&lt;/a&gt;Hive常见的数据导入方式&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;从本地文件系统中导入&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;load data local inpath ‘test.txt’ into table test;&lt;/li&gt;
+&lt;li&gt;load data local inpath ‘test.txt’ overwrite into table test;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;从HDFS上导入&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;load data inpath ‘/test.txt’ into table test;&lt;/li&gt;
+&lt;li&gt;load data inpath ‘/test.txt’ overwrite into table test;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;从别的表中查询出相应数据并导入 &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;insert into table test partition(age=’25’) select id, name, tel from test;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在创建表的时候通过从别的表中查询出相应的记录并插入到所创建的表中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;create table test2 as select id, name, tel from test;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 </content>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;http://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;http://hexo.io
+      &lt;p&gt;Hive是建立在 Hadoop 上的数据仓库基础构架。它提供了一系列的工具，可以用来进行数据提取转化加载（ETL），这是一种可以存储、查询和分析存储在 Hadoop 中的大规模数据的机制。&lt;br&gt;
     
     </summary>
     
+    
+      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hive的部署安装</title>
+    <link href="http://dxer.github.io/2016/03/10/hive01/"/>
+    <id>http://dxer.github.io/2016/03/10/hive01/</id>
+    <published>2016-03-10T06:29:19.000Z</published>
+    <updated>2016-04-25T00:42:30.581Z</updated>
+    
+    <content type="html"></content>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>zookeeper伪集群模式安装和配置</title>
+    <link href="http://dxer.github.io/2016/03/07/zookeeper01/"/>
+    <id>http://dxer.github.io/2016/03/07/zookeeper01/</id>
+    <published>2016-03-07T02:25:38.000Z</published>
+    <updated>2016-04-22T09:22:12.058Z</updated>
+    
+    <content type="html">&lt;p&gt;伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。&lt;br&gt;下面来看看zookeeper怎么进行安装的吧。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h6 id=&quot;下载&quot;&gt;&lt;a href=&quot;#下载&quot; class=&quot;headerlink&quot; title=&quot;下载&quot;&gt;&lt;/a&gt;下载&lt;/h6&gt;&lt;p&gt;选择一个稳定版本进行下载，我这里下载的是zookeeper-3.4.6版本。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h6 id=&quot;解压&quot;&gt;&lt;a href=&quot;#解压&quot; class=&quot;headerlink&quot; title=&quot;解压&quot;&gt;&lt;/a&gt;解压&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tar -zxvf  zookeeper-3.4.6.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;# 3个实例，复制三份 zk1，zk2，zk3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp -r zookeeper-3.4.6 zk1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp -r zookeeper-3.4.6 zk2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp -r zookeeper-3.4.6 zk3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h6 id=&quot;创建实例配置文件&quot;&gt;&lt;a href=&quot;#创建实例配置文件&quot; class=&quot;headerlink&quot; title=&quot;创建实例配置文件&quot;&gt;&lt;/a&gt;创建实例配置文件&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cd zookeeper-3.4.6/conf&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp zoo_sample.cfg zoo1.cfg&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp zoo_sample.cfg zoo2.cfg&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cp zoo_sample.cfg zoo3.cfg&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h6 id=&quot;修改配置&quot;&gt;&lt;a href=&quot;#修改配置&quot; class=&quot;headerlink&quot; title=&quot;修改配置&quot;&gt;&lt;/a&gt;修改配置&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tickTime=2000  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;dataDir=/opt/zk1/data  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;clientPort=2181  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;initLimit=10  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;syncLimit=5  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;server.1=127.0.0.1:2881:3881  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;server.2=127.0.0.1:2882:3882  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;server.3=127.0.0.1:2883:3883&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ol&gt;
+&lt;li&gt;分别配置三个实例的clientPort端口为2181, 2182, 2183&lt;/li&gt;
+&lt;li&gt;分别配置是哪个实例的dataDir目录为&lt;code&gt;/opt/zk1/data&lt;/code&gt;，&lt;code&gt;/opt/zk2/data&lt;/code&gt;，&lt;code&gt;/opt/zk3/data&lt;/code&gt;，并创建这三个目录,没有创建该目录会启动出错&lt;/li&gt;
+&lt;li&gt;定义zookeeper集群的各个实例的ip和端口，server.1=127.0.0.1:2881:3881 ,server.2=127.0.0.1:2882:3882,server.3=127.0.0.1:2883:3883 &lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;dataDir&lt;br&gt;定义zookeeper实例存储持久出具的本地文件系统位置&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;clientPort&lt;br&gt;定义zookeeper客户端连接zookeeper服务端时使用的端口&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;server&lt;br&gt;定义zookeeper集群的各个实例的ip和端口&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;tickTime&lt;br&gt;指定了zookeeper中的基本时间单元（以毫秒为单位）&lt;br&gt;zookeeper集群中，每个服务器都有一个id（数字），服务器id在集群中是唯一的，并且取值范围是1~255，通过一个名为myid的纯文本设置，这个文件保存在dataDir中&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;server.n=hostname:port:port&lt;br&gt;n是服务器id，第一个port是follower用来连接leader的端口，第二个port是用于leader选举&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;clientPort&lt;br&gt;监听client连接的端口号&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;initLimit&lt;br&gt;设定了所有follower与leader进行连接并同步的时间范围。如果在设定的时间段内，半数以上的follower跟随者未能完成同步，leader会宣布放弃领导地位，然后进行另外一次leader选举，如果这种情况经常发生，则表明设定的值太小&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;syncLimit&lt;br&gt;设定了允许一个follower与leader这进行同步的时间。如果在设定的时间段内，一个follower未能完成同步，会自己重启，所有关联到follower的客户端将连接到另一个follower&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h6 id=&quot;创建dataDir和实例id文件&quot;&gt;&lt;a href=&quot;#创建dataDir和实例id文件&quot; class=&quot;headerlink&quot; title=&quot;创建dataDir和实例id文件&quot;&gt;&lt;/a&gt;创建dataDir和实例id文件&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mkdir -p /opt/zk1/data  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkdir -p /opt/zk2/data  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkdir -p /opt/zk3/data  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;echo 1 &amp;gt; /opt/zk1/data/myid  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;echo 2 &amp;gt; /opt/zk2/data/myid  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;echo 3 &amp;gt; /opt/zk3/data/myid&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;启动zookeeper服务&quot;&gt;&lt;a href=&quot;#启动zookeeper服务&quot; class=&quot;headerlink&quot; title=&quot;启动zookeeper服务&quot;&gt;&lt;/a&gt;启动zookeeper服务&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;bin/zkServer.sh start zoo1.cfg&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bin/zkServer.sh start zoo2.cfg&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bin/zkServer.sh start zoo3.cfg&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h6 id=&quot;查看是否启动成功&quot;&gt;&lt;a href=&quot;#查看是否启动成功&quot; class=&quot;headerlink&quot; title=&quot;查看是否启动成功&quot;&gt;&lt;/a&gt;查看是否启动成功&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;jps&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;看到类似下面的进程就表示3个实例均启动成功&lt;br&gt;13419 QuorumPeerMain&lt;br&gt;13460 QuorumPeerMain&lt;br&gt;13561 Jps&lt;br&gt;13392 QuorumPeerMain&lt;br&gt;如果未成功启动，可以到zookeeper.out文件中查看启动失败的日志信息。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&quot;客户端连接&quot;&gt;&lt;a href=&quot;#客户端连接&quot; class=&quot;headerlink&quot; title=&quot;客户端连接&quot;&gt;&lt;/a&gt;客户端连接&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;./zkCli.sh -server 127.0.0.1:2181&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;关闭zookeeper&quot;&gt;&lt;a href=&quot;#关闭zookeeper&quot; class=&quot;headerlink&quot; title=&quot;关闭zookeeper&quot;&gt;&lt;/a&gt;关闭zookeeper&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;bin/zkServer.sh stop&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h6 id=&quot;重启zookeeper&quot;&gt;&lt;a href=&quot;#重启zookeeper&quot; class=&quot;headerlink&quot; title=&quot;重启zookeeper&quot;&gt;&lt;/a&gt;重启zookeeper&lt;/h6&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;bin/zkServer.sh restart&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。&lt;br&gt;下面来看看zookeeper怎么进行安装的吧。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="zookeeper" scheme="http://dxer.github.io/tags/zookeeper/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>redis学习 - 数据持久化</title>
+    <link href="http://dxer.github.io/2015/05/07/redis-persistence/"/>
+    <id>http://dxer.github.io/2015/05/07/redis-persistence/</id>
+    <published>2015-05-07T06:55:38.000Z</published>
+    <updated>2016-04-19T04:10:37.064Z</updated>
+    
+    <content type="html">&lt;p&gt;Redis提供了多种不同级别的持久化方式:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;RDB 持久化可以在指定的时间间隔内产生数据集的时间点快照（point-in-time snapshot）&lt;/li&gt;
+&lt;li&gt;AOF持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。AOF文件中的命令全部以Redis协议的格式来保存，新命令会被追加到文件的末尾.Redis还可以在后台对AOF文件进行重写(rewrite)，使得AOF文件的体积不会超过保存数据集状态所需的实际大小。&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Redis还可以同时使用AOF和RDB持久化。在这种情况下，当Redis重启时，它会优先使用AOF文件来还原数据集，因为AOF文件保存的数据集通常比RDB文件所保存的数据集更完整。&lt;/li&gt;
+&lt;li&gt;可以关闭持久化功能，让数据只在服务器运行时存在。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&quot;RDB的优点&quot;&gt;&lt;a href=&quot;#RDB的优点&quot; class=&quot;headerlink&quot; title=&quot;RDB的优点&quot;&gt;&lt;/a&gt;RDB的优点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;RDB是一个很紧凑的文件，它保存了redis在某个时间点上的数据集。&lt;/li&gt;
+&lt;li&gt;RDB非常适用于灾难恢复，它只有一个文件，并且内容紧凑，可以将它传送到别的数据中心&lt;/li&gt;
+&lt;li&gt;可以最大化redis的性能；父进程在保存RDB文件时，唯一要做的就是fork一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无需执行任何磁盘I/O操作&lt;/li&gt;
+&lt;li&gt;RDB在恢复大数据集的时候比AOF的速度要快&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&quot;RDB的缺点&quot;&gt;&lt;a href=&quot;#RDB的缺点&quot; class=&quot;headerlink&quot; title=&quot;RDB的缺点&quot;&gt;&lt;/a&gt;RDB的缺点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;因为RDB是保存在某个时间点上的数据集，这样的话，服务器故障可能会丢失数据。&lt;/li&gt;
+&lt;li&gt;每次保存RDB的时候，redis要fork一个子进程，并由子进程来进行实际的持久化工作，在数据集比较大的时候，fork可能会非常耗时，可能会造成服务器停止处理客户端请求；如果数据集非常巨大，并且cpu比较紧张的话，那么 这种停止时间设置可能会长达整整1秒。虽然AOF重写也需要进行fork，但无论AOF重写的执行间隔有多长，数据的耐久性都不会有任何损失&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&quot;AOF优点&quot;&gt;&lt;a href=&quot;#AOF优点&quot; class=&quot;headerlink&quot; title=&quot;AOF优点&quot;&gt;&lt;/a&gt;AOF优点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;使用AOF持久化会让redis变得非常耐久，你可以设置不同的fsync策略，比如无fsync，每秒钟一次fsync，或者每次写入命令是fsync。AOF的默认策略为每秒钟fsync一次，在这种配置下，redis仍然可以保持良好的性能，并且就算发生故障停机，也最多只会丢失一秒钟的数据&lt;/li&gt;
+&lt;li&gt;AOF文件只是一个日志文件追加操作（append only log），因此对AOF文件的写入不需要进行seek，即使日志因为某些原因而包含了未写入完整命令（比如写入时， 磁盘满了，写入时中途停机等），redis-check-aof工具可以轻易的修复这种问题&lt;/li&gt;
+&lt;li&gt;redis可以在AOF文件体积过大时，自动在后台对AOF进行重写，重写后的AOF文件包含了恢复当前数据集所需的最小命令集合。这个重写操作是绝对安全的，因为redis在创建新的AOF过程中，会继续讲命令追加到现有的AOF文件里面，即使重写过程中发生停机，现有的AOF文件也不会丢失，而一旦新AOF文件创建完毕，redis就会从旧文件切换到新AOF文件，并开始对新AOF文件进行追加操作&lt;/li&gt;
+&lt;li&gt;AOF文件有序地保存了对数据库执行的所有写入操作，这些写入操作以redis协议的格式保存，因此AOF文件的内容非常容易被人读懂，对文件进行分析也很容易。到处AOF文件也非常简单。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&quot;AOF缺点&quot;&gt;&lt;a href=&quot;#AOF缺点&quot; class=&quot;headerlink&quot; title=&quot;AOF缺点&quot;&gt;&lt;/a&gt;AOF缺点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;对于相同的数据来说，AOF文件的体积通常要大于RDB文件的体积&lt;/li&gt;
+&lt;li&gt;根据所使用的fsync策略。AOF的速度可能会慢于RDB。&lt;/li&gt;
+&lt;li&gt;AOF的bug，曾经因为个别命令的原因，导致AOF文件在重新载入是，无法将数据集恢复成保存时的样子。&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Redis提供了多种不同级别的持久化方式:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;RDB 持久化可以在指定的时间间隔内产生数据集的时间点快照（point-in-time snapshot）&lt;/li&gt;
+&lt;li&gt;AOF持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。AOF文件中的命令全部以Redis协议的格式来保存，新命令会被追加到文件的末尾.Redis还可以在后台对AOF文件进行重写(rewrite)，使得AOF文件的体积不会超过保存数据集状态所需的实际大小。
+    
+    </summary>
+    
+    
+      <category term="redis" scheme="http://dxer.github.io/tags/redis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>redis学习 - 主从拷贝</title>
+    <link href="http://dxer.github.io/2015/05/07/redis_master_slave_copy/"/>
+    <id>http://dxer.github.io/2015/05/07/redis_master_slave_copy/</id>
+    <published>2015-05-07T06:29:19.000Z</published>
+    <updated>2016-04-19T04:10:26.841Z</updated>
+    
+    <content type="html">&lt;h5 id=&quot;Redis主从拷贝的特点&quot;&gt;&lt;a href=&quot;#Redis主从拷贝的特点&quot; class=&quot;headerlink&quot; title=&quot;Redis主从拷贝的特点&quot;&gt;&lt;/a&gt;Redis主从拷贝的特点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;同一个Master可以拥有多个Slaves。&lt;/li&gt;
+&lt;li&gt;Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Master以非阻塞的方式同步数据至slave，这将意味着Master会继续处理一个或多个slave的读写请求；&lt;br&gt;4.Slave端同步数据也可以修改为非阻塞是的方式，当slave在执行新的同步时，它仍可以用旧的数据信息来提供查询；否则，当slave与master失去联系时，slave会返回一个错误给客户端；&lt;/li&gt;
+&lt;li&gt;主从复制具有可扩展性，即多个slave专门提供只读查询与数据的冗余，Master端专门提供写操作；&lt;/li&gt;
+&lt;li&gt;通过配置禁用Master数据持久化机制，将其数据持久化操作交给Slaves完成，避免在Master中要有独立的进程来完成此操作。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h6 id=&quot;Redis主从拷贝的过程&quot;&gt;&lt;a href=&quot;#Redis主从拷贝的过程&quot; class=&quot;headerlink&quot; title=&quot;Redis主从拷贝的过程&quot;&gt;&lt;/a&gt;Redis主从拷贝的过程&lt;/h6&gt;&lt;p&gt;slave连接上master之后，slave发送一个SYNC命令到master，master接收到命令之后，无论是第一次同步建立的连接，还是连接断开后的重新连接，master会开启BGSAVE操作，启动一个后台进程，保存一份当前master内存快照，并且开始保存从调用BGSAVE之后的所有写命令，master生成完快照之后，发送内存快照rdb文件给slave。slave接收到master发送过来的rdb文件之后，将清空所有旧数据，加载接收到的rdb文件到内存中，发送完rdb文件给slave之后，开始发送刚刚保存的写操作日志给slave，slave执行这些写操作，至此，主从数据保存一致。发送完写日志之后，master会增量发送之后的写操作给slave，使主从一致。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ps: 当master和slave的连接断开时，slave可以自动重新建立连接。如果master同时收到多个slave发来的同步连接命令，只会使用启动一个进程来写内存快照，然后发送给所有的slave&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h6 id=&quot;Master-write-Slave-read机制&quot;&gt;&lt;a href=&quot;#Master-write-Slave-read机制&quot; class=&quot;headerlink&quot; title=&quot;Master write, Slave read机制&quot;&gt;&lt;/a&gt;Master write, Slave read机制&lt;/h6&gt;&lt;p&gt;redis的主从复制，通过程序实现数据的读写分离，让master负责处理些请求，slave负责处理读请求，通过扩展slave处理更多的并发请求，减轻master端的负载。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ps:在程序中判断用户的读写请求，将write请求发送给master，read请求发送给slave处理&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h6 id=&quot;redis主从拷贝配置&quot;&gt;&lt;a href=&quot;#redis主从拷贝配置&quot; class=&quot;headerlink&quot; title=&quot;redis主从拷贝配置&quot;&gt;&lt;/a&gt;redis主从拷贝配置&lt;/h6&gt;&lt;p&gt;开启主从复制，最简单的方式，连接上从机redis，执行slaveof &amp;lt;主机host&amp;gt; &amp;lt;主机端口&amp;gt;，另外也可以在从机的配置文件中加入slaveof &amp;lt;主机host&amp;gt; &amp;lt;主机端口&amp;gt;，这样从机启动的时候，就会自动连接主机，并且同步数据。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;slaveof 192.168.100.126 6379 # 配置主机信息&lt;br&gt;masterauth &lt;master-password&gt; # 如果主机设置了密码，配置密码&lt;br&gt;slave-serve-stale-data yes # 配置当从机正在和主机进行同步的时候是否响应，如果配置是，有可能客户端会读到旧数据，如果配置否，当请求读数据的时候，将会报错SYNC with master in progress&lt;br&gt;slave-read-only yes # 从机是否只读。这边设置可写，不会同步到主机，&lt;br&gt;repl-ping-slave-period 10 # 从机发送ping命令到主机的间隔时间。&lt;br&gt;repl-timeout 60 # 主机响应超时时间，这个包括传输超时，IO超时，ping超时，注意这边时间必须大于上面的间隔时间，要不然会一直报超时错误。&lt;br&gt;repl-disable-tcp-nodelay no # 是否禁用TCP NODELAY。官方对这个配置用法的建议是：&lt;br&gt;# By default we optimize for low latency, but in very high traffic conditions&lt;br&gt;# or when the master and slaves are many hops away, turning this to “yes” may&lt;br&gt;# be a good idea.&lt;br&gt;# 默认情况下，我们优化目的是为了低延迟，但是在高传输条件或者主从机分布在路由很多跳之外的，建议禁用掉tcp-nodelay。&lt;br&gt;slave-priority 100 # 如果master不能再正常工作，那么会在多个slave中，选择优先值最小的一个slave提升为master，优先值为0表示不能提升为master&lt;/master-password&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h5 id=&quot;Redis主从拷贝的特点&quot;&gt;&lt;a href=&quot;#Redis主从拷贝的特点&quot; class=&quot;headerlink&quot; title=&quot;Redis主从拷贝的特点&quot;&gt;&lt;/a&gt;Redis主从拷贝的特点&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;同一个Master可以拥有多个Slaves。&lt;/li&gt;
+&lt;li&gt;Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；
+    
+    </summary>
+    
+    
+      <category term="redis" scheme="http://dxer.github.io/tags/redis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 6.3忘记root密码的解决办法</title>
+    <link href="http://dxer.github.io/2015/02/26/centos-passwd/"/>
+    <id>http://dxer.github.io/2015/02/26/centos-passwd/</id>
+    <published>2015-02-26T13:53:34.000Z</published>
+    <updated>2015-05-05T06:07:42.755Z</updated>
+    
+    <content type="html">&lt;p&gt;忘记linux系统的登陆密码了，悲剧了，查了好多资料，终于搞定了，来和大家分享下具体操作。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;br&gt;在开机启动的时候按键盘上的“E”键会进入如下界面（我的系统是centos 6.3，其他发行版不一定适用哦）。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20150226/1.jpg&quot; alt=&quot;&quot;&gt;  &lt;/p&gt;
+&lt;p&gt;注：本机是新装的系统，没有升级之类的操作，故选项只有一个，可能是因为只有一个选项的关系，所以需要按一下“E”键才会出现如上界面。多个应该可以直接用方向键直接选择&lt;/p&gt;
+&lt;p&gt;选择相应的内核，再次按“E”，出现下图，选择第二项，再次按“E”键&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20150226/2.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;经过第二步，这个画面可以编辑，在信息的最后加“空格”，然后键入“single”（如图），或者直接输入数字的“1”并回车确定进入下一步。图如下： &lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20150226/3.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;操作完第三步，会出现下图，是不是感觉又回到第二步了呢？并不是，这里按键盘的”B”键，进入引导系统。注意，这儿是“B”键&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20150226/4.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;在下面这个画面中的“#”后输入“passwd root”，重新设置root的密码，密码输入一遍，确认输入一遍，共2遍。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20150226/5.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;注：重置密码成功会有一个修改成功的提示，然后输入reboot重启系统，root密码重置就完成了。&lt;/p&gt;
+&lt;p&gt;ok，大功告成。。。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      你对本页的描述
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://dxer.github.io/tags/linux/"/>
+    
+      <category term="centos" scheme="http://dxer.github.io/tags/centos/"/>
     
   </entry>
   

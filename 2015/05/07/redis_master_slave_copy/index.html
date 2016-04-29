@@ -17,7 +17,7 @@
 <blockquote>
 <p>slaveof 192.168.100.126 6379 # 配置主机信息<br>masterauth <master-password> # 如果主机设置了密码，配置密码<br>slave-serve-stale-data yes # 配置当从机正在和主机进行同步的时候是否响应，如果配置是，有可能客户端会读到旧数据，如果配置否，当请求读数据的时候，将会报错SYNC with master in progress<br>slave-read-only yes # 从机是否只读。这边设置可写，不会同步到主机，<br>repl-ping-slave-period 10 # 从机发送ping命令到主机的间隔时间。<br>repl-timeout 60 # 主机响应超时时间，这个包括传输超时，IO超时，ping超时，注意这边时间必须大于上面的间隔时间，要不然会一直报超时错误。<br>repl-disable-tcp-nodelay no # 是否禁用TCP NODELAY。官方对这个配置用法的建议是：<br># By default we optimize for low latency, but in very high traffic conditions<br># or when the master and slaves are many hops away, turning this to “yes” may<br># be a good idea.<br># 默认情况下，我们优化目的是为了低延迟，但是在高传输条件或者主从机分布在路由很多跳之外的，建议禁用掉tcp-nodelay。<br>slave-priority 100 # 如果master不能再正常工作，那么会在多个slave中，选择优先值最小的一个slave提升为master，优先值为0表示不能提升为master</master-password></p>
 </blockquote>
-</div></article></div></section><footer><div class="paginator"><a href="/2015/05/07/redis-persistence/" class="prev">上一篇</a><a href="/2015/02/26/centos-passwd/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+</div></article></div></section><footer><div class="paginator"><a href="/2015/05/07/redis-persistence/" class="prev">PREV</a><a href="/2015/02/26/centos-passwd/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
 var disqus_identifier = '2015/05/07/redis_master_slave_copy/';
 var disqus_title = 'redis学习 - 主从拷贝';
 var disqus_url = 'http://dxer.github.io/2015/05/07/redis_master_slave_copy/';

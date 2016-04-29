@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Neo4j - Cypher · dxer's Blog</title><meta name="description" content="Neo4j - Cypher - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/dxer" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">Neo4j - Cypher</h1><div class="post-info">Dec 2, 2015</div><div class="post-content"><p>Neo4j是一种图数据库。它将结构化数据存储在图上而不是传统的数据库表中。 相对于关系数据库来说，图数据库善于处理大量复杂、互连接、低结构化的数据，这些数据变化迅速，需要频繁的查询。在关系数据库中， 这些查询会导致大量的表连接，因此会产生性能上的问题,但是使用Neo4j就可以解决查询时出现的性能衰退问题。 同时Neo4j还提供了非常快的图算法、推荐系统和OLAP风格的分析。下面主要简单记录一下Cypher查询语言的使用方法。<br><a id="more"></a></p>
+<p>这个查询语言包含以下几个明显的部分：</p>
+<ul>
+<li>START：在图中的开始点，通过元素的ID或所以查找获得。</li>
+<li>MATCH：图形的匹配模式，束缚于开始点。</li>
+<li>WHERE：过滤条件。</li>
+<li>RETURN：返回所需要的。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Operators</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mathematical</td>
+<td>+, -, *, /, %, ^</td>
+</tr>
+<tr>
+<td>Comparison</td>
+<td>=, &lt;&gt;, &lt;, &gt;, &lt;=, &gt;=</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>AND, OR, XOR, NOT</td>
+</tr>
+<tr>
+<td>String</td>
+<td>+</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>+, IN, [x], [x .. y]</td>
+</tr>
+<tr>
+<td>Regular Expression</td>
+<td>=~</td>
+</tr>
+<tr>
+<td>String matching</td>
+<td>STARTS WITH, ENDS WITH, CONTAINS</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h4><ol>
+<li><p>创建节点</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (n) <span class="comment">-- 创建单节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n),(m) <span class="comment">-- 创建多节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person) <span class="comment">-- 创建一个节点并含有一个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person:Swedish) <span class="comment">-- 创建一个节点并含有多个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span>, title : <span class="string">'Developer'</span> &#125;) <span class="comment">-- 创建一个节点并含有label和properties</span></span><br><span class="line"><span class="keyword">CREATE</span> (a &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span> &#125;) <span class="keyword">RETURN</span> a <span class="comment">-- 创建一个节点并返回该节点</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建关系</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MATCH (a:Person),(b:Person)</span><br><span class="line">WHERE a.name = 'Node A' AND b.name = 'Node B'</span><br><span class="line"><span class="keyword">CREATE</span> (a)-[r:RELTYPE]-&gt;(b)</span><br><span class="line"><span class="keyword">RETURN</span> r</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建关系并设置属性</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MATCH (a:Person),(b:Person)</span><br><span class="line">WHERE a.name = 'Node A' AND b.name = 'Node B'</span><br><span class="line"><span class="keyword">CREATE</span> (a)-[r:RELTYPE &#123; <span class="keyword">name</span> : a.name + <span class="string">'&lt;-&gt;'</span> + b.name &#125;]-&gt;(b)</span><br><span class="line"><span class="keyword">RETURN</span> r</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h4><ol>
+<li><p>Use ON CREATE and ON MATCH</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> (keanu:Person &#123; <span class="keyword">name</span>:<span class="string">'Keanu Reeves'</span> &#125;)</span><br><span class="line"><span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> keanu.created = <span class="keyword">timestamp</span>()</span><br><span class="line"><span class="keyword">RETURN</span> keanu.name, keanu.created</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Merge with ON CREATE and ON MATCH</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> (keanu:Person &#123; <span class="keyword">name</span>:<span class="string">'Keanu Reeves'</span> &#125;)</span><br><span class="line"><span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> keanu.created = <span class="keyword">timestamp</span>()</span><br><span class="line"><span class="keyword">ON</span> <span class="keyword">MATCH</span> <span class="keyword">SET</span> keanu.lastSeen = <span class="keyword">timestamp</span>()</span><br><span class="line"><span class="keyword">RETURN</span> keanu.name, keanu.created, keanu.lastSeen</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Merge relationships</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MATCH (charlie:Person &#123; name:'Charlie Sheen' &#125;),(wallStreet:Movie &#123; title:'Wall Street' &#125;)</span><br><span class="line">MERGE (charlie)-[r:ACTED_IN]-&gt;(wallStreet)</span><br><span class="line">RETURN charlie.name, type(r), wallStreet.title</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MATCH (oliver:Person &#123; name:'Oliver Stone' &#125;),(reiner:Person &#123; name:'Rob Reiner' &#125;)</span><br><span class="line">MERGE (oliver)-[:DIRECTED]-&gt;(movie:Movie)&lt;-[:ACTED_IN]-(reiner)</span><br><span class="line">RETURN movie</span><br></pre></td></tr></table></figure>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[MATCH WHERE] </span><br><span class="line">[OPTIONAL MATCH WHERE] </span><br><span class="line">[WITH [ORDER BY] [SKIP] [LIMIT]] </span><br><span class="line">RETURN [ORDER BY] [SKIP] [LIMIT]</span><br></pre></td></tr></table></figure>
+<p>MATCH (n:Person)-[:KNOWS]-&gt;(m:Person)WHERE n.name=”Alice”<br>Node patterns can contain labels and properties.</p>
+<p>MATCH (n)–&gt;(m)<br>Any pattern can be used in MATCH.</p>
+<p>MATCH (n {name:’Alice’})–&gt;(m)<br>Patterns with node properties.</p>
+<p>MATCH p = (n)–&gt;(m)<br>Assign a path to p.</p>
+<p>OPTIONAL MATCH (n)-[r]-&gt;(m)<br>Optional pattern, NULLs will be used for missing parts</p>
+<h3 id="唯一约束"><a href="#唯一约束" class="headerlink" title="唯一约束"></a>唯一约束</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> <span class="keyword">ON</span> (p:Person) ASSERT p.name <span class="keyword">IS</span> <span class="keyword">UNIQUE</span></span><br></pre></td></tr></table></figure>
+<p>DROP CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE</p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><pre><code>1. 创建索引
+CREATE INDEX ON :Person(name)
+
+2. 删除索引
+DROP INDEX ON :Person(name)
+</code></pre><p>##　参考:<br><a href="http://neo4j.com/docs/stable/cypher-query-lang.html" target="_blank" rel="external">neo4j官网Cypher文档</a></p>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/03/07/zookeeper01/" class="prev">PREV</a><a href="/2015/12/02/neo4j-01/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
+var disqus_identifier = '2015/12/02/neo4j-cypher/';
+var disqus_title = 'Neo4j - Cypher';
+var disqus_url = 'http://dxer.github.io/2015/12/02/neo4j-cypher/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smarthader.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2016 <a href="http://dxer.github.io">dxer</a>, unless otherwise noted.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>

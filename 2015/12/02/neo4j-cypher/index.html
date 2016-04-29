@@ -46,7 +46,7 @@
 </table>
 <h4 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h4><ol>
 <li><p>创建节点</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (n) <span class="comment">-- 创建单节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n),(m) <span class="comment">-- 创建多节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person) <span class="comment">-- 创建一个节点并含有一个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person:Swedish) <span class="comment">-- 创建一个节点并含有多个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span>, title : <span class="string">'Developer'</span> &#125;) <span class="comment">-- 创建一个节点并含有label和properties</span></span><br><span class="line"><span class="keyword">CREATE</span> (a &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span> &#125;) <span class="keyword">RETURN</span> a <span class="comment">-- 创建一个节点并返回该节点</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">-- 创建单节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建多节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (n),(m)</span><br><span class="line"> </span><br><span class="line"><span class="comment">-- 创建一个节点并含有一个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person) </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建一个节点并含有多个label</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person:Swedish) </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建一个节点并含有label和properties</span></span><br><span class="line"><span class="keyword">CREATE</span> (n:Person &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span>, title : <span class="string">'Developer'</span> &#125;) </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建一个节点并返回该节点</span></span><br><span class="line"><span class="keyword">CREATE</span> (a &#123; <span class="keyword">name</span> : <span class="string">'Andres'</span> &#125;) <span class="keyword">RETURN</span> a</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>创建关系</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MATCH (a:Person),(b:Person)</span><br><span class="line">WHERE a.name = 'Node A' AND b.name = 'Node B'</span><br><span class="line"><span class="keyword">CREATE</span> (a)-[r:RELTYPE]-&gt;(b)</span><br><span class="line"><span class="keyword">RETURN</span> r</span><br></pre></td></tr></table></figure>
@@ -68,19 +68,29 @@
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MATCH (oliver:Person &#123; name:'Oliver Stone' &#125;),(reiner:Person &#123; name:'Rob Reiner' &#125;)</span><br><span class="line">MERGE (oliver)-[:DIRECTED]-&gt;(movie:Movie)&lt;-[:ACTED_IN]-(reiner)</span><br><span class="line">RETURN movie</span><br></pre></td></tr></table></figure>
 <h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[MATCH WHERE] </span><br><span class="line">[OPTIONAL MATCH WHERE] </span><br><span class="line">[WITH [ORDER BY] [SKIP] [LIMIT]] </span><br><span class="line">RETURN [ORDER BY] [SKIP] [LIMIT]</span><br></pre></td></tr></table></figure>
-<p>MATCH (n:Person)-[:KNOWS]-&gt;(m:Person)WHERE n.name=”Alice”<br>Node patterns can contain labels and properties.</p>
-<p>MATCH (n)–&gt;(m)<br>Any pattern can be used in MATCH.</p>
-<p>MATCH (n {name:’Alice’})–&gt;(m)<br>Patterns with node properties.</p>
-<p>MATCH p = (n)–&gt;(m)<br>Assign a path to p.</p>
-<p>OPTIONAL MATCH (n)-[r]-&gt;(m)<br>Optional pattern, NULLs will be used for missing parts</p>
-<h3 id="唯一约束"><a href="#唯一约束" class="headerlink" title="唯一约束"></a>唯一约束</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> <span class="keyword">ON</span> (p:Person) ASSERT p.name <span class="keyword">IS</span> <span class="keyword">UNIQUE</span></span><br></pre></td></tr></table></figure>
-<p>DROP CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE</p>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><pre><code>1. 创建索引
+<pre><code>MATCH (n:Person)-[:KNOWS]-&gt;(m:Person)WHERE n.name=&quot;Alice&quot;
+Node patterns can contain labels and properties.
+
+MATCH (n)--&gt;(m)
+Any pattern can be used in MATCH.
+
+MATCH (n {name:&apos;Alice&apos;})--&gt;(m)
+Patterns with node properties.
+
+MATCH p = (n)--&gt;(m)
+Assign a path to p.
+
+OPTIONAL MATCH (n)-[r]-&gt;(m)
+Optional pattern, NULLs will be used for missing parts
+</code></pre><h3 id="唯一约束"><a href="#唯一约束" class="headerlink" title="唯一约束"></a>唯一约束</h3><pre><code>CREATE CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE
+
+DROP CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE
+</code></pre><h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><pre><code>1. 创建索引
 CREATE INDEX ON :Person(name)
 
 2. 删除索引
 DROP INDEX ON :Person(name)
-</code></pre><p>##　参考:<br><a href="http://neo4j.com/docs/stable/cypher-query-lang.html" target="_blank" rel="external">neo4j官网Cypher文档</a></p>
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h2><p><a href="http://neo4j.com/docs/stable/cypher-query-lang.html" target="_blank" rel="external">neo4j官网Cypher文档</a></p>
 </div></article></div></section><footer><div class="paginator"><a href="/2016/03/07/zookeeper01/" class="prev">PREV</a><a href="/2015/12/02/neo4j-01/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'smarthader';
 var disqus_identifier = '2015/12/02/neo4j-cypher/';
 var disqus_title = 'Neo4j - Cypher';

@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/about/index.html</loc>
+    
+    <lastmod>2016-05-11T04:22:54.865Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/tags/index.html</loc>
+    
+    <lastmod>2016-05-11T04:22:33.016Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2015/12/02/neo4j-cypher/</loc>
     
     <lastmod>2016-04-29T08:27:30.078Z</lastmod>

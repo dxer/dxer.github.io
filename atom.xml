@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-05-12T07:54:42.040Z</updated>
+  <updated>2016-05-12T07:55:59.624Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -20,14 +20,15 @@
     <link href="http://dxer.github.io/2016/04/01/hbase%20optimize/"/>
     <id>http://dxer.github.io/2016/04/01/hbase optimize/</id>
     <published>2016-04-01T07:25:38.000Z</published>
-    <updated>2016-05-12T07:54:42.040Z</updated>
+    <updated>2016-05-12T07:55:59.624Z</updated>
     
     <content type="html">&lt;p&gt;本文主要是从HBase应用程序设计与开发的角度，总结几种常用的性能优化方法。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&quot;Auto-Flash&quot;&gt;&lt;a href=&quot;#Auto-Flash&quot; class=&quot;headerlink&quot; title=&quot;Auto Flash&quot;&gt;&lt;/a&gt;Auto Flash&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.setAutoFlushTo(false)&lt;/code&gt;方法可以将HTable写客户福安的自动flush关闭，这样可以批量写入数据到HBase，而不是有一条put就执行一次更新，只有当put填满客户端写缓存的时候，才会向HBase服务端发起写请求。默认情况下auto flush是开启的。&lt;/p&gt;
 &lt;h3 id=&quot;Write-Buffer&quot;&gt;&lt;a href=&quot;#Write-Buffer&quot; class=&quot;headerlink&quot; title=&quot;Write Buffer&quot;&gt;&lt;/a&gt;Write Buffer&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.setWriteBufferSize(writeBufferSize)&lt;/code&gt;方法可以设置HTable客户端的写buffer大小，如果新设置的buffer小于当前写buffer中的数据时，buffer将会被flush到服务端。其中，writeBufferSize的单位是byte字节数，可以根基实际写入数据量的多少来设置该值。&lt;/p&gt;
 &lt;h3 id=&quot;WAL-Flag&quot;&gt;&lt;a href=&quot;#WAL-Flag&quot; class=&quot;headerlink&quot; title=&quot;WAL Flag&quot;&gt;&lt;/a&gt;WAL Flag&lt;/h3&gt;&lt;p&gt;在HBase中，客户端向集群中的RegionServer提交数据时（Put/Delete操作），首先会写到WAL（Write Ahead Log）日志，即HLog，一个RegionServer上的所有Region共享一个HLog，只有当WAL日志写成功后，再接着写MemStore，然后客户端被通知提交数据成功，如果写WAL日志失败，客户端被告知提交失败，这样做的好处是可以做到RegionServer宕机后的数据恢复。&lt;br&gt;对于不太重要的数据，可以在Put/Delete操作时，通过调用&lt;code&gt;Put.setWriteToWAL(false)&lt;/code&gt;或&lt;code&gt;Delete.setWriteToWAL(false)&lt;/code&gt;函数，放弃写WAL日志，以提高数据写入的性能。&lt;/p&gt;
 &lt;p&gt;注：如果关闭WAL日志，一旦RegionServer宕机，Put/Delete的数据将会无法根据WAL日志进行恢复。&lt;/p&gt;
-&lt;h3 id=&quot;Compression-压缩&quot;&gt;&lt;a href=&quot;#Compression-压缩&quot; class=&quot;headerlink&quot; title=&quot;Compression 压缩&quot;&gt;&lt;/a&gt;Compression 压缩&lt;/h3&gt;&lt;h3 id=&quot;批量写&quot;&gt;&lt;a href=&quot;#批量写&quot; class=&quot;headerlink&quot; title=&quot;批量写&quot;&gt;&lt;/a&gt;批量写&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.put(Put)&lt;/code&gt;方法可以将一个指定的row key记录写入HBase，同样HBase提供了另一个方法：通过调用&lt;code&gt;HTable.put(List&amp;lt;Put&amp;gt;)&lt;/code&gt;方法可以将指定的row key列表，批量写入多行记录，这样做的好处是批量执行，只需要一次网络I/O开销，这对于对数据实时性要求高，网络传输RTT高的情景下可能带来明显的性能提升。&lt;/p&gt;
+&lt;h3 id=&quot;Compression-压缩&quot;&gt;&lt;a href=&quot;#Compression-压缩&quot; class=&quot;headerlink&quot; title=&quot;Compression 压缩&quot;&gt;&lt;/a&gt;Compression 压缩&lt;/h3&gt;&lt;p&gt;数据量大，边压边写也会提升性能的，毕竟IO是大数据的最严重的瓶颈，哪怕使用了SSD也是一样。众多的压缩方式中，推荐使用SNAPPY。从压缩率和压缩速度来看，性价比最高。&lt;br&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;HColumnDescriptor hcd = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HColumnDescriptor(familyName);   &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hcd.setCompressionType(Algorithm.SNAPPY);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&quot;批量写&quot;&gt;&lt;a href=&quot;#批量写&quot; class=&quot;headerlink&quot; title=&quot;批量写&quot;&gt;&lt;/a&gt;批量写&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.put(Put)&lt;/code&gt;方法可以将一个指定的row key记录写入HBase，同样HBase提供了另一个方法：通过调用&lt;code&gt;HTable.put(List&amp;lt;Put&amp;gt;)&lt;/code&gt;方法可以将指定的row key列表，批量写入多行记录，这样做的好处是批量执行，只需要一次网络I/O开销，这对于对数据实时性要求高，网络传输RTT高的情景下可能带来明显的性能提升。&lt;/p&gt;
 &lt;h3 id=&quot;多线程并发写&quot;&gt;&lt;a href=&quot;#多线程并发写&quot; class=&quot;headerlink&quot; title=&quot;多线程并发写&quot;&gt;&lt;/a&gt;多线程并发写&lt;/h3&gt;&lt;p&gt;在客户端开启多个 HTable 写线程，每个写线程负责一个 HTable 对象的 flush 操作，这样结合定时 flush 和写 buffer（writeBufferSize），可以既保证在数据量小的时候，数据可以在较短时间内被 flush（如1秒内），同时又保证在数据量大的时候，写 buffer 一满就及时进行 flush。&lt;/p&gt;
 &lt;h3 id=&quot;批量读&quot;&gt;&lt;a href=&quot;#批量读&quot; class=&quot;headerlink&quot; title=&quot;批量读&quot;&gt;&lt;/a&gt;批量读&lt;/h3&gt;&lt;p&gt;通过调用 &lt;code&gt;HTable.get(Get)&lt;/code&gt; 方法可以根据一个指定的 row key 获取一行记录，同样 HBase 提供了另一个方法：通过调用 &lt;code&gt;HTable.get(List)&lt;/code&gt; 方法可以根据一个指定的 row key 列表，批量获取多行记录，这样做的好处是批量执行，只需要一次网络 I/O 开销，这对于对数据实时性要求高而且网络传输 RTT 高的情景下可能带来明显的性能提升。&lt;/p&gt;
 &lt;h3 id=&quot;缓存查询结果&quot;&gt;&lt;a href=&quot;#缓存查询结果&quot; class=&quot;headerlink&quot; title=&quot;缓存查询结果&quot;&gt;&lt;/a&gt;缓存查询结果&lt;/h3&gt;&lt;p&gt;对于频繁查询 HBase 的应用场景，可以考虑在应用程序中做缓存，当有新的查询请求时，首先在缓存中查找，如果存在则直接返回，不再查询 HBase；否则对 HBase 发起读请求查询，然后在应用程序中将查询结果缓存起来。至于缓存的替换策略，可以考虑 LRU 等常用的策略。&lt;/p&gt;

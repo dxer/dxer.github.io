@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/04/01/hbase%20optimize/</loc>
+    
+    <lastmod>2016-05-12T07:51:30.344Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/about/index.html</loc>
     
     <lastmod>2016-05-11T04:22:54.865Z</lastmod>

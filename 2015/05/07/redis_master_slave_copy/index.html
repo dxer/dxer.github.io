@@ -1,81 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>redis学习 - 主从拷贝 | dxer&#39;s Blog</title>
-  <meta name="author" content="dxer">
-  
-  <meta name="description" content="Redis主从拷贝的特点
-同一个Master可以拥有多个Slaves。
-Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；">
-  
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <meta property="og:title" content="redis学习 - 主从拷贝"/>
-  <meta property="og:site_name" content="dxer&#39;s Blog"/>
-
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="dxer&#39;s Blog" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-</head>
-
-
-<body>
-<div id="page" class="site">
-  <div id="primary" class="content-area">
-
-    <header id="header" class="inner"><div class="site-branding">
-  <h1 class="site-title">
-    <a href="/">dxer&#39;s Blog</a>
-  </h1>
-  <p class="site-description"></p>
-</div>
-<nav id="site-navigation" class="main-navigation" role="navigation">
-  <ul>
-    
-      <li><a href="/">Home</a></li>
-    
-      <li><a href="/archives">Archives</a></li>
-    
-  </ul>
-</nav></header>
-
-    <article id="content" class="site-content">
-      <main id="main" class="site-main posts-loop" role="main">
-        <article class="post article">
-
-  
-  
-    <h3 class="article-title"><span>redis学习 - 主从拷贝</span></h3>
-  
-
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/05/07/redis_master_slave_copy/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-05-07T06:29:19.000Z">
-          2015-05-07
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h2 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h2><ol>
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>redis学习 - 主从拷贝 · dxer</title><meta name="description" content="redis学习 - 主从拷贝 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis主从拷贝的特点"><span class="toc-text">Redis主从拷贝的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis主从拷贝的过程"><span class="toc-text">Redis主从拷贝的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Master-write-Slave-read机制"><span class="toc-text">Master write, Slave read机制</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis主从拷贝配置"><span class="toc-text">redis主从拷贝配置</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">redis学习 - 主从拷贝</h1><div class="post-time">May 7, 2015</div><div class="post-content"><h2 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h2><ol>
 <li>同一个Master可以拥有多个Slaves。</li>
 <li>Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&gt;Slave-&gt;Slave模式；<a id="more"></a></li>
 <li>Master以非阻塞的方式同步数据至slave，这将意味着Master会继续处理一个或多个slave的读写请求；<br>4.Slave端同步数据也可以修改为非阻塞是的方式，当slave在执行新的同步时，它仍可以用旧的数据信息来提供查询；否则，当slave与master失去联系时，slave会返回一个错误给客户端；</li>
@@ -94,67 +17,11 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
 <blockquote>
 <p>slaveof 192.168.100.126 6379 # 配置主机信息<br>masterauth <master-password> # 如果主机设置了密码，配置密码<br>slave-serve-stale-data yes # 配置当从机正在和主机进行同步的时候是否响应，如果配置是，有可能客户端会读到旧数据，如果配置否，当请求读数据的时候，将会报错SYNC with master in progress<br>slave-read-only yes # 从机是否只读。这边设置可写，不会同步到主机，<br>repl-ping-slave-period 10 # 从机发送ping命令到主机的间隔时间。<br>repl-timeout 60 # 主机响应超时时间，这个包括传输超时，IO超时，ping超时，注意这边时间必须大于上面的间隔时间，要不然会一直报超时错误。<br>repl-disable-tcp-nodelay no # 是否禁用TCP NODELAY。官方对这个配置用法的建议是：<br># By default we optimize for low latency, but in very high traffic conditions<br># or when the master and slaves are many hops away, turning this to “yes” may<br># be a good idea.<br># 默认情况下，我们优化目的是为了低延迟，但是在高传输条件或者主从机分布在路由很多跳之外的，建议禁用掉tcp-nodelay。<br>slave-priority 100 # 如果master不能再正常工作，那么会在多个slave中，选择优先值最小的一个slave提升为master，优先值为0表示不能提升为master</master-password></p>
 </blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-        <div class="article-meta pull-left">
-          
-          
-  
-
-  <span class="post-tags">
-    <i class="icon-tags"></i>
-    <a href="/tags/redis/">redis</a>
-  </span>
-
-
-        </div>
-        
-    </footer>
-  </div>
-</article>
-
-  
-	<div id="comment">
-	
-	
-	<!-- 多说评论框 start -->
-	 <div class="ds-thread" data-thread-key="/2015/05/07/redis_master_slave_copy/" data-title="redis学习 - 主从拷贝" data-url="http://dxer.github.io/2015/05/07/redis_master_slave_copy/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"smarthader"};
-	  (function() {
-	    var ds = document.createElement('script');
-	    ds.type = 'text/javascript';ds.async = true;
-	    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-	    ds.charset = 'UTF-8';
-	    (document.getElementsByTagName('head')[0] 
-	     || document.getElementsByTagName('body')[0]).appendChild(ds);
-	  })();
-	  </script>
-	<!-- 多说公共JS代码 end -->
-	
-	</div>
-
-
-
-
-      </main>
-    </article>
-
-    <footer id="colophon" class="site-footer" role="contentinfo"><p class="site-info">
-  Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-  Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-  </br>
-  
-  &copy; 2016 dxer
-  
-</p>
-</footer>
-    
-  </div>
-</div>
-</body>
-</html>
+</div></article></div><div class="tags"><a href="/tags/redis/">redis</a></div><div class="paginator"><a href="/2015/05/07/redis-persistence/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2015/02/26/centos-passwd/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2015/05/07/redis_master_slave_copy/index.html" data-title="redis学习 - 主从拷贝" data-url="http://dxer.github.io/2015/05/07/redis_master_slave_copy/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

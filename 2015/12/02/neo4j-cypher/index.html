@@ -1,79 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>Neo4j - Cypher | dxer&#39;s Blog</title>
-  <meta name="author" content="dxer">
-  
-  <meta name="description" content="Neo4j是一种图数据库。它将结构化数据存储在图上而不是传统的数据库表中。 相对于关系数据库来说，图数据库善于处理大量复杂、互连接、低结构化的数据，这些数据变化迅速，需要频繁的查询。在关系数据库中， 这些查询会导致大量的表连接，因此会产生性能上的问题,但是使用Neo4j就可以解决查询时出现的性能衰退问题。 同时Neo4j还提供了非常快的图算法、推荐系统和OLAP风格的分析。下面主要简单记录一下Cypher查询语言的使用方法。">
-  
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <meta property="og:title" content="Neo4j - Cypher"/>
-  <meta property="og:site_name" content="dxer&#39;s Blog"/>
-
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="dxer&#39;s Blog" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-</head>
-
-
-<body>
-<div id="page" class="site">
-  <div id="primary" class="content-area">
-
-    <header id="header" class="inner"><div class="site-branding">
-  <h1 class="site-title">
-    <a href="/">dxer&#39;s Blog</a>
-  </h1>
-  <p class="site-description"></p>
-</div>
-<nav id="site-navigation" class="main-navigation" role="navigation">
-  <ul>
-    
-      <li><a href="/">Home</a></li>
-    
-      <li><a href="/archives">Archives</a></li>
-    
-  </ul>
-</nav></header>
-
-    <article id="content" class="site-content">
-      <main id="main" class="site-main posts-loop" role="main">
-        <article class="post article">
-
-  
-  
-    <h3 class="article-title"><span>Neo4j - Cypher</span></h3>
-  
-
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/12/02/neo4j-cypher/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-12-02T04:17:19.000Z">
-          2015-12-02
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>Neo4j是一种图数据库。它将结构化数据存储在图上而不是传统的数据库表中。 相对于关系数据库来说，图数据库善于处理大量复杂、互连接、低结构化的数据，这些数据变化迅速，需要频繁的查询。在关系数据库中， 这些查询会导致大量的表连接，因此会产生性能上的问题,但是使用Neo4j就可以解决查询时出现的性能衰退问题。 同时Neo4j还提供了非常快的图算法、推荐系统和OLAP风格的分析。下面主要简单记录一下Cypher查询语言的使用方法。<br><a id="more"></a></p>
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Neo4j - Cypher · dxer</title><meta name="description" content="Neo4j - Cypher - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Create"><span class="toc-text">Create</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Merge"><span class="toc-text">Merge</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询"><span class="toc-text">查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#唯一约束"><span class="toc-text">唯一约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考:</span></a></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">Neo4j - Cypher</h1><div class="post-time">Dec 2, 2015</div><div class="post-content"><p>Neo4j是一种图数据库。它将结构化数据存储在图上而不是传统的数据库表中。 相对于关系数据库来说，图数据库善于处理大量复杂、互连接、低结构化的数据，这些数据变化迅速，需要频繁的查询。在关系数据库中， 这些查询会导致大量的表连接，因此会产生性能上的问题,但是使用Neo4j就可以解决查询时出现的性能衰退问题。 同时Neo4j还提供了非常快的图算法、推荐系统和OLAP风格的分析。下面主要简单记录一下Cypher查询语言的使用方法。<br><a id="more"></a></p>
 <p>这个查询语言包含以下几个明显的部分：</p>
 <ul>
 <li>START：在图中的开始点，通过元素的ID或所以查找获得。</li>
@@ -166,67 +91,11 @@ CREATE INDEX ON :Person(name)
 2. 删除索引
 DROP INDEX ON :Person(name)
 </code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h2><p><a href="http://neo4j.com/docs/stable/cypher-query-lang.html" target="_blank" rel="external">neo4j官网Cypher文档</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-        <div class="article-meta pull-left">
-          
-          
-  
-
-  <span class="post-tags">
-    <i class="icon-tags"></i>
-    <a href="/tags/Neo4j/">Neo4j</a>, <a href="/tags/Cypher/">Cypher</a>
-  </span>
-
-
-        </div>
-        
-    </footer>
-  </div>
-</article>
-
-  
-	<div id="comment">
-	
-	
-	<!-- 多说评论框 start -->
-	 <div class="ds-thread" data-thread-key="/2015/12/02/neo4j-cypher/" data-title="Neo4j - Cypher" data-url="http://dxer.github.io/2015/12/02/neo4j-cypher/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"smarthader"};
-	  (function() {
-	    var ds = document.createElement('script');
-	    ds.type = 'text/javascript';ds.async = true;
-	    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-	    ds.charset = 'UTF-8';
-	    (document.getElementsByTagName('head')[0] 
-	     || document.getElementsByTagName('body')[0]).appendChild(ds);
-	  })();
-	  </script>
-	<!-- 多说公共JS代码 end -->
-	
-	</div>
-
-
-
-
-      </main>
-    </article>
-
-    <footer id="colophon" class="site-footer" role="contentinfo"><p class="site-info">
-  Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-  Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-  </br>
-  
-  &copy; 2016 dxer
-  
-</p>
-</footer>
-    
-  </div>
-</div>
-</body>
-</html>
+</div></article></div><div class="tags"><a href="/tags/Neo4j/">Neo4j</a><a href="/tags/Cypher/">Cypher</a></div><div class="paginator"><a href="/2016/03/07/zookeeper01/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2015/12/02/neo4j-01/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2015/12/02/neo4j-cypher/index.html" data-title="Neo4j - Cypher" data-url="http://dxer.github.io/2015/12/02/neo4j-cypher/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

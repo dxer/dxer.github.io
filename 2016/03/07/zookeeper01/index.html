@@ -1,79 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>zookeeper伪集群模式安装和配置 | dxer&#39;s Blog</title>
-  <meta name="author" content="dxer">
-  
-  <meta name="description" content="伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。下面来看看zookeeper怎么进行安装的吧。">
-  
-  
-
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <meta property="og:title" content="zookeeper伪集群模式安装和配置"/>
-  <meta property="og:site_name" content="dxer&#39;s Blog"/>
-
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="dxer&#39;s Blog" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-</head>
-
-
-<body>
-<div id="page" class="site">
-  <div id="primary" class="content-area">
-
-    <header id="header" class="inner"><div class="site-branding">
-  <h1 class="site-title">
-    <a href="/">dxer&#39;s Blog</a>
-  </h1>
-  <p class="site-description"></p>
-</div>
-<nav id="site-navigation" class="main-navigation" role="navigation">
-  <ul>
-    
-      <li><a href="/">Home</a></li>
-    
-      <li><a href="/archives">Archives</a></li>
-    
-  </ul>
-</nav></header>
-
-    <article id="content" class="site-content">
-      <main id="main" class="site-main posts-loop" role="main">
-        <article class="post article">
-
-  
-  
-    <h3 class="article-title"><span>zookeeper伪集群模式安装和配置</span></h3>
-  
-
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2016/03/07/zookeeper01/" rel="bookmark">
-        <time class="entry-date published" datetime="2016-03-07T02:25:38.000Z">
-          2016-03-07
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。<br>下面来看看zookeeper怎么进行安装的吧。<br><a id="more"></a></p>
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>zookeeper伪集群模式安装和配置 · dxer</title><meta name="description" content="zookeeper伪集群模式安装和配置 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载"><span class="toc-text">下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解压"><span class="toc-text">解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建实例配置文件"><span class="toc-text">创建实例配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改配置"><span class="toc-text">修改配置</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#创建dataDir和实例id文件"><span class="toc-text">创建dataDir和实例id文件</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动zookeeper服务"><span class="toc-text">启动zookeeper服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看是否启动成功"><span class="toc-text">查看是否启动成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端连接"><span class="toc-text">客户端连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭zookeeper"><span class="toc-text">关闭zookeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重启zookeeper"><span class="toc-text">重启zookeeper</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">zookeeper伪集群模式安装和配置</h1><div class="post-time">Mar 7, 2016</div><div class="post-content"><p>伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。<br>下面来看看zookeeper怎么进行安装的吧。<br><a id="more"></a></p>
 <h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>选择一个稳定版本进行下载，我这里下载的是zookeeper-3.4.6版本。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz</span><br></pre></td></tr></table></figure>
 <h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf  zookeeper-3.4.6.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3个实例，复制三份 zk1，zk2，zk3</span></span><br><span class="line">cp -r zookeeper-3.4.6 zk1</span><br><span class="line">cp -r zookeeper-3.4.6 zk2</span><br><span class="line">cp -r zookeeper-3.4.6 zk3</span><br></pre></td></tr></table></figure>
@@ -114,67 +39,11 @@
 <h2 id="客户端连接"><a href="#客户端连接" class="headerlink" title="客户端连接"></a>客户端连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkCli.sh -server 127.0.0.1:2181</span><br></pre></td></tr></table></figure>
 <h2 id="关闭zookeeper"><a href="#关闭zookeeper" class="headerlink" title="关闭zookeeper"></a>关闭zookeeper</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh stop</span><br></pre></td></tr></table></figure>
 <h2 id="重启zookeeper"><a href="#重启zookeeper" class="headerlink" title="重启zookeeper"></a>重启zookeeper</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh restart</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-        <div class="article-meta pull-left">
-          
-          
-  
-
-  <span class="post-tags">
-    <i class="icon-tags"></i>
-    <a href="/tags/zookeeper/">zookeeper</a>
-  </span>
-
-
-        </div>
-        
-    </footer>
-  </div>
-</article>
-
-  
-	<div id="comment">
-	
-	
-	<!-- 多说评论框 start -->
-	 <div class="ds-thread" data-thread-key="/2016/03/07/zookeeper01/" data-title="zookeeper伪集群模式安装和配置" data-url="http://dxer.github.io/2016/03/07/zookeeper01/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"smarthader"};
-	  (function() {
-	    var ds = document.createElement('script');
-	    ds.type = 'text/javascript';ds.async = true;
-	    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-	    ds.charset = 'UTF-8';
-	    (document.getElementsByTagName('head')[0] 
-	     || document.getElementsByTagName('body')[0]).appendChild(ds);
-	  })();
-	  </script>
-	<!-- 多说公共JS代码 end -->
-	
-	</div>
-
-
-
-
-      </main>
-    </article>
-
-    <footer id="colophon" class="site-footer" role="contentinfo"><p class="site-info">
-  Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-  Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-  </br>
-  
-  &copy; 2016 dxer
-  
-</p>
-</footer>
-    
-  </div>
-</div>
-</body>
-</html>
+</div></article></div><div class="tags"><a href="/tags/zookeeper/">zookeeper</a></div><div class="paginator"><a href="/2016/03/10/hive01/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2015/12/02/neo4j-cypher/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/03/07/zookeeper01/index.html" data-title="zookeeper伪集群模式安装和配置" data-url="http://dxer.github.io/2016/03/07/zookeeper01/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

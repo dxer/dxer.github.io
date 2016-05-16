@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-05-12T07:55:59.624Z</updated>
+  <updated>2016-05-16T00:49:00.607Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://dxer.github.io/2016/05/16/cookie_and_session/"/>
+    <id>http://dxer.github.io/2016/05/16/cookie_and_session/</id>
+    <published>2016-05-16T00:49:11.440Z</published>
+    <updated>2016-05-16T00:49:00.607Z</updated>
+    
+    <content type="html">&lt;p&gt;cookie与session&lt;/p&gt;
+&lt;p&gt;会话（session）跟踪式web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是cookie与session。coolie是通过在客户端记录信息确定用户身份，session是通过在服务端记录信息确定用户身份。&lt;/p&gt;
+&lt;p&gt;cookie&lt;br&gt;cookie技术是客户端解决方案。cookie是由服务器发给客户端的特殊信息，这些信息以文本的方式存放在客户端，客户端每次向服务器发送请求的时候都会带上这些特殊的信息。&lt;/p&gt;
+&lt;p&gt;例如：在用户访问一个网站的时候，先登录，用户将用户名和密码发送给服务器；服务器对用户名和密码进行验证，验证成功后，会向客户端回传相应的超文本信息的同时也是返回这些个人信息，这些个人信息存放在HTTP的头部；当客户端接收到服务端的响应之后，浏览器会将这些个人信息存放在一个统一的位置；后面如果客户端再向服务端请求的时候，都会把cookie信息发回到服务器。服务器在接收到来自客户端的请求之后，分析存放于请求头的cookie信息，得到用户相关信息，从而生成与该客户端请求的内容。&lt;/p&gt;
+&lt;p&gt;cookie是弥补HTTP协议的无状态的不足。&lt;/p&gt;
+&lt;p&gt;cookies是HTTP的一个扩展，有两个专门负责设置以及发送cookie的http头部，Set-Cookie和Cookie。当服务器返回给客户端一个http响应时，如果包含Set-Cookie这个头部时，指示客户端建立一个新的cookie，并且在后续的http请求中自动发送这个cookie到服务端，直到这个cookie过期。如果cookie的生存时间是整个会话期间，浏览器会将cookie保存在内存中个，在浏览器关闭的时候会自动清除这个cookie。cookie也可以保存在客户端的磁盘上，这种情况，在浏览器关闭之后，该cookie也不会清除，下次打开浏览器访问对应网站的时候，这个cookie就会自动再次发送到服务器端。&lt;/p&gt;
+&lt;p&gt;客户端发送一个http请求到服务器端，服务器端发送一个http响应到客户端，其中包含Set-Cookie头部&lt;br&gt;客户端发送一个http请求到服务器端，其中包含Cookie头部&lt;/p&gt;
+&lt;h3 id=&quot;cookie的不可跨域性&quot;&gt;&lt;a href=&quot;#cookie的不可跨域性&quot; class=&quot;headerlink&quot; title=&quot;cookie的不可跨域性&quot;&gt;&lt;/a&gt;cookie的不可跨域性&lt;/h3&gt;&lt;p&gt;很多网站都会使用cookie，但是不同网站的只能使用本网站生成的cookie，不能进行跨域访问。&lt;/p&gt;
+&lt;p&gt;cookie中使用Unicode字符时，需要对Unicode字符进行编码，否则会乱码&lt;/p&gt;
+&lt;p&gt;cookie不仅可以使用ASCII字符与Unicode字符，还可以使用二进制数据，&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;session&quot;&gt;&lt;a href=&quot;#session&quot; class=&quot;headerlink&quot; title=&quot;session&quot;&gt;&lt;/a&gt;session&lt;/h2&gt;&lt;p&gt;web应用中还经常使用session来记录客户端的状态，session是服务器端使用的一种记录客户端状态的机制，比cookie简单，但是会增加服务器的存储压力&lt;/p&gt;
+&lt;p&gt;session技术是服务器端的解决方案，它是通过服务器来保持状态的，客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上，这个就是session。客户端浏览器再次访问时只需要从该session中查找客户的章台就可以了。&lt;br&gt;session类似在服务器上建立了一个客户档案，客户来访的时候只需要查询客户档案就可以了。&lt;/p&gt;
+&lt;h3 id=&quot;session的生命周期&quot;&gt;&lt;a href=&quot;#session的生命周期&quot; class=&quot;headerlink&quot; title=&quot;session的生命周期&quot;&gt;&lt;/a&gt;session的生命周期&lt;/h3&gt;&lt;p&gt;session是保存在服务端的，为了获得更高的存取速度，服务器一般把session放在内存中，每个用户都会拥有一个独立的session。如果session的内容太复杂，当亮亮客户访问的时候，会导致服务器内存溢出。所以session里的信息应当尽量精简。&lt;/p&gt;
+&lt;p&gt;session在用户第一次访问服务器的时候自动创建，访问服务器端的静态资源是不会产生session的&lt;/p&gt;
+&lt;p&gt;session生成后，用户只要继续访问，服务器就会更新session的最后访问时间，并维护该sessin，用户没访问服务器一次，无论是否读写session，服务器都认为该用户的session“活跃”了一次&lt;/p&gt;
+&lt;h3 id=&quot;session的有效期&quot;&gt;&lt;a href=&quot;#session的有效期&quot; class=&quot;headerlink&quot; title=&quot;session的有效期&quot;&gt;&lt;/a&gt;session的有效期&lt;/h3&gt;&lt;p&gt;由于访问服务端的用户会越来越多，因此session也会越来越多，为了防止内存溢出，如果超过了超时时间也没有访问服务器端，该session就会自动失效了。&lt;/p&gt;
+&lt;p&gt;session对浏览器的要求&lt;br&gt;虽然session保存在服务器端，对客户端是透明的，它的正常运行任然需要客户端浏览器的支持，因为session需要使用cookie作为识别标志。HTTP协议是无状态的，session不能通过HTTP链接来判断是否是同一个用户，因此服务器向客户端浏览器发送一个名为JSESSIONID的cookie，它的值为该Session的id。&lt;/p&gt;
+&lt;p&gt;该cookie是服务器端自动生成的，它的maxAge属性为-1，表示仅当前浏览器内有效，并且个浏览器窗口见不共享，关闭浏览器就会消失。&lt;/p&gt;
+&lt;p&gt;同一台机器的两个浏览器窗口访问服务器时，会生成两个不同的session，但是有浏览器窗口内的链接，脚本等打开的新窗口除外。这类子窗口会共享父窗口的cookie，因此会共享一个session。&lt;br&gt;新打开的浏览器窗口会生成新的session，但子窗口除外，子窗口会共享父窗口的session。&lt;/p&gt;
+&lt;p&gt;如果客户端浏览器将cookie禁用，或者不支持cookie怎么办（绝大数手机浏览器不支持cookie）？&lt;br&gt;URL地址重写&lt;/p&gt;
+&lt;h2 id=&quot;URL重写&quot;&gt;&lt;a href=&quot;#URL重写&quot; class=&quot;headerlink&quot; title=&quot;URL重写&quot;&gt;&lt;/a&gt;URL重写&lt;/h2&gt;&lt;p&gt;URL地址重写是对客户端不支持cookie的解决方案&lt;br&gt;URL地址重写的原理就是将用户的session的id信息重写到URL地址中，服务器能够够解析重写后的URL，从而获取session的id。这样即使客户端不支持cookie，也可以使用session来记录用户的状态了。&lt;/p&gt;
+&lt;h2 id=&quot;cookie与session的区别&quot;&gt;&lt;a href=&quot;#cookie与session的区别&quot; class=&quot;headerlink&quot; title=&quot;cookie与session的区别&quot;&gt;&lt;/a&gt;cookie与session的区别&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;cookie数据存在客户端的浏览器上，session数据存放在服务器上&lt;/li&gt;
+&lt;li&gt;cookie不是很安全，别人可以分析存放在本地的cookie并进行cookie欺骗，考虑到安全应当那个使用session&lt;/li&gt;
+&lt;li&gt;session会在一定时间内保存在服务器上，当访问量增多，会占用比较多的服务器资源，考虑到减轻服务器性能方面，应当使用cookie&lt;/li&gt;
+&lt;li&gt;的那个cookie在客户端的限制是3k，就是说一个站点在客户端存放的cookie不能超过3k&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;cookie与session&lt;/p&gt;
+&lt;p&gt;会话（session）跟踪式web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是cookie与session。coolie是通过在客户端记录信息确定用户身份，session是通过在服务端记录信息确定用户身份。&lt;/p
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>HBase性能优化方法总结</title>
@@ -363,9 +410,9 @@
     </summary>
     
     
-      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
     
   </entry>
   
@@ -383,9 +430,9 @@
     </summary>
     
     
-      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
     
   </entry>
   
@@ -603,6 +650,36 @@
   </entry>
   
   <entry>
+    <title>Hadoop 1.0 &amp; Hadoop 2.0</title>
+    <link href="http://dxer.github.io/2015/11/03/hadoop%20v1.0%20and%20hadoopv2.0/"/>
+    <id>http://dxer.github.io/2015/11/03/hadoop v1.0 and hadoopv2.0/</id>
+    <published>2015-11-03T01:29:19.000Z</published>
+    <updated>2016-05-16T07:06:42.164Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;Hadoop-1-0&quot;&gt;&lt;a href=&quot;#Hadoop-1-0&quot; class=&quot;headerlink&quot; title=&quot;Hadoop 1.0&quot;&gt;&lt;/a&gt;Hadoop 1.0&lt;/h2&gt;&lt;p&gt;Hadoop 1.0即第一代Hadoop，由分布式存储系统HDFS和分布式和分布式计算框架MapReduce组成。其中HDFS由一个NameNode和多个DataNode组成MapReduce由一个JobTracker和多个TaskTracker组成，对应的Hadoop版本为Apache Hadoop 0.20.x、1.x、0.21.x、0.22.x和CDH3。&lt;/p&gt;
+&lt;h2 id=&quot;Hadoop-2-0&quot;&gt;&lt;a href=&quot;#Hadoop-2-0&quot; class=&quot;headerlink&quot; title=&quot;Hadoop 2.0&quot;&gt;&lt;/a&gt;Hadoop 2.0&lt;/h2&gt;&lt;p&gt;Hadoop 2.0即第二代Hadoop，为了克服Hadooop 1.0中HDFS和MapReduce存在的各种问题而提出的。针对Hadoop 1.0中的单NameNode制约HDFS的扩展性问题，提出了HDFS Federation，它让多个NameNode分管不同的目录进而实现访问隔离和横向扩展，同时解决了NameNode的单点故障问题。针对Hadoop 1.0中的MapReduce在扩展性和多框架支持等方面的不足，它将JobTracker中的资源管理和作业控制功能分开，分别由组件ResourceManager和ApplicationMaster实现，其中，ResourceManager负责所有应用程序的资源分配，ApplicationMaster仅负责管理一个应用程序，着便是全新的通用的资源管理框架YARN。Hadoop 2.0对应的Hadoop的版本为Apache Hadoop 0.23.x、2.x和CDH4。&lt;/p&gt;
+&lt;h2 id=&quot;MRv1&quot;&gt;&lt;a href=&quot;#MRv1&quot; class=&quot;headerlink&quot; title=&quot;MRv1&quot;&gt;&lt;/a&gt;MRv1&lt;/h2&gt;&lt;p&gt;MapReduce 1.0计算框架主要由三部分组成，分别是编程模型，数据处理引擎和运行时环境。它的编程模型是将问题抽象成Map和Reduce两个阶段，其中Map阶段将输入数据解析成key/value，迭代调用map()函数处理后，再以key/value的形式输出到本地目录，而Reduce阶段则是将Map阶段输出的数据按照key相同的value进行归约处理，并将最终结果写到HDFS上。它的数据处理引擎由MapTask和ReduceTask组成，分别负责Map阶段逻辑和Reduce阶段逻辑的处理。运行时的环境由一个JobTracker和若干个TaskTracker组成，JobTracker负责资源管理和所有作业的控制，TaskTracker负责接收来自JobTracker的命令并执行它。&lt;/p&gt;
+&lt;h2 id=&quot;MRv2&quot;&gt;&lt;a href=&quot;#MRv2&quot; class=&quot;headerlink&quot; title=&quot;MRv2&quot;&gt;&lt;/a&gt;MRv2&lt;/h2&gt;&lt;p&gt;MRv2具有与MRv1相同的编程模型和数据处理引擎，唯一不同的是运行时环境。MRv2是在MRv1基础上经加工之后，运行于资源管理框架YARN之上的计算框架。它由资源管理系统YARN和作业控制进程ApplicationMaster组成，其中YARN负责资源管理和调度，而ApplicationMaster仅负责一个作业的管理。MRv1仅是一个独立的离线计算框架，而MRv2则是运行于YARN之上的MapReduce。&lt;/p&gt;
+&lt;h2 id=&quot;YARN&quot;&gt;&lt;a href=&quot;#YARN&quot; class=&quot;headerlink&quot; title=&quot;YARN&quot;&gt;&lt;/a&gt;YARN&lt;/h2&gt;&lt;p&gt;YARN是Hadoop 2.0中的资源管理系统，它是一个通用的资源管理模块，可以为各类应用横须进行资源管理和调度。YARN不仅限于MapReduce一种框架使用，也可以供其他框架使用，比如Spark,Storm等。&lt;/p&gt;
+&lt;h2 id=&quot;HDFS-Federation&quot;&gt;&lt;a href=&quot;#HDFS-Federation&quot; class=&quot;headerlink&quot; title=&quot;HDFS Federation&quot;&gt;&lt;/a&gt;HDFS Federation&lt;/h2&gt;&lt;p&gt;在Hadoop 2.0中，对HDFS进行改进，是的NameNode可以横向扩展成多个，每个NameNode分管一部分目录，进而产生了HDFS Federation，该机制的引入不仅增强了HDFS的扩展性，也使HDFS具备了隔离性。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Hadoop-1-0&quot;&gt;&lt;a href=&quot;#Hadoop-1-0&quot; class=&quot;headerlink&quot; title=&quot;Hadoop 1.0&quot;&gt;&lt;/a&gt;Hadoop 1.0&lt;/h2&gt;&lt;p&gt;Hadoop 1.0即第一代Hadoop，由分布式存储系统HDFS和分布式和
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+  </entry>
+  
+  <entry>
     <title>redis学习 - 数据持久化</title>
     <link href="http://dxer.github.io/2015/05/07/redis-persistence/"/>
     <id>http://dxer.github.io/2015/05/07/redis-persistence/</id>
@@ -691,6 +768,34 @@
     
     
       <category term="redis" scheme="http://dxer.github.io/tags/redis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入了解HashMap</title>
+    <link href="http://dxer.github.io/2015/03/21/hashmap/"/>
+    <id>http://dxer.github.io/2015/03/21/hashmap/</id>
+    <published>2015-03-21T07:43:19.000Z</published>
+    <updated>2016-05-16T07:05:38.980Z</updated>
+    
+    <content type="html">&lt;p&gt;HashMap基于哈希表的Map接口的实现。此实现提供了所有可选的映射操作，允许使用null键和值。与HashTable相比，HashMap不支持同步，不是线程安全，允许使用null键值，其他大致相同。HashTable不保证映射的顺序，不保证顺序很久不变&lt;/p&gt;
+&lt;p&gt;HashMap不是线程安全的，如果想要线程安全的HashMap，可以通过Collections&lt;br&gt;类的静态方法synchronizedMap获得线程安全的HashMap。HashTable是线程安全的，通过synchronized实现。&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Map map = Collections.synchronizedMap(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HashMap());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;HashMap的数据结构&quot;&gt;&lt;a href=&quot;#HashMap的数据结构&quot; class=&quot;headerlink&quot; title=&quot;HashMap的数据结构&quot;&gt;&lt;/a&gt;HashMap的数据结构&lt;/h2&gt;&lt;p&gt;HashMap的底层主要是基于数组和链表来实现的，它之所以查询速度特别快，主要是因为它是通过计算散列码来决定存储的位置。&lt;/p&gt;
+&lt;p&gt;从上图可以看出，x轴方向是链表的存储方式，y轴是数组。&lt;/p&gt;
+&lt;h2 id=&quot;HashMap在put和get的工作流程&quot;&gt;&lt;a href=&quot;#HashMap在put和get的工作流程&quot; class=&quot;headerlink&quot; title=&quot;HashMap在put和get的工作流程&quot;&gt;&lt;/a&gt;HashMap在put和get的工作流程&lt;/h2&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;HashMap基于哈希表的Map接口的实现。此实现提供了所有可选的映射操作，允许使用null键和值。与HashTable相比，HashMap不支持同步，不是线程安全，允许使用null键值，其他大致相同。HashTable不保证映射的顺序，不保证顺序很久不变&lt;/p&gt;
+&lt;p&gt;H
+    
+    </summary>
+    
+    
+      <category term="java" scheme="http://dxer.github.io/tags/java/"/>
+    
+      <category term="hashmap" scheme="http://dxer.github.io/tags/hashmap/"/>
     
   </entry>
   

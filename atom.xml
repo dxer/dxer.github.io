@@ -650,6 +650,64 @@
   </entry>
   
   <entry>
+    <title>YARN学习</title>
+    <link href="http://dxer.github.io/2015/11/03/yarn/"/>
+    <id>http://dxer.github.io/2015/11/03/yarn/</id>
+    <published>2015-11-03T06:46:19.000Z</published>
+    <updated>2016-05-16T07:46:37.010Z</updated>
+    
+    <content type="html">&lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序的ApplicationMaster，它负责向ResourceManager申请资源，并要求NodeManager启动可以占用一定资源的任务。由于不同的ApplicationMaster被分布到不同的节点上，因此它们之间不会相互影响。&lt;/p&gt;
+&lt;h2 id=&quot;ResourceManager&quot;&gt;&lt;a href=&quot;#ResourceManager&quot; class=&quot;headerlink&quot; title=&quot;ResourceManager&quot;&gt;&lt;/a&gt;ResourceManager&lt;/h2&gt;&lt;p&gt;ResourceManager简称RM，是一个全局的资源管理器，负责整个系统的资源管理和分配工作。主要由调度器（Scheduler）和应用程序管理器（Applications Master，ASM）两部分组成。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;调度器（Scheduler）&lt;br&gt;调度器根据容量，队列等限制条件将系统中的资源分配给各个正在运行的应用程序。&lt;/li&gt;
+&lt;li&gt;应用程序管理器（Applications Master）&lt;br&gt;ApplicationMaster负责管理整个系统中所有应用程序，包括应用程序提交、与调度器协商资源以启动ApplicationMaster，监控ApplicationMaster运行状态并在失败时重新启动它等。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;ApplicationMaster&quot;&gt;&lt;a href=&quot;#ApplicationMaster&quot; class=&quot;headerlink&quot; title=&quot;ApplicationMaster&quot;&gt;&lt;/a&gt;ApplicationMaster&lt;/h2&gt;&lt;p&gt;ApplicationMaster简称AM。YARN中每个应用都会启动一个AM。&lt;br&gt;主要功能包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;与RM调度器协商以获取资源&lt;/li&gt;
+&lt;li&gt;将得到的任务进一步分配给内部的任务&lt;/li&gt;
+&lt;li&gt;与NM通信以启动/停止任务&lt;/li&gt;
+&lt;li&gt;监控所有任务运行状态，并在任务失败时重新为任务申请资源以重新运行任务&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;NodeManager&quot;&gt;&lt;a href=&quot;#NodeManager&quot; class=&quot;headerlink&quot; title=&quot;NodeManager&quot;&gt;&lt;/a&gt;NodeManager&lt;/h2&gt;&lt;p&gt;NodeManager简称NM，NM是每个节点上的资源和任务管理器&lt;br&gt;主要功能包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;定时向RM汇报本节点上的资源使用情况和各个Continer的运行状态&lt;/li&gt;
+&lt;li&gt;接收并处理来自AM的Container启动/停止等各种请求&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;Container&quot;&gt;&lt;a href=&quot;#Container&quot; class=&quot;headerlink&quot; title=&quot;Container&quot;&gt;&lt;/a&gt;Container&lt;/h2&gt;&lt;p&gt;Container是YARN中资源容器。它封装了某个节点上的多维度资源，如内存、cpu、磁盘、网络等。YARN中所有的应用都是在container上运行的。AM也是在container上运行的，不过AM的container是向RM申请的。YARN会为每一个任务分配一个Container，并且该任务只能使用该Container中描述的资源。&lt;/p&gt;
+&lt;h2 id=&quot;YARN工作流程&quot;&gt;&lt;a href=&quot;#YARN工作流程&quot; class=&quot;headerlink&quot; title=&quot;YARN工作流程&quot;&gt;&lt;/a&gt;YARN工作流程&lt;/h2&gt;&lt;p&gt;YARN上运行的应用程序主要分为两类：短应用程序和长应用程序。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;短应用程序是指一定时间内（可能是秒级、分钟级或小时级，尽管天级别或者更长时间的也存在，但是非常少）可运行完成并征程退出的应用程序&lt;/li&gt;
+&lt;li&gt;长应用程序是指不出意外，永不终止运行的应用程序，通常是一些服务，如Storm，HBase等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;YARN的工作流程包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;向YARN中提交一个应用程序，其中包括ApplicationMaster程序，启动ApplicationMaster的命令，用户程序等&lt;/li&gt;
+&lt;li&gt;ResourceManager为该应用程序分配一个Container，并与对应的NodeManager通信，要求它在这个Container中启动应用程序的ApplicationMaster&lt;/li&gt;
+&lt;li&gt;ApplicationMaster首先向ResourceManager注册（注册之后可以直接通过ResourceManager查看应用程序的运行状态），然后它将为各个任务申请资源，并监控它的运行状态，直到运行结束&lt;/li&gt;
+&lt;li&gt;ApplicationMaster采用轮询的方式通过RPC协议向ResourceManager申请和领取资源&lt;/li&gt;
+&lt;li&gt;一旦ApplicationMaster申请到资源后，便与对应的NodeManager通信，要求它启动任务&lt;/li&gt;
+&lt;li&gt;NodeManager为任务设置好运行环境（包括环境变量，jar包，二进制程序等）后，将任务启动命令写到一个脚本中，并通过运行该脚本启动任务&lt;/li&gt;
+&lt;li&gt;各个任务通过RPC协议向ApplicationMaster汇报自己的状态和进度，使得ApplicationMaster随时掌握各个任务的运行状态，从而可以在任务失败时重新启动任务&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="YAR" scheme="http://dxer.github.io/tags/YAR/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hadoop 1.0 &amp; Hadoop 2.0</title>
     <link href="http://dxer.github.io/2015/11/03/hadoop%20v1.0%20and%20hadoopv2.0/"/>
     <id>http://dxer.github.io/2015/11/03/hadoop v1.0 and hadoopv2.0/</id>

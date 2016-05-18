@@ -161,7 +161,7 @@
     <link href="http://dxer.github.io/2016/03/18/hbase/"/>
     <id>http://dxer.github.io/2016/03/18/hbase/</id>
     <published>2016-03-18T11:25:38.000Z</published>
-    <updated>2016-05-18T09:39:14.833Z</updated>
+    <updated>2016-05-18T09:45:10.303Z</updated>
     
     <content type="html">&lt;h2 id=&quot;HBase一些基本概念&quot;&gt;&lt;a href=&quot;#HBase一些基本概念&quot; class=&quot;headerlink&quot; title=&quot;HBase一些基本概念&quot;&gt;&lt;/a&gt;HBase一些基本概念&lt;/h2&gt;&lt;p&gt;1、Row key&lt;/p&gt;
 &lt;p&gt;行主键，在对HBase进行查询时候只能依靠Row key，HBase不支持条件查询等类似于一些主流数据库的查询方式，读取记录只能依赖行主键以及进行全局扫面，可以将行主键想象成主流数据库查询过程中用到的主键（例如，id）。&lt;/p&gt;
@@ -210,29 +210,100 @@
 &lt;p&gt;&lt;em&gt;大合并（major compaction）&lt;/em&gt;：处理给定region的一个列族的所有HFile。大合并完成后，这个列族的所有HFile合并成一个文件，可以从Shell中收工出发整个表（或者特定region）的大合并。大合并是HBase清理被删除记录的唯一机会&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;小合并（minor compaction）&lt;/em&gt;：把多个小HFile合并成一个大HFile。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;HBase-Shell命令&quot;&gt;&lt;a href=&quot;#HBase-Shell命令&quot; class=&quot;headerlink&quot; title=&quot;HBase Shell命令&quot;&gt;&lt;/a&gt;HBase Shell命令&lt;/h2&gt;&lt;p&gt;| Command | 描述 |&lt;/p&gt;
-&lt;p&gt;|——–|——–|&lt;/p&gt;
-&lt;p&gt;|alter        |修改列族模式       |&lt;/p&gt;
-&lt;p&gt;|count        |统计表中行的数量        |&lt;/p&gt;
-&lt;p&gt;|create        |创建表        |&lt;/p&gt;
-&lt;p&gt;|describe   |显示表相关的详细信息        |&lt;/p&gt;
-&lt;p&gt;|delete        |删除指定对象的值（可以为表，行，列对应的值，另外也可以指定时间戳的值）        |&lt;/p&gt;
-&lt;p&gt;|deleteall        |删除指定行的所有元素值        |&lt;/p&gt;
-&lt;p&gt;|disable        |使表无效        |&lt;/p&gt;
-&lt;p&gt;|enable        |使表有效        |&lt;/p&gt;
-&lt;p&gt;|drop        |删除表        |&lt;/p&gt;
-&lt;p&gt;|exists        |测试表是否存在        |&lt;/p&gt;
-&lt;p&gt;|exit        |退出HBase Shell的值        |&lt;/p&gt;
-&lt;p&gt;|get        |获取行或单元的值        |&lt;/p&gt;
-&lt;p&gt;|incr        |增加指定表、行或列的值        |&lt;/p&gt;
-&lt;p&gt;|list        |列出HBase中存在的所有表        |&lt;/p&gt;
-&lt;p&gt;|put        |向指定的表单元添加值        |&lt;/p&gt;
-&lt;p&gt;|tools        |列出HBase所支持的工具        |&lt;/p&gt;
-&lt;p&gt;|scan        |通过对表的扫描来获取对应的值        |&lt;/p&gt;
-&lt;p&gt;|status        | 返回HBase集群的状态信息       |&lt;/p&gt;
-&lt;p&gt;|shutdown        |关闭HBase集群（与exit不同）        |&lt;/p&gt;
-&lt;p&gt;|truncate        |重新创建指定表        |&lt;/p&gt;
-&lt;p&gt;|version        |返回HBase版本信息        |&lt;/p&gt;
+&lt;h2 id=&quot;HBase-Shell命令&quot;&gt;&lt;a href=&quot;#HBase-Shell命令&quot; class=&quot;headerlink&quot; title=&quot;HBase Shell命令&quot;&gt;&lt;/a&gt;HBase Shell命令&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Command&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;alter&lt;/td&gt;
+&lt;td&gt;修改列族模式&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;count&lt;/td&gt;
+&lt;td&gt;统计表中行的数量&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;create&lt;/td&gt;
+&lt;td&gt;创建表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;describe&lt;/td&gt;
+&lt;td&gt;显示表相关的详细信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;delete&lt;/td&gt;
+&lt;td&gt;删除指定对象的值（可以为表，行，列对应的值，另外也可以指定时间戳的值）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;deleteall&lt;/td&gt;
+&lt;td&gt;删除指定行的所有元素值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;disable&lt;/td&gt;
+&lt;td&gt;使表无效&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;enable&lt;/td&gt;
+&lt;td&gt;使表有效&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;drop&lt;/td&gt;
+&lt;td&gt;删除表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;exists&lt;/td&gt;
+&lt;td&gt;测试表是否存在&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;exit&lt;/td&gt;
+&lt;td&gt;退出HBase Shell的值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;get&lt;/td&gt;
+&lt;td&gt;获取行或单元的值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;incr&lt;/td&gt;
+&lt;td&gt;增加指定表、行或列的值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;list&lt;/td&gt;
+&lt;td&gt;列出HBase中存在的所有表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;put&lt;/td&gt;
+&lt;td&gt;向指定的表单元添加值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;tools&lt;/td&gt;
+&lt;td&gt;列出HBase所支持的工具&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;scan&lt;/td&gt;
+&lt;td&gt;通过对表的扫描来获取对应的值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;status&lt;/td&gt;
+&lt;td&gt;返回HBase集群的状态信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;shutdown&lt;/td&gt;
+&lt;td&gt;关闭HBase集群（与exit不同）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;truncate&lt;/td&gt;
+&lt;td&gt;重新创建指定表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;version&lt;/td&gt;
+&lt;td&gt;返回HBase版本信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h4 id=&quot;create&quot;&gt;&lt;a href=&quot;#create&quot; class=&quot;headerlink&quot; title=&quot;create&quot;&gt;&lt;/a&gt;create&lt;/h4&gt;&lt;p&gt;创建表&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;#123;NAME =&amp;gt; &amp;apos;f1&amp;apos;, VERSIONS =&amp;gt; 5&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;#123;Name =&amp;gt; &amp;apos;f1&amp;apos;&amp;#125;, &amp;#123;NAME =&amp;gt; &amp;apos;f2&amp;apos;&amp;#125;, &amp;#123;NAME =&amp;gt; &amp;apos;f3&amp;apos;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#等价于：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;apos;cf&amp;apos;, &amp;apos;cf2&amp;apos;, &amp;apos;cf3&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;h4 id=&quot;list&quot;&gt;&lt;a href=&quot;#list&quot; class=&quot;headerlink&quot; title=&quot;list&quot;&gt;&lt;/a&gt;list&lt;/h4&gt;&lt;p&gt;列出HBase中包含的表名称&lt;/p&gt;
@@ -797,7 +868,7 @@
     <link href="http://dxer.github.io/2015/08/17/jvm/"/>
     <id>http://dxer.github.io/2015/08/17/jvm/</id>
     <published>2015-08-17T13:21:38.000Z</published>
-    <updated>2016-05-18T09:43:20.407Z</updated>
+    <updated>2016-05-18T09:44:25.574Z</updated>
     
     <content type="html">&lt;p&gt;JVM堆内存被分为两部分&lt;em&gt;年轻代(Young Generation)&lt;/em&gt;和&lt;em&gt;老年代(Old Generation)&lt;/em&gt;。&lt;/p&gt;
 &lt;h5 id=&quot;新生代-Young-Generation&quot;&gt;&lt;a href=&quot;#新生代-Young-Generation&quot; class=&quot;headerlink&quot; title=&quot;新生代(Young Generation)&quot;&gt;&lt;/a&gt;新生代(Young Generation)&lt;/h5&gt;&lt;p&gt;新生代是所有新对象产生的地方。当年轻代的内存空间被用完时，就会触发垃圾回收。这个垃圾回收叫做&lt;em&gt;Minor GC&lt;/em&gt;。新生代分为3个部分&lt;em&gt;Eden区&lt;/em&gt;和&lt;em&gt;Survivor区(FromSpace和ToSpace,两个区域大小相同)&lt;/em&gt;，新生代的大小可以通过&lt;code&gt;-Xmn&lt;/code&gt;来控制，也可以用&lt;code&gt;-XX：SurvivorRatio&lt;/code&gt;来控制Eden和Survivor的比例。&lt;/p&gt;
@@ -845,8 +916,7 @@
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;-XX:SurvivorRatio&lt;/td&gt;
-&lt;td&gt;提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个&lt;/td&gt;
-&lt;td&gt;Survivor区分配2.5m内存。默认比例是8。&lt;/td&gt;
+&lt;td&gt;提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个Survivor区分配2.5m内存。默认比例是8。&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;-XX:NewRatio&lt;/td&gt;

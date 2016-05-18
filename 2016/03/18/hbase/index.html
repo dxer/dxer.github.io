@@ -45,29 +45,100 @@
 <p><em>大合并（major compaction）</em>：处理给定region的一个列族的所有HFile。大合并完成后，这个列族的所有HFile合并成一个文件，可以从Shell中收工出发整个表（或者特定region）的大合并。大合并是HBase清理被删除记录的唯一机会</p>
 <p><em>小合并（minor compaction）</em>：把多个小HFile合并成一个大HFile。</p>
 <hr>
-<h2 id="HBase-Shell命令"><a href="#HBase-Shell命令" class="headerlink" title="HBase Shell命令"></a>HBase Shell命令</h2><p>| Command | 描述 |</p>
-<p>|——–|——–|</p>
-<p>|alter        |修改列族模式       |</p>
-<p>|count        |统计表中行的数量        |</p>
-<p>|create        |创建表        |</p>
-<p>|describe   |显示表相关的详细信息        |</p>
-<p>|delete        |删除指定对象的值（可以为表，行，列对应的值，另外也可以指定时间戳的值）        |</p>
-<p>|deleteall        |删除指定行的所有元素值        |</p>
-<p>|disable        |使表无效        |</p>
-<p>|enable        |使表有效        |</p>
-<p>|drop        |删除表        |</p>
-<p>|exists        |测试表是否存在        |</p>
-<p>|exit        |退出HBase Shell的值        |</p>
-<p>|get        |获取行或单元的值        |</p>
-<p>|incr        |增加指定表、行或列的值        |</p>
-<p>|list        |列出HBase中存在的所有表        |</p>
-<p>|put        |向指定的表单元添加值        |</p>
-<p>|tools        |列出HBase所支持的工具        |</p>
-<p>|scan        |通过对表的扫描来获取对应的值        |</p>
-<p>|status        | 返回HBase集群的状态信息       |</p>
-<p>|shutdown        |关闭HBase集群（与exit不同）        |</p>
-<p>|truncate        |重新创建指定表        |</p>
-<p>|version        |返回HBase版本信息        |</p>
+<h2 id="HBase-Shell命令"><a href="#HBase-Shell命令" class="headerlink" title="HBase Shell命令"></a>HBase Shell命令</h2><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alter</td>
+<td>修改列族模式</td>
+</tr>
+<tr>
+<td>count</td>
+<td>统计表中行的数量</td>
+</tr>
+<tr>
+<td>create</td>
+<td>创建表</td>
+</tr>
+<tr>
+<td>describe</td>
+<td>显示表相关的详细信息</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>删除指定对象的值（可以为表，行，列对应的值，另外也可以指定时间戳的值）</td>
+</tr>
+<tr>
+<td>deleteall</td>
+<td>删除指定行的所有元素值</td>
+</tr>
+<tr>
+<td>disable</td>
+<td>使表无效</td>
+</tr>
+<tr>
+<td>enable</td>
+<td>使表有效</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>删除表</td>
+</tr>
+<tr>
+<td>exists</td>
+<td>测试表是否存在</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出HBase Shell的值</td>
+</tr>
+<tr>
+<td>get</td>
+<td>获取行或单元的值</td>
+</tr>
+<tr>
+<td>incr</td>
+<td>增加指定表、行或列的值</td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出HBase中存在的所有表</td>
+</tr>
+<tr>
+<td>put</td>
+<td>向指定的表单元添加值</td>
+</tr>
+<tr>
+<td>tools</td>
+<td>列出HBase所支持的工具</td>
+</tr>
+<tr>
+<td>scan</td>
+<td>通过对表的扫描来获取对应的值</td>
+</tr>
+<tr>
+<td>status</td>
+<td>返回HBase集群的状态信息</td>
+</tr>
+<tr>
+<td>shutdown</td>
+<td>关闭HBase集群（与exit不同）</td>
+</tr>
+<tr>
+<td>truncate</td>
+<td>重新创建指定表</td>
+</tr>
+<tr>
+<td>version</td>
+<td>返回HBase版本信息</td>
+</tr>
+</tbody>
+</table>
 <h4 id="create"><a href="#create" class="headerlink" title="create"></a>create</h4><p>创建表</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">create &apos;t1&apos;, &#123;NAME =&gt; &apos;f1&apos;, VERSIONS =&gt; 5&#125;</span><br><span class="line"></span><br><span class="line">create &apos;t1&apos;, &#123;Name =&gt; &apos;f1&apos;&#125;, &#123;NAME =&gt; &apos;f2&apos;&#125;, &#123;NAME =&gt; &apos;f3&apos;&#125;</span><br><span class="line"></span><br><span class="line">#等价于：</span><br><span class="line"></span><br><span class="line">create &apos;t1&apos;, &apos;cf&apos;, &apos;cf2&apos;, &apos;cf3&apos;</span><br></pre></td></tr></table></figure>
 <h4 id="list"><a href="#list" class="headerlink" title="list"></a>list</h4><p>列出HBase中包含的表名称</p>

@@ -793,6 +793,107 @@
   </entry>
   
   <entry>
+    <title>JVM垃圾回收</title>
+    <link href="http://dxer.github.io/2015/08/17/jvm/"/>
+    <id>http://dxer.github.io/2015/08/17/jvm/</id>
+    <published>2015-08-17T13:21:38.000Z</published>
+    <updated>2016-05-18T09:43:20.407Z</updated>
+    
+    <content type="html">&lt;p&gt;JVM堆内存被分为两部分&lt;em&gt;年轻代(Young Generation)&lt;/em&gt;和&lt;em&gt;老年代(Old Generation)&lt;/em&gt;。&lt;/p&gt;
+&lt;h5 id=&quot;新生代-Young-Generation&quot;&gt;&lt;a href=&quot;#新生代-Young-Generation&quot; class=&quot;headerlink&quot; title=&quot;新生代(Young Generation)&quot;&gt;&lt;/a&gt;新生代(Young Generation)&lt;/h5&gt;&lt;p&gt;新生代是所有新对象产生的地方。当年轻代的内存空间被用完时，就会触发垃圾回收。这个垃圾回收叫做&lt;em&gt;Minor GC&lt;/em&gt;。新生代分为3个部分&lt;em&gt;Eden区&lt;/em&gt;和&lt;em&gt;Survivor区(FromSpace和ToSpace,两个区域大小相同)&lt;/em&gt;，新生代的大小可以通过&lt;code&gt;-Xmn&lt;/code&gt;来控制，也可以用&lt;code&gt;-XX：SurvivorRatio&lt;/code&gt;来控制Eden和Survivor的比例。&lt;/p&gt;
+&lt;p&gt;新生代的特点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;大多数新建的对象都在Eden区&lt;/li&gt;
+&lt;li&gt;当Eden区域被填满时，就会执行Minor GC。并把所有存活下来的对象转移到其中一个survivor区&lt;/li&gt;
+&lt;li&gt;Minor GC同样会检查存活下来的对象，并把他们转移到另一个survivor区。这样在一段时间内，总会有一个空的survivor区&lt;/li&gt;
+&lt;li&gt;经过多次GC周期后，仍然存活下来的对象会被转移到老年代内存空间。通常这是在新生代有资格提升到老年代前通过设定年龄阈值来完成的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&quot;老年代-Old-Generation&quot;&gt;&lt;a href=&quot;#老年代-Old-Generation&quot; class=&quot;headerlink&quot; title=&quot;老年代(Old Generation)&quot;&gt;&lt;/a&gt;老年代(Old Generation)&lt;/h5&gt;&lt;p&gt;老年代内存里包含了长期存活的对象和经过多次Minor GC后依然存活下来的对象。通常会在老年代内存被占满时进行垃圾回收。老年代的垃圾收集叫做Major GC。Major GC会花费更多的时间。旧生带占用大小为&lt;code&gt;-Xmx&lt;/code&gt;值减去&lt;code&gt;-Xmn&lt;/code&gt;对应的值&lt;/p&gt;
+&lt;h5 id=&quot;永久代-Permanent-Generation&quot;&gt;&lt;a href=&quot;#永久代-Permanent-Generation&quot; class=&quot;headerlink&quot; title=&quot;永久代(Permanent Generation)&quot;&gt;&lt;/a&gt;永久代(Permanent Generation)&lt;/h5&gt;&lt;p&gt;永久代包含了JVM需要的应用元数据，这些元数据描述了在应用里使用的类和方法。注意，永久代不是Java堆内存的一部分，有一些JVM没有这一代，主要存放敞亮及类的一些信息，默认最小值为16MB，最大值为64MB，可以通过&lt;code&gt;-XX:PermSize&lt;/code&gt;及&lt;code&gt;-XX:MaxPermSize&lt;/code&gt;来设置最小值和最大值。&lt;/p&gt;
+&lt;p&gt;永久代存放JVM运行时使用的类。永久代同样包含了Java SE库的类和方法。永久代的对象在full GC时进行垃圾收集。&lt;/p&gt;
+&lt;h5 id=&quot;方法区&quot;&gt;&lt;a href=&quot;#方法区&quot; class=&quot;headerlink&quot; title=&quot;方法区&quot;&gt;&lt;/a&gt;方法区&lt;/h5&gt;&lt;p&gt;方法区是永久代空间的一部分，并用来存储类型信息（运行时常量和静态变量）和方法代码和构造函数代码。&lt;/p&gt;
+&lt;h5 id=&quot;内存池&quot;&gt;&lt;a href=&quot;#内存池&quot; class=&quot;headerlink&quot; title=&quot;内存池&quot;&gt;&lt;/a&gt;内存池&lt;/h5&gt;&lt;p&gt;如果JVM实现支持，JVM内存管理会为创建内存池，用来为不变对象创建对象池。字符串池就是内存池类型的一个很好的例子。内存池可以属于堆或者永久代，这取决于JVM内存管理的实现。&lt;/p&gt;
+&lt;h5 id=&quot;运行时常量池&quot;&gt;&lt;a href=&quot;#运行时常量池&quot; class=&quot;headerlink&quot; title=&quot;运行时常量池&quot;&gt;&lt;/a&gt;运行时常量池&lt;/h5&gt;&lt;p&gt;运行时常量池是每个类常量池的运行时代表。它包含了类的运行时常量和静态方法。运行时常量池是方法区的一部分。&lt;/p&gt;
+&lt;h5 id=&quot;Java栈内存&quot;&gt;&lt;a href=&quot;#Java栈内存&quot; class=&quot;headerlink&quot; title=&quot;Java栈内存&quot;&gt;&lt;/a&gt;Java栈内存&lt;/h5&gt;&lt;p&gt;Java栈内存用于运行线程。它们包含了方法里的临时数据、堆里其它对象引用的特定数据。你可以阅读栈内存和堆内存的区别。&lt;/p&gt;
+&lt;h5 id=&quot;Java-堆内存开关&quot;&gt;&lt;a href=&quot;#Java-堆内存开关&quot; class=&quot;headerlink&quot; title=&quot;Java 堆内存开关&quot;&gt;&lt;/a&gt;Java 堆内存开关&lt;/h5&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;VM设置&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-Xms&lt;/td&gt;
+&lt;td&gt;设置JVM启动时堆的初始化大小。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-Xmx&lt;/td&gt;
+&lt;td&gt;设置堆最大值。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-Xmn&lt;/td&gt;
+&lt;td&gt;设置年轻代的空间大小，剩下的为老年代的空间大小。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-XX:PermGen&lt;/td&gt;
+&lt;td&gt;设置永久代内存的初始化大小。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-XX:MaxPermGen&lt;/td&gt;
+&lt;td&gt;设置永久代的最大值。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-XX:SurvivorRatio&lt;/td&gt;
+&lt;td&gt;提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个&lt;/td&gt;
+&lt;td&gt;Survivor区分配2.5m内存。默认比例是8。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-XX:NewRatio&lt;/td&gt;
+&lt;td&gt;提供年老代和年轻代的比例大小。默认值是2。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;大多数时候，上面的选项已经足够使用了。但是如果你还想了解其他的选项，那么请查看JVM选项官方网页。&lt;/p&gt;
+&lt;h5 id=&quot;Java垃圾回收&quot;&gt;&lt;a href=&quot;#Java垃圾回收&quot; class=&quot;headerlink&quot; title=&quot;Java垃圾回收&quot;&gt;&lt;/a&gt;Java垃圾回收&lt;/h5&gt;&lt;p&gt;JVM堆内存主要被分为三块，新生代、老年代、持久代。三代的特点不同，造就了他们所用的GC算法不同，新生代适合那些生命周期较短，频繁创建及销毁的对象，老年代适合生命周期相对较长的对象，持久代在Sun HotSpot中就是指方法区（有些JVM中根本就没有持久代这中说法）。&lt;/p&gt;
+&lt;p&gt;Java垃圾回收会找出没用的对象，把它从内存中移除并释放出内存给以后创建的对象使用。Java程序语言中的一个最大优点是自动垃圾回收，不像其他的程序语言那样需要手动分配和释放内存，比如C语言。&lt;/p&gt;
+&lt;p&gt;垃圾收集器是一个后台运行程序。它管理着内存中的所有对象并找出没被引用的对象。所有的这些未引用的对象都会被删除，回收它们的空间并分配给其他对象。&lt;/p&gt;
+&lt;p&gt;一个基本的垃圾回收过程涉及三个步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;标记：这是第一步。在这一步，垃圾收集器会找出哪些对象正在使用和哪些对象不在使用。&lt;/li&gt;
+&lt;li&gt;正常清除：垃圾收集器清会除不在使用的对象，回收它们的空间分配给其他对象。&lt;/li&gt;
+&lt;li&gt;压缩清除：为了提升性能，压缩清除会在删除没用的对象后，把所有存活的对象移到一起。这样可以提高分配新对象的效率。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;简单标记和清除方法存在两个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;效率很低。因为大多数新建对象都会成为“没用对象”。&lt;/li&gt;
+&lt;li&gt;经过多次垃圾回收周期的对象很有可能在以后的周期也会存活下来。&lt;br&gt;上面简单清除方法的问题在于Java垃圾收集的分代回收的，而且在堆内存里有年轻代和年老代两个区域。我已经在上面解释了Minor GC和Major GC是怎样扫描对象，以及如何把对象从一个分代空间移到另外一个分代空间。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&quot;Java垃圾回收类型&quot;&gt;&lt;a href=&quot;#Java垃圾回收类型&quot; class=&quot;headerlink&quot; title=&quot;Java垃圾回收类型&quot;&gt;&lt;/a&gt;Java垃圾回收类型&lt;/h5&gt;&lt;p&gt;这里有五种可以在应用里使用的垃圾回收类型。仅需要使用JVM开关就可以在我们的应用里启用垃圾回收策略。让我们一起来逐一了解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Serial GC（-XX:+UseSerialGC）：Serial GC使用简单的标记、清除、压缩方法对年轻代和年老代进行垃圾回收，即Minor GC和Major GC。Serial GC在client模式（客户端模式）很有用，比如在简单的独立应用和CPU配置较低的机器。这个模式对占有内存较少的应用很管用。&lt;/li&gt;
+&lt;li&gt;Parallel GC（-XX:+UseParallelGC）：除了会产生N个线程来进行年轻代的垃圾收集外，Parallel GC和Serial GC几乎一样。这里的N是系统CPU的核数。我们可以使用 -XX:ParallelGCThreads=n 这个JVM选项来控制线程数量。并行垃圾收集器也叫throughput收集器。因为它使用了多CPU加快垃圾回收性能。Parallel GC在进行年老代垃圾收集时使用单线程。&lt;/li&gt;
+&lt;li&gt;Parallel Old GC（-XX:+UseParallelOldGC）：和Parallel GC一样。不同之处，Parallel Old GC在年轻代垃圾收集和年老代垃圾回收时都使用多线程收集。&lt;/li&gt;
+&lt;li&gt;并发标记清除（CMS）收集器（-XX:+UseConcMarkSweepGC)：CMS收集器也被称为短暂停顿并发收集器。它是对年老代进行垃圾收集的。CMS收集器通过多线程并发进行垃圾回收，尽量减少垃圾收集造成的停顿。CMS收集器对年轻代进行垃圾回收使用的算法和Parallel收集器一样。这个垃圾收集器适用于不能忍受长时间停顿要求快速响应的应用。可使用 -XX:ParallelCMSThreads=n JVM选项来限制CMS收集器的线程数量。&lt;/li&gt;
+&lt;li&gt;G1垃圾收集器（-XX:+UseG1GC) G1（Garbage First）：垃圾收集器是在Java 7后才可以使用的特性，它的长远目标时代替CMS收集器。G1收集器是一个并行的、并发的和增量式压缩短暂停顿的垃圾收集器。G1收集器和其他的收集器运行方式不一样，不区分年轻代和年老代空间。它把堆空间划分为多个大小相等的区域。当进行垃圾收集时，它会优先收集存活对象较少的区域，因此叫“Garbage First”。你可以在Oracle Garbage-FIrst收集器文档找到更多详细信息。&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;JVM堆内存被分为两部分&lt;em&gt;年轻代(Young Generation)&lt;/em&gt;和&lt;em&gt;老年代(Old Generation)&lt;/em&gt;。&lt;/p&gt;
+&lt;h5 id=&quot;新生代-Young-Generation&quot;&gt;&lt;a href=&quot;#新生代-Young-Generation
+    
+    </summary>
+    
+    
+      <category term="java" scheme="http://dxer.github.io/tags/java/"/>
+    
+      <category term="jvm" scheme="http://dxer.github.io/tags/jvm/"/>
+    
+  </entry>
+  
+  <entry>
     <title>redis学习 - 数据持久化</title>
     <link href="http://dxer.github.io/2015/05/07/redis-persistence/"/>
     <id>http://dxer.github.io/2015/05/07/redis-persistence/</id>

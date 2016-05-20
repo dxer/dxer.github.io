@@ -845,11 +845,11 @@
   </entry>
   
   <entry>
-    <title>YARN学习</title>
+    <title>hadoop序列化</title>
     <link href="http://dxer.github.io/2015/10/25/hadoop_serializable/"/>
     <id>http://dxer.github.io/2015/10/25/hadoop_serializable/</id>
     <published>2015-10-25T06:46:19.000Z</published>
-    <updated>2016-05-20T09:34:02.248Z</updated>
+    <updated>2016-05-20T09:35:07.266Z</updated>
     
     <content type="html">&lt;p&gt;对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。&lt;br&gt;将一个对象编码成一个字节流叫做序列化改对象(Serializing)&lt;br&gt;相反的处理过程称为反序列化（Deserializing）&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;序列化的主要用途：&lt;/p&gt;

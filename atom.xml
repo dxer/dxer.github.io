@@ -845,6 +845,77 @@
   </entry>
   
   <entry>
+    <title>YARN学习</title>
+    <link href="http://dxer.github.io/2015/10/25/hadoop_serializable/"/>
+    <id>http://dxer.github.io/2015/10/25/hadoop_serializable/</id>
+    <published>2015-10-25T06:46:19.000Z</published>
+    <updated>2016-05-20T09:34:02.248Z</updated>
+    
+    <content type="html">&lt;p&gt;对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。&lt;br&gt;将一个对象编码成一个字节流叫做序列化改对象(Serializing)&lt;br&gt;相反的处理过程称为反序列化（Deserializing）&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;序列化的主要用途：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;作为一种持久化格式&lt;br&gt;一个对象被序列化之后，它的编码可以被存储到磁盘上，供反序列化使用&lt;/li&gt;
+&lt;li&gt;作为一种通信数据格式&lt;br&gt;序列化的结果可以从一个正在运行的虚拟机，通过网络传输到一个虚拟机上&lt;/li&gt;
+&lt;li&gt;作为一种拷贝，克隆机制&lt;br&gt;将对象序列化到内存，然后通过反序列化，可以得到一个对已经存在的对象的深拷贝的新对象&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在hadoop中，序列化是要使用的是数据持久化和通信数据格式两种功能。&lt;/p&gt;
+&lt;h2 id=&quot;JDK中自带序列化&quot;&gt;&lt;a href=&quot;#JDK中自带序列化&quot; class=&quot;headerlink&quot; title=&quot;JDK中自带序列化&quot;&gt;&lt;/a&gt;JDK中自带序列化&lt;/h2&gt;&lt;p&gt;JDK的序列化只有实现了serializable接口就能实现序列化与反序列化，但是记得一定要加上序列化版本ID serialVersionUID，这个是用来识别序列化的之前那个类的到底是哪一个。&lt;br&gt;我们显式设置这个序列化版本ID的目的就是为了：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在某些场合，希望类的不同版本对序列化兼容，因此需要确保类的不同版本具有相同的serialVersionUID；&lt;/li&gt;
+&lt;li&gt;在某些场合，不希望类的不同版本对序列化兼容，因此需要确保类的不同版本具有不同的serialVersionUID。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;java序列化算法要点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将对象实例相关的元数据输出&lt;/li&gt;
+&lt;li&gt;递归的输出类的超类描述直到不再有超类&lt;/li&gt;
+&lt;li&gt;类元数据完了之后，开始从最顶层的超类开始输出对象的实例的实际数据值&lt;/li&gt;
+&lt;li&gt;从上到下递归输出实例的数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;java序列化与反序列化实现方法&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建一个对象，并实现Serializbale接口&lt;/li&gt;
+&lt;li&gt;序列化&lt;code&gt;ObjectOutputStream.writeObject(obj);&lt;/code&gt;&lt;br&gt;反序列化&lt;code&gt;ObjectOutputStream.readObject();&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;java序列化不足之处：&lt;br&gt;java序列化将每个对象的类名写入到输出流中，这就导致了java序列化对象需要占用比原对象更多的存储空间。&lt;br&gt;java的反序列化会不断的创建对象，这会给系统带来一定的开销。&lt;/p&gt;
+&lt;p&gt;正是由于java序列化的不足，所以hadoop没有直接使用java序列化，而是实现了自己的序列化机制，在hadoop序列化中，用户可以复用对象，这样就减少了java对象的分配和回收，提高了应用的效率。&lt;/p&gt;
+&lt;p&gt;Hadoop序列化特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;紧凑&lt;br&gt;由于带宽是hadoop集群中稀缺的资源，一个紧凑的序列化机制可以充分利用数据中心的带宽&lt;/li&gt;
+&lt;li&gt;快速&lt;br&gt;在进程间通信时会大量使用序列化机制，因此必须尽量减少序列化和反序列化的开销&lt;/li&gt;
+&lt;li&gt;可扩展&lt;br&gt;随着系统的发展，系统间通信的协议升级，类的定义会发生变化，序列化机制需要支持这些升级和变化&lt;/li&gt;
+&lt;li&gt;互操作&lt;br&gt;可以支持不同开发语言间的通信，如c++和java之间的通信。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Hadoop序列化&quot;&gt;&lt;a href=&quot;#Hadoop序列化&quot; class=&quot;headerlink&quot; title=&quot;Hadoop序列化&quot;&gt;&lt;/a&gt;Hadoop序列化&lt;/h2&gt;&lt;p&gt;hadoop中通过实现Writable接口来实现序列化，它比较紧凑、快速。&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;Writable&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   * 输出（序列化）对象到流中&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   * &lt;span class=&quot;doctag&quot;&gt;@param&lt;/span&gt; out&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   * &lt;span class=&quot;doctag&quot;&gt;@throws&lt;/span&gt; IOException&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(DataOutput out)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; IOException&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; &lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  * 从流中读取（反序列化对象）&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  * &lt;span class=&quot;doctag&quot;&gt;@param&lt;/span&gt; in&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  * &lt;span class=&quot;doctag&quot;&gt;@throws&lt;/span&gt; IOException&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;readFields&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(DataInput in)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; IOException&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;write方法用于将对象写入二进制的DataOutput中，完成序列化&lt;br&gt;readFields从DataInput流中读取数据，完成反序列化&lt;/p&gt;
+&lt;p&gt;下面是一个demo：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;MyWritable&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;Writable&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;// Some data&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; counter;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;long&lt;/span&gt; timestamp;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(DataOutput out)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; IOException &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        out.writeInt(counter);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        out.writeLong(timestamp);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;readFields&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(DataInput in)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; IOException &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        counter = in.readInt();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        timestamp = in.readLong();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; MyWritable &lt;span class=&quot;title&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(DataInput in)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; IOException &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        MyWritable w = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; MyWritable();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        w.readFields(in);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; w;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;hadoop中常用的序列化文件如下图所示&lt;br&gt;&lt;img src=&quot;/pic/20160520/hadoop_Serializable.jpg&quot; alt=&quot;hadoop序列化&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;BytesWritable&quot;&gt;&lt;a href=&quot;#BytesWritable&quot; class=&quot;headerlink&quot; title=&quot;BytesWritable&quot;&gt;&lt;/a&gt;BytesWritable&lt;/h3&gt;&lt;p&gt;BytesWritable类型是一个二进制数组的封装类型，序列化格式是以一个4字节的整数。&lt;/p&gt;
+&lt;h3 id=&quot;NullWritable&quot;&gt;&lt;a href=&quot;#NullWritable&quot; class=&quot;headerlink&quot; title=&quot;NullWritable&quot;&gt;&lt;/a&gt;NullWritable&lt;/h3&gt;&lt;p&gt;NullWritable是一个非常特殊的Writable类型，序列化不包含任何字符，仅仅相当于个占位符。在MapReduce编程中，key或者value在不需要使用时，可以定义为NullWritable。&lt;/p&gt;
+&lt;h3 id=&quot;ObjectWritable&quot;&gt;&lt;a href=&quot;#ObjectWritable&quot; class=&quot;headerlink&quot; title=&quot;ObjectWritable&quot;&gt;&lt;/a&gt;ObjectWritable&lt;/h3&gt;&lt;p&gt;ObjectWritable是其他类型的封装类，包括java原生类型，String，enum，null等，或者这些类型的数组。当一个field有多种类型时，就可以使用ObjectWritable，不过有个不好的地方就是占用的空间太大，即使你存一个字母，因为它需要保存封装前的类型。&lt;/p&gt;
+&lt;h3 id=&quot;GenericWritable&quot;&gt;&lt;a href=&quot;#GenericWritable&quot; class=&quot;headerlink&quot; title=&quot;GenericWritable&quot;&gt;&lt;/a&gt;GenericWritable&lt;/h3&gt;&lt;p&gt;使用GenericWritable时，只需继承他，并通过getTypes方法指定哪些类型需要支持即可。&lt;br&gt;GenericWritable的序列化只是把类型在type数组里的索引放在了前面，这样就比ObjectWritable节省了很多空间，所以推荐大家使用GenericWritable&lt;/p&gt;
+&lt;h2 id=&quot;集合类型的Writable&quot;&gt;&lt;a href=&quot;#集合类型的Writable&quot; class=&quot;headerlink&quot; title=&quot;集合类型的Writable&quot;&gt;&lt;/a&gt;集合类型的Writable&lt;/h2&gt;&lt;h3 id=&quot;ArrayWritable和TwoDArrayWritable&quot;&gt;&lt;a href=&quot;#ArrayWritable和TwoDArrayWritable&quot; class=&quot;headerlink&quot; title=&quot;ArrayWritable和TwoDArrayWritable&quot;&gt;&lt;/a&gt;ArrayWritable和TwoDArrayWritable&lt;/h3&gt;&lt;p&gt;ArrayWritable和TwoDArrayWritable分别表示数组和二维数组的Writable类型，指定数组的类型有两种方法,构造方法里设置，或者继承于ArrayWritable,TwoDArrayWritable也是一样。&lt;/p&gt;
+&lt;h3 id=&quot;MapWritable和SortedMapWritable&quot;&gt;&lt;a href=&quot;#MapWritable和SortedMapWritable&quot; class=&quot;headerlink&quot; title=&quot;MapWritable和SortedMapWritable&quot;&gt;&lt;/a&gt;MapWritable和SortedMapWritable&lt;/h3&gt;&lt;p&gt;MapWritable对应Map,SortedMapWritable对应SortedMap,以4个字节开头，存储集合大小，然后每个元素以一个字节开头存储类型的索引（类似GenericWritable,所以总共的类型总数只能倒127），接着是元素本身，先key后value，这样一对对排开。&lt;br&gt;这两个Writable以后会用很多，贯穿整个hadoop，这里就不写示例了。&lt;/p&gt;
+&lt;p&gt;hadoop序列化中没有set集合和list集合，但是可以代替实现。用MapWritable代替set，SortedMapWritable代替sortedmap，只需将他们的values设置成NullWritable即可，NullWritable不占空间。可以用ArrayWritable代替list集合，不同类型的list可以用GenericWritable实现类型，然后再使用ArrayWritable封装。当然MapWritable一样可以实现list，把key设置为索引，values做list里的元素。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。&lt;br&gt;将一个对象编码成一个字节流叫做序列化改对象(Serializing)&lt;br&gt;相反的处理过程称为反序列化（Deserializing）&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="serializable" scheme="http://dxer.github.io/tags/serializable/"/>
+    
+  </entry>
+  
+  <entry>
     <title>JVM垃圾回收</title>
     <link href="http://dxer.github.io/2015/08/17/jvm/"/>
     <id>http://dxer.github.io/2015/08/17/jvm/</id>

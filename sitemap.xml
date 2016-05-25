@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2015/11/03/hadoop_ha/</loc>
+    
+    <lastmod>2016-05-25T06:53:29.068Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2015/10/25/hadoop_serializable/</loc>
     
     <lastmod>2016-05-25T03:41:02.709Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://dxer.github.io/2015/11/03/yarn/</loc>
     
     <lastmod>2016-05-25T03:40:23.138Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2015/11/03/hadoop_ha/</loc>
-    
-    <lastmod>2016-05-25T03:39:18.539Z</lastmod>
     
   </url>
   

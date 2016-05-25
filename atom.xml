@@ -799,7 +799,7 @@
     <link href="http://dxer.github.io/2015/11/03/hadoop_ha/"/>
     <id>http://dxer.github.io/2015/11/03/hadoop_ha/</id>
     <published>2015-11-03T06:38:19.000Z</published>
-    <updated>2016-05-25T03:39:18.539Z</updated>
+    <updated>2016-05-25T06:53:29.068Z</updated>
     
     <content type="html">&lt;p&gt;在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;在Hadoop2.0中解决了这个问题，在Hadoop2.0中NameNode不再只是一个，可以有多个。每一个都具有相同的职能，一个NameNode是active状态，一个是standby状态。当集群在运行的时候，只有active状态的NameNode是正常工作的，standBy状态的NameNode是处于待命状态，时刻同步active状态NameNode的数据。一旦active状态的NameNode不能工作了，通过手工或者自动切换，standby状态的NameNode就可以转变为active状态了，这样集群还是正常工作了，这样集群就具有高可用性了。&lt;/p&gt;
@@ -808,7 +808,7 @@
 &lt;li&gt;NFS（Network File System）&lt;/li&gt;
 &lt;li&gt;QJM（Quorum Journal Manager）&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;基本原理&lt;br&gt;Hadoop2.0中有两个NameNode，一个是active状态NameNode，一个是standby状态NameNode。两者的状态是可以切换的，但是不能同时都是active状态，最多只有一个active状态。只有active状态的NameNode对外提供服务，standby状态的NameNode不对外服务。active状态的NameNode和standby状态的NameNode之间通过NFS或者JN（journalnode，QJM方式）来同步数据。&lt;/p&gt;
+&lt;h3 id=&quot;基本原理&quot;&gt;&lt;a href=&quot;#基本原理&quot; class=&quot;headerlink&quot; title=&quot;基本原理&quot;&gt;&lt;/a&gt;基本原理&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/HDFS_HA_arch.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;Hadoop2.0中有两个NameNode，一个是active状态NameNode，一个是standby状态NameNode。两者的状态是可以切换的，但是不能同时都是active状态，最多只有一个active状态。只有active状态的NameNode对外提供服务，standby状态的NameNode不对外服务。active状态的NameNode和standby状态的NameNode之间通过NFS或者JN（journalnode，QJM方式）来同步数据。&lt;/p&gt;
 &lt;p&gt;active状态的NameNode会把最近的操作记录写到本地的edits文件中（edits file），并传输到NFS或者JN中。standby状态的NameNode定期检查，从NFS或者JN中把最近的edit文件读过来，然后把edits文件和fsimage文件合并成一个新的fsimage，合并完成之后会通知active状态NameNode来获取新的fsiamge，active状态NameNode获得到这个新的fsimage文件后，替换掉原来旧的fsimage文件。&lt;/p&gt;
 &lt;h3 id=&quot;NFS方式&quot;&gt;&lt;a href=&quot;#NFS方式&quot; class=&quot;headerlink&quot; title=&quot;NFS方式&quot;&gt;&lt;/a&gt;NFS方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_nfs.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;NFS作为active NameNode和standby NameNode之间数据共享的存储，active状态的 NameNode会把最近的edits文件写到NFS，而standby状态的NameNode从NFS中读取edits文件。这个方式的缺点就是，如果active状态的NameNode或standby状态的NameNode有一个和NFS之间网络有问题是，就会造成它们之间数据的同步出现问题。&lt;/p&gt;
 &lt;h3 id=&quot;QJM方式&quot;&gt;&lt;a href=&quot;#QJM方式&quot; class=&quot;headerlink&quot; title=&quot;QJM方式&quot;&gt;&lt;/a&gt;QJM方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_qjm.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;QJM方式可以解决NFS容错机制不足的问题，active状态NameNode和standby状态NameNode之间通过一组journalnode（奇数个，2n+1）来共享数据，active状态NameNode把最近的edits文件写到这组journalnode上，只要有n+1个写入成功就认为这次写入操作是成功的，然后standby状态NameNode就可以从journalnode上读取数据了。QJM方式有容错机制，可以容忍n个journalnode的失败&lt;/p&gt;
@@ -830,9 +830,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
     
   </entry>
   
@@ -860,9 +860,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
       <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
   </entry>
   

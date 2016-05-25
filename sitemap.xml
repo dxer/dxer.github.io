@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2015/10/26/secondarynamenode/</loc>
+    
+    <lastmod>2016-05-25T08:17:31.947Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2015/11/03/hadoop_ha/</loc>
     
     <lastmod>2016-05-25T06:53:29.068Z</lastmod>

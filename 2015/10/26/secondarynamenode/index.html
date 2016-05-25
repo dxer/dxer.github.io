@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>【Hadoop学习】Secondary NameNode解读 · dxer</title><meta name="description" content="【Hadoop学习】Secondary NameNode解读 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#NameNode"><span class="toc-text">NameNode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Secondary-NameNode"><span class="toc-text">Secondary NameNode</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">【Hadoop学习】Secondary NameNode解读</h1><div class="post-time">Oct 26, 2015</div><div class="post-content"><p>Secondary NameNode从它的名字上来看，给人的感觉是NameNode的备份。但实际上不是这样。那到底Secondary NameNode在HDFS中扮演的是什么角色呢？<br><a id="more"></a></p>
+<p>从名字上来看Secondary NameNode与NameNode，都包含着NameNode，这两者是不是存在某种关系呢，先来看下NameNode是干什么的。</p>
+<h3 id="NameNode"><a href="#NameNode" class="headerlink" title="NameNode"></a>NameNode</h3><p>NameNode主要是用来保存HDFS的元数据信息，比如命名空间信息，快信息等。当它运行的时候，这些信息会保存在内存中。同时这部分信息也会持久化到磁盘上。</p>
+<p><img src="/pic/20151026/nn.jpg" alt=""></p>
+<ul>
+<li>fsimage:是在NameNode启动时对整个文件系统的快照</li>
+<li>edits:在NameNode启动后，对文件系统改动序列</li>
+</ul>
+<p>只有在NameNode重启时，edits才会合并到fsimage文件中，从而得到一个文件系统的最新快照。但是在产品集群中NameNode是很少重启的，这也意味着当NameNode运行了很长时间后，edits文件会变得很大。就会面临如下问题：</p>
+<ol>
+<li>edits文件会变的很大，怎么去管理这个文件是一个挑战</li>
+<li>NameNode的重启会花费很长时间，因为有很多edits中改动要合并到fsimage文件上。</li>
+<li>如果NameNode挂掉了，就会丢失了很多改动，因为此时的fsimage文件非常旧。</li>
+</ol>
+<p>这个时候Secondary NameNode就出场了，Secondary NameNode可以来帮助解决上面问题，它的职责就是用来合并NameNode的edits到fsimage中。</p>
+<h3 id="Secondary-NameNode"><a href="#Secondary-NameNode" class="headerlink" title="Secondary NameNode"></a>Secondary NameNode</h3><p>HDFS文件系统的写操作不是直接被修改到fsimage中，而是edits中，Secondary NameNode节点负责将两者进行整合。</p>
+<p><img src="/pic/20151026/checkpoint.jpg" alt=""></p>
+<p>checkpoint过程如下：</p>
+<ol>
+<li>Secondary Namenode请求Namenode停止使用edits文件，暂时将新的写操作记录到一个新文件中，如edits.new。</li>
+<li>Secondary Namenode节点从Namenode节点获取fsimage和edits文件（采用HTTP GET）</li>
+<li>Secondary Namenode将fsimage文件载入到内存，逐一执行edits文件中的操作，创建新的fsimage文件</li>
+<li>Secondary Namenode将新的fsimage文件发送回Namenode（使用HTTP POST）</li>
+<li>Namenode节点将从Secondary Namenode节点接收的fsimage文件替换旧的fsimage文件，用步骤1产生的edits.new文件替换旧的edits文件（即改名）。同时更新fstime文件来记录检查点执行的时间<br>注：从Hadoop0.21.0开始，辅助Namenode已经放弃不用，由checkpoint节点取而代之，功能不变。新版本同时引入一种新的Namenode，名为BackupNode。</li>
+</ol>
+<p>Secondary NameNode的整个目的在HDFS中提供一个Checkpoint Node，它只是NameNode的一个助手节点</p>
+<p>现在，我们明白Secondary NameNode所做的是在文件系统这设置一个Checkpoint来帮助NameNode更好的工作；它不是取代NameNode，也不是NameNode的备份。</p>
+<p>Secondary NameNode的检查点进程启动，是由两个配置参数控制的：</p>
+<ul>
+<li>fs.checkpoint.period，指定连续两次检查点的最大时间间隔， 默认值是1小时。</li>
+<li>fs.checkpoint.size定义了edits日志文件的最大值，一旦超过这个值会导致强制执行检查点（即使没到检查点的最大时间间隔）。默认值是64MB。</li>
+</ul>
+<p>关于NameNode是什么时候将改动写到edit logs中的？<br>这个操作实际上是由DataNode的写操作触发的，当我们往DataNode写文件时，DataNode会跟NameNode通信，告诉NameNode什么文件的第几个block放在它那里，NameNode这个时候会将这些元数据信息写到edit logs文件中。</p>
+</div></article></div><div class="tags"><a href="/tags/hadoop/">hadoop</a><a href="/tags/hdfs/">hdfs</a></div><div class="paginator"><a href="/2015/11/03/hadoop v1.0 and hadoopv2.0/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2015/10/25/hadoop_serializable/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2015/10/26/secondarynamenode/index.html" data-title="【Hadoop学习】Secondary NameNode解读" data-url="http://dxer.github.io/2015/10/26/secondarynamenode/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

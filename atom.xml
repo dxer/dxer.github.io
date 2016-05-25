@@ -524,26 +524,6 @@
   </entry>
   
   <entry>
-    <title>hive的部署安装</title>
-    <link href="http://dxer.github.io/2016/03/10/hive01/"/>
-    <id>http://dxer.github.io/2016/03/10/hive01/</id>
-    <published>2016-03-10T06:29:19.000Z</published>
-    <updated>2016-04-25T00:42:30.581Z</updated>
-    
-    <content type="html"></content>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
-      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
-    
-  </entry>
-  
-  <entry>
     <title>zookeeper伪集群模式安装和配置</title>
     <link href="http://dxer.github.io/2016/03/07/zookeeper01/"/>
     <id>http://dxer.github.io/2016/03/07/zookeeper01/</id>
@@ -757,13 +737,13 @@
   </entry>
   
   <entry>
-    <title>YARN学习</title>
+    <title>【Hadoop学习】YARN学习</title>
     <link href="http://dxer.github.io/2015/11/03/yarn/"/>
     <id>http://dxer.github.io/2015/11/03/yarn/</id>
     <published>2015-11-03T06:46:19.000Z</published>
-    <updated>2016-05-16T07:46:37.010Z</updated>
+    <updated>2016-05-25T03:40:23.138Z</updated>
     
-    <content type="html">&lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序的ApplicationMaster，它负责向ResourceManager申请资源，并要求NodeManager启动可以占用一定资源的任务。由于不同的ApplicationMaster被分布到不同的节点上，因此它们之间不会相互影响。&lt;/p&gt;
+    <content type="html">&lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序的ApplicationMaster，它负责向ResourceManager申请资源，并要求NodeManager启动可以占用一定资源的任务。由于不同的ApplicationMaster被分布到不同的节点上，因此它们之间不会相互影响。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&quot;ResourceManager&quot;&gt;&lt;a href=&quot;#ResourceManager&quot; class=&quot;headerlink&quot; title=&quot;ResourceManager&quot;&gt;&lt;/a&gt;ResourceManager&lt;/h2&gt;&lt;p&gt;ResourceManager简称RM，是一个全局的资源管理器，负责整个系统的资源管理和分配工作。主要由调度器（Scheduler）和应用程序管理器（Applications Master，ASM）两部分组成。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;调度器（Scheduler）&lt;br&gt;调度器根据容量，队列等限制条件将系统中的资源分配给各个正在运行的应用程序。&lt;/li&gt;
@@ -801,7 +781,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序
+      &lt;p&gt;YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序的ApplicationMaster，它负责向ResourceManager申请资源，并要求NodeManager启动可以占用一定资源的任务。由于不同的ApplicationMaster被分布到不同的节点上，因此它们之间不会相互影响。&lt;br&gt;
     
     </summary>
     
@@ -815,11 +795,53 @@
   </entry>
   
   <entry>
-    <title>Hadoop 1.0 &amp; Hadoop 2.0</title>
+    <title>【Hadoop学习】Hadoop2.0高可用性</title>
+    <link href="http://dxer.github.io/2015/11/03/hadoop_ha/"/>
+    <id>http://dxer.github.io/2015/11/03/hadoop_ha/</id>
+    <published>2015-11-03T06:38:19.000Z</published>
+    <updated>2016-05-25T03:39:18.539Z</updated>
+    
+    <content type="html">&lt;p&gt;在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在Hadoop2.0中解决了这个问题，在Hadoop2.0中NameNode不再只是一个，可以有多个。每一个都具有相同的职能，一个NameNode是active状态，一个是standby状态。当集群在运行的时候，只有active状态的NameNode是正常工作的，standBy状态的NameNode是处于待命状态，时刻同步active状态NameNode的数据。一旦active状态的NameNode不能工作了，通过手工或者自动切换，standby状态的NameNode就可以转变为active状态了，这样集群还是正常工作了，这样集群就具有高可用性了。&lt;/p&gt;
+&lt;p&gt;Hadoop2.0的HA机制官方介绍了2中方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;NFS（Network File System）&lt;/li&gt;
+&lt;li&gt;QJM（Quorum Journal Manager）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;基本原理&lt;br&gt;Hadoop2.0中有两个NameNode，一个是active状态NameNode，一个是standby状态NameNode。两者的状态是可以切换的，但是不能同时都是active状态，最多只有一个active状态。只有active状态的NameNode对外提供服务，standby状态的NameNode不对外服务。active状态的NameNode和standby状态的NameNode之间通过NFS或者JN（journalnode，QJM方式）来同步数据。&lt;/p&gt;
+&lt;p&gt;active状态的NameNode会把最近的操作记录写到本地的edits文件中（edits file），并传输到NFS或者JN中。standby状态的NameNode定期检查，从NFS或者JN中把最近的edit文件读过来，然后把edits文件和fsimage文件合并成一个新的fsimage，合并完成之后会通知active状态NameNode来获取新的fsiamge，active状态NameNode获得到这个新的fsimage文件后，替换掉原来旧的fsimage文件。&lt;/p&gt;
+&lt;h3 id=&quot;NFS方式&quot;&gt;&lt;a href=&quot;#NFS方式&quot; class=&quot;headerlink&quot; title=&quot;NFS方式&quot;&gt;&lt;/a&gt;NFS方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_nfs.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;NFS作为active NameNode和standby NameNode之间数据共享的存储，active状态的 NameNode会把最近的edits文件写到NFS，而standby状态的NameNode从NFS中读取edits文件。这个方式的缺点就是，如果active状态的NameNode或standby状态的NameNode有一个和NFS之间网络有问题是，就会造成它们之间数据的同步出现问题。&lt;/p&gt;
+&lt;h3 id=&quot;QJM方式&quot;&gt;&lt;a href=&quot;#QJM方式&quot; class=&quot;headerlink&quot; title=&quot;QJM方式&quot;&gt;&lt;/a&gt;QJM方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_qjm.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;QJM方式可以解决NFS容错机制不足的问题，active状态NameNode和standby状态NameNode之间通过一组journalnode（奇数个，2n+1）来共享数据，active状态NameNode把最近的edits文件写到这组journalnode上，只要有n+1个写入成功就认为这次写入操作是成功的，然后standby状态NameNode就可以从journalnode上读取数据了。QJM方式有容错机制，可以容忍n个journalnode的失败&lt;/p&gt;
+&lt;h3 id=&quot;NameNode故障切换&quot;&gt;&lt;a href=&quot;#NameNode故障切换&quot; class=&quot;headerlink&quot; title=&quot;NameNode故障切换&quot;&gt;&lt;/a&gt;NameNode故障切换&lt;/h3&gt;&lt;p&gt;active和standby状态NameNode可以随时切换，当active挂掉后，可以把standby切换成active状态。&lt;br&gt;故障切换可以通过人工切换和自动切换方式完成。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;人工切换是通过HA管理的命令来改变NameNode的状态&lt;/li&gt;
+&lt;li&gt;自动切换是在active状态NameNode挂掉的时候，standby状态NameNode自动切换成active状态，取代原来的active状态NameNode成为新的active状态NameNode，确保HDFS继续正常工作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;自动切换需要配置zookeeper。集群中两个NameNode都在zookeeper中注册，当active状态的NameNode出现故障时，zookeeper能检查到这种情况，它就会自动把standby状态的NameNode切换为active状态。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Hadoop学习】Hadoop 1.0 &amp; Hadoop 2.0</title>
     <link href="http://dxer.github.io/2015/11/03/hadoop%20v1.0%20and%20hadoopv2.0/"/>
     <id>http://dxer.github.io/2015/11/03/hadoop v1.0 and hadoopv2.0/</id>
     <published>2015-11-03T01:29:19.000Z</published>
-    <updated>2016-05-16T07:06:42.164Z</updated>
+    <updated>2016-05-25T03:40:47.130Z</updated>
     
     <content type="html">&lt;h2 id=&quot;Hadoop-1-0&quot;&gt;&lt;a href=&quot;#Hadoop-1-0&quot; class=&quot;headerlink&quot; title=&quot;Hadoop 1.0&quot;&gt;&lt;/a&gt;Hadoop 1.0&lt;/h2&gt;&lt;p&gt;Hadoop 1.0即第一代Hadoop，由分布式存储系统HDFS和分布式和分布式计算框架MapReduce组成。其中HDFS由一个NameNode和多个DataNode组成MapReduce由一个JobTracker和多个TaskTracker组成，对应的Hadoop版本为Apache Hadoop 0.20.x、1.x、0.21.x、0.22.x和CDH3。&lt;/p&gt;
 &lt;h2 id=&quot;Hadoop-2-0&quot;&gt;&lt;a href=&quot;#Hadoop-2-0&quot; class=&quot;headerlink&quot; title=&quot;Hadoop 2.0&quot;&gt;&lt;/a&gt;Hadoop 2.0&lt;/h2&gt;&lt;p&gt;Hadoop 2.0即第二代Hadoop，为了克服Hadooop 1.0中HDFS和MapReduce存在的各种问题而提出的。针对Hadoop 1.0中的单NameNode制约HDFS的扩展性问题，提出了HDFS Federation，它让多个NameNode分管不同的目录进而实现访问隔离和横向扩展，同时解决了NameNode的单点故障问题。针对Hadoop 1.0中的MapReduce在扩展性和多框架支持等方面的不足，它将JobTracker中的资源管理和作业控制功能分开，分别由组件ResourceManager和ApplicationMaster实现，其中，ResourceManager负责所有应用程序的资源分配，ApplicationMaster仅负责管理一个应用程序，着便是全新的通用的资源管理框架YARN。Hadoop 2.0对应的Hadoop的版本为Apache Hadoop 0.23.x、2.x和CDH4。&lt;/p&gt;
@@ -838,18 +860,18 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
     
   </entry>
   
   <entry>
-    <title>hadoop序列化</title>
+    <title>【Hadoop学习】Hadoop的序列化</title>
     <link href="http://dxer.github.io/2015/10/25/hadoop_serializable/"/>
     <id>http://dxer.github.io/2015/10/25/hadoop_serializable/</id>
     <published>2015-10-25T06:46:19.000Z</published>
-    <updated>2016-05-20T09:35:07.266Z</updated>
+    <updated>2016-05-25T03:41:02.709Z</updated>
     
     <content type="html">&lt;p&gt;对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。&lt;br&gt;将一个对象编码成一个字节流叫做序列化改对象(Serializing)&lt;br&gt;相反的处理过程称为反序列化（Deserializing）&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;序列化的主要用途：&lt;/p&gt;

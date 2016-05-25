@@ -4,7 +4,28 @@
   <url>
     <loc>http://dxer.github.io/2015/10/25/hadoop_serializable/</loc>
     
-    <lastmod>2016-05-20T09:35:07.266Z</lastmod>
+    <lastmod>2016-05-25T03:41:02.709Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2015/11/03/hadoop%20v1.0%20and%20hadoopv2.0/</loc>
+    
+    <lastmod>2016-05-25T03:40:47.130Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2015/11/03/yarn/</loc>
+    
+    <lastmod>2016-05-25T03:40:23.138Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2015/11/03/hadoop_ha/</loc>
+    
+    <lastmod>2016-05-25T03:39:18.539Z</lastmod>
     
   </url>
   
@@ -26,20 +47,6 @@
     <loc>http://dxer.github.io/2015/04/17/cookie_and_session/</loc>
     
     <lastmod>2016-05-16T07:57:36.106Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2015/11/03/yarn/</loc>
-    
-    <lastmod>2016-05-16T07:46:37.010Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2015/11/03/hadoop%20v1.0%20and%20hadoopv2.0/</loc>
-    
-    <lastmod>2016-05-16T07:06:42.164Z</lastmod>
     
   </url>
   
@@ -117,13 +124,6 @@
     <loc>http://dxer.github.io/2015/05/07/redis-persistence/</loc>
     
     <lastmod>2016-04-28T10:33:59.527Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2016/03/10/hive01/</loc>
-    
-    <lastmod>2016-04-25T00:42:30.581Z</lastmod>
     
   </url>
   

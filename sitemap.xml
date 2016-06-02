@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/04/01/hbase-optimize/</loc>
+    
+    <lastmod>2016-06-02T00:31:08.598Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2015/10/26/secondarynamenode/</loc>
     
     <lastmod>2016-05-25T08:17:31.947Z</lastmod>
@@ -82,13 +89,6 @@
     <loc>http://dxer.github.io/2016/03/19/hbase%E7%AE%80%E4%BB%8B/</loc>
     
     <lastmod>2016-05-12T08:25:38.218Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2016/04/01/hbase-optimize/</loc>
-    
-    <lastmod>2016-05-12T07:55:59.624Z</lastmod>
     
   </url>
   

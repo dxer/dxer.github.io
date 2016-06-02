@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-05-12T07:55:59.624Z</updated>
+  <updated>2016-06-02T00:31:08.598Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://dxer.github.io/2016/04/01/hbase-optimize/"/>
     <id>http://dxer.github.io/2016/04/01/hbase-optimize/</id>
     <published>2016-04-01T07:25:38.000Z</published>
-    <updated>2016-05-12T07:55:59.624Z</updated>
+    <updated>2016-06-02T00:31:08.598Z</updated>
     
     <content type="html">&lt;p&gt;本文主要是从HBase应用程序设计与开发的角度，总结几种常用的性能优化方法。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Auto-Flash&quot;&gt;&lt;a href=&quot;#Auto-Flash&quot; class=&quot;headerlink&quot; title=&quot;Auto Flash&quot;&gt;&lt;/a&gt;Auto Flash&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.setAutoFlushTo(false)&lt;/code&gt;方法可以将HTable写客户福安的自动flush关闭，这样可以批量写入数据到HBase，而不是有一条put就执行一次更新，只有当put填满客户端写缓存的时候，才会向HBase服务端发起写请求。默认情况下auto flush是开启的。&lt;/p&gt;
+&lt;h3 id=&quot;Auto-Flash&quot;&gt;&lt;a href=&quot;#Auto-Flash&quot; class=&quot;headerlink&quot; title=&quot;Auto Flash&quot;&gt;&lt;/a&gt;Auto Flash&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.setAutoFlushTo(false)&lt;/code&gt;方法可以将HTable写客户端自动flush关闭，这样可以批量写入数据到HBase，而不是有一条put就执行一次更新，只有当put填满客户端写缓存的时候，才会向HBase服务端发起写请求。默认情况下auto flush是开启的。&lt;/p&gt;
 &lt;h3 id=&quot;Write-Buffer&quot;&gt;&lt;a href=&quot;#Write-Buffer&quot; class=&quot;headerlink&quot; title=&quot;Write Buffer&quot;&gt;&lt;/a&gt;Write Buffer&lt;/h3&gt;&lt;p&gt;通过调用&lt;code&gt;HTable.setWriteBufferSize(writeBufferSize)&lt;/code&gt;方法可以设置HTable客户端的写buffer大小，如果新设置的buffer小于当前写buffer中的数据时，buffer将会被flush到服务端。其中，writeBufferSize的单位是byte字节数，可以根基实际写入数据量的多少来设置该值。&lt;/p&gt;
 &lt;h3 id=&quot;WAL-Flag&quot;&gt;&lt;a href=&quot;#WAL-Flag&quot; class=&quot;headerlink&quot; title=&quot;WAL Flag&quot;&gt;&lt;/a&gt;WAL Flag&lt;/h3&gt;&lt;p&gt;在HBase中，客户端向集群中的RegionServer提交数据时（Put/Delete操作），首先会写到WAL（Write Ahead Log）日志，即HLog，一个RegionServer上的所有Region共享一个HLog，只有当WAL日志写成功后，再接着写MemStore，然后客户端被通知提交数据成功，如果写WAL日志失败，客户端被告知提交失败，这样做的好处是可以做到RegionServer宕机后的数据恢复。&lt;br&gt;对于不太重要的数据，可以在Put/Delete操作时，通过调用&lt;code&gt;Put.setWriteToWAL(false)&lt;/code&gt;或&lt;code&gt;Delete.setWriteToWAL(false)&lt;/code&gt;函数，放弃写WAL日志，以提高数据写入的性能。&lt;/p&gt;
 &lt;p&gt;注：如果关闭WAL日志，一旦RegionServer宕机，Put/Delete的数据将会无法根据WAL日志进行恢复。&lt;/p&gt;

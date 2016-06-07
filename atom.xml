@@ -70,6 +70,53 @@
   </entry>
   
   <entry>
+    <title>Redis-消息队列</title>
+    <link href="http://dxer.github.io/2016/03/20/redis-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
+    <id>http://dxer.github.io/2016/03/20/redis-消息队列/</id>
+    <published>2016-03-20T03:21:38.000Z</published>
+    <updated>2016-06-07T00:39:08.402Z</updated>
+    
+    <content type="html">&lt;p&gt;在网站开发中，当页面需要进行如发送邮件、发送短信、复杂数据运算等耗时较长的操作时会阻塞页面的渲染。为了避免用户等待太久，应该使用独立的线程来完成这类操作。不过一些编程语言或框架不易实现多线程，这时很容易就会想到通过其他进程来实现。设想有一个进程能够完成发邮件的功能，那么在页面中只需要想办法通知这个进程向指定的地址发送邮件就可以了。&lt;/p&gt;
+&lt;p&gt;更多的时候，服务器做的额外的事情，并不需要客户端等待，这时候就可以把这些额外的事情异步去做。处理异步任务的工具很多。主要还是处理通知消息，针对通知消息通常采用的是队列结构。这个异步处理的模型可以抽象为生产者和消费者模型。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;redis中提供了两种方式来做消息队列，一个是使用生产者消费者模式，一种是使用发布订阅者模式。生产者消费者模式会让一个或者多个客户端监听消息队列，一旦有队列中有消息，消费者会马上去消费，谁先获得这个消息，谁就去处理。如果队列为空，则消费者继续监听。发布订阅者模式也是使用了一个或者多个客户端订阅消息频道，只要发布者发布了消息，所有的订阅者都能收到消息。&lt;/p&gt;
+&lt;p&gt;这里我们先看下生产者和消费者模型的消息队列。&lt;/p&gt;
+&lt;h2 id=&quot;队列&quot;&gt;&lt;a href=&quot;#队列&quot; class=&quot;headerlink&quot; title=&quot;队列&quot;&gt;&lt;/a&gt;队列&lt;/h2&gt;&lt;p&gt;与任务队列进行交互的实体有两类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生产者（producer）：生产者会将需要处理的任务放入任务队列中&lt;/li&gt;
+&lt;li&gt;消费者（consumer）：消费者不断从任务队列中读入任务信息并执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;使用任务队列的好处&quot;&gt;&lt;a href=&quot;#使用任务队列的好处&quot; class=&quot;headerlink&quot; title=&quot;使用任务队列的好处&quot;&gt;&lt;/a&gt;使用任务队列的好处&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;松耦合&lt;br&gt;生产者和消费者无需知道彼此的实现细节，只需要约定好任务的描述格式。这使得生产者和消费者可以由不同的团队使用不同的编程语言来进行开发。&lt;/li&gt;
+&lt;li&gt;易扩展&lt;br&gt;可以很方便的将消费者阔这到很多个，而且可以分布在不同的服务器中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;普通队列&quot;&gt;&lt;a href=&quot;#普通队列&quot; class=&quot;headerlink&quot; title=&quot;普通队列&quot;&gt;&lt;/a&gt;普通队列&lt;/h3&gt;&lt;p&gt;在redis中，可以使用列表（list）类型来实现。使用LPUSH和RPOP命令，&lt;br&gt;生产者将任务使用LPUSH命令加入到某个键中，消费者不断的使用RPOP命令从该键中取出任务。&lt;br&gt;代码如下:&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	String task = jedis.rpop(&lt;span class=&quot;string&quot;&gt;&quot;queue.task&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(task!=&lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; task.length()&amp;gt;&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		execute(task);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		Thread.sleep(&lt;span class=&quot;number&quot;&gt;1000&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;上面是一个很简单的任务队列的程序，不过上面的代码还是有点不太完美的地方：当任务队列中没有任务的时候，消费者每秒都会调用一次RPOP命令查看是否有新的任务。这里我们可以借助BRPOP命令来实现一旦有新的任务队列就通知消费者，这样消费者每秒都去查看任务队列中是否有任务了。&lt;/p&gt;
+&lt;p&gt;上面的程序可以修改为：&lt;br&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	List&amp;lt;String&amp;gt; tasks = jedis.brpop(&lt;span class=&quot;number&quot;&gt;10&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;queue.task&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (tasks != &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; tasks.size() &amp;gt; &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		execute(tasks.get(&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;)); &lt;span class=&quot;comment&quot;&gt;// 这里要获取index为1的数据，因为index为0的数据是该队列的名字&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;BRPOP&lt;/code&gt;命令和&lt;code&gt;RPOP&lt;/code&gt;命令相似，唯一的区别就是当列表中没有元数据的时候，BRPOP命令会一直阻塞住连接，直到有新元素加入。&lt;/p&gt;
+&lt;p&gt;BRPOP命令接收两个参数，第一个是键名，第二个是超时时间（单位：s）。当超过了这个时间，任然没有获得到新的数据的话，就会返回nil。当设置超时时间为0的时候，表示不限制等待时间，也就是说没有新数据加入的时候，就会永远阻塞下去。&lt;/p&gt;
+&lt;p&gt;redis还提供了BLPOP命令，和BRPOP的区别在与从队列取数据时，BLPOP会从队列左边开始取数据，而BRPOP是从队列的右边开始取数据。&lt;/p&gt;
+&lt;h2 id=&quot;优先级队列&quot;&gt;&lt;a href=&quot;#优先级队列&quot; class=&quot;headerlink&quot; title=&quot;优先级队列&quot;&gt;&lt;/a&gt;优先级队列&lt;/h2&gt;&lt;p&gt;在产品给用户发送短信的时候，有验证短信和营销短信，同样都是将短信添加到任务队列，供消费者进行处理。在没有优先级队列的时候，系统现在正在给用户发送营销短信，这是有一个用户注册了，系统要给用户发送验证短信，但是系统正在处理营销短信，按照普通任务队列，验证短信，要在营销短信发送完成之后，才开始发送，这样多影响用户体验。要是不管在什么时候，只要有发送验证短信的任务，就能立刻去处理掉，这样就好啦。&lt;/p&gt;
+&lt;p&gt;这样我们就需要一个具有优先级的任务队列啦，按照我们的业务逻辑，优先处理重要的任务。&lt;/p&gt;
+&lt;p&gt;在redis中，&lt;code&gt;BRPOP&lt;/code&gt;命令可以同时接收多个键，完整的命令格式如下&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;BRPOP queue.task.1 queue.task.2 0&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;它可以同时检测多个键，如果所有的键都没有数据则阻塞，如果其中有一个键有数据则会返回响应的数据。如果多个键都有数据，则按照命令中从左到右的键的顺序取第一个有数据的键中对应的数据。这样我们就可以实现一个具有优先级的任务队列了。&lt;/p&gt;
+&lt;p&gt;代码如下：&lt;br&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	List&amp;lt;String&amp;gt; tasks = jedis.brpop(&lt;span class=&quot;number&quot;&gt;10&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;queue.task.1&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;queue.task.2&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (tasks != &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; tasks.size() &amp;gt; &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		execute(tasks.get(&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;)); &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在网站开发中，当页面需要进行如发送邮件、发送短信、复杂数据运算等耗时较长的操作时会阻塞页面的渲染。为了避免用户等待太久，应该使用独立的线程来完成这类操作。不过一些编程语言或框架不易实现多线程，这时很容易就会想到通过其他进程来实现。设想有一个进程能够完成发邮件的功能，那么在页面中只需要想办法通知这个进程向指定的地址发送邮件就可以了。&lt;/p&gt;
+&lt;p&gt;更多的时候，服务器做的额外的事情，并不需要客户端等待，这时候就可以把这些额外的事情异步去做。处理异步任务的工具很多。主要还是处理通知消息，针对通知消息通常采用的是队列结构。这个异步处理的模型可以抽象为生产者和消费者模型。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="redis" scheme="http://dxer.github.io/tags/redis/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HBase简介</title>
     <link href="http://dxer.github.io/2016/03/19/hbase%E7%AE%80%E4%BB%8B/"/>
     <id>http://dxer.github.io/2016/03/19/hbase简介/</id>

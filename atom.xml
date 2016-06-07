@@ -877,9 +877,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
       <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
   </entry>
   
@@ -907,9 +907,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
     
   </entry>
   

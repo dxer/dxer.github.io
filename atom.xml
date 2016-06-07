@@ -877,9 +877,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
     
   </entry>
   
@@ -907,9 +907,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
       <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
   </entry>
   
@@ -1287,34 +1287,6 @@
       <category term="session" scheme="http://dxer.github.io/tags/session/"/>
     
       <category term="cookie" scheme="http://dxer.github.io/tags/cookie/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入了解HashMap</title>
-    <link href="http://dxer.github.io/2015/03/21/hashmap/"/>
-    <id>http://dxer.github.io/2015/03/21/hashmap/</id>
-    <published>2015-03-21T07:43:19.000Z</published>
-    <updated>2016-05-16T07:05:38.980Z</updated>
-    
-    <content type="html">&lt;p&gt;HashMap基于哈希表的Map接口的实现。此实现提供了所有可选的映射操作，允许使用null键和值。与HashTable相比，HashMap不支持同步，不是线程安全，允许使用null键值，其他大致相同。HashTable不保证映射的顺序，不保证顺序很久不变&lt;/p&gt;
-&lt;p&gt;HashMap不是线程安全的，如果想要线程安全的HashMap，可以通过Collections&lt;br&gt;类的静态方法synchronizedMap获得线程安全的HashMap。HashTable是线程安全的，通过synchronized实现。&lt;/p&gt;
-&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Map map = Collections.synchronizedMap(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HashMap());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;HashMap的数据结构&quot;&gt;&lt;a href=&quot;#HashMap的数据结构&quot; class=&quot;headerlink&quot; title=&quot;HashMap的数据结构&quot;&gt;&lt;/a&gt;HashMap的数据结构&lt;/h2&gt;&lt;p&gt;HashMap的底层主要是基于数组和链表来实现的，它之所以查询速度特别快，主要是因为它是通过计算散列码来决定存储的位置。&lt;/p&gt;
-&lt;p&gt;从上图可以看出，x轴方向是链表的存储方式，y轴是数组。&lt;/p&gt;
-&lt;h2 id=&quot;HashMap在put和get的工作流程&quot;&gt;&lt;a href=&quot;#HashMap在put和get的工作流程&quot; class=&quot;headerlink&quot; title=&quot;HashMap在put和get的工作流程&quot;&gt;&lt;/a&gt;HashMap在put和get的工作流程&lt;/h2&gt;</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;HashMap基于哈希表的Map接口的实现。此实现提供了所有可选的映射操作，允许使用null键和值。与HashTable相比，HashMap不支持同步，不是线程安全，允许使用null键值，其他大致相同。HashTable不保证映射的顺序，不保证顺序很久不变&lt;/p&gt;
-&lt;p&gt;H
-    
-    </summary>
-    
-    
-      <category term="java" scheme="http://dxer.github.io/tags/java/"/>
-    
-      <category term="hashmap" scheme="http://dxer.github.io/tags/hashmap/"/>
     
   </entry>
   

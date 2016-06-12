@@ -784,11 +784,11 @@
   </entry>
   
   <entry>
-    <title>【Hadoop学习】Hadoop配额</title>
+    <title>【Hadoop学习】Hadoop配额实战</title>
     <link href="http://dxer.github.io/2015/11/23/hadoop_quota/"/>
     <id>http://dxer.github.io/2015/11/23/hadoop_quota/</id>
     <published>2015-11-23T06:46:19.000Z</published>
-    <updated>2016-06-12T09:22:30.249Z</updated>
+    <updated>2016-06-12T09:24:01.634Z</updated>
     
     <content type="html">&lt;p&gt;在HDFS中，管理员可以为每一个目录设置基于名称或者空间上的配额。可以设置名称配额和空间配额，名称配额和空间配额可以单独设置。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&quot;名称配额（Name-Quota）&quot;&gt;&lt;a href=&quot;#名称配额（Name-Quota）&quot; class=&quot;headerlink&quot; title=&quot;名称配额（Name Quota）&quot;&gt;&lt;/a&gt;名称配额（Name Quota）&lt;/h3&gt;&lt;p&gt;名称配额是在对应的目录下所有文件和目录名称的数量上的限制。当超过这个配额的时候，文件或目录就会创建失败，重命名后名称配额仍然有效。如果重命名操作违反配额的限制，那么重命名会失败，新建的目录不会有任何配额设置，名字配额的上限是Long.Max_Value，如果配额为1，那么这个目录会强制为空，因为目录自身也会占用1个配额。配额的设置是持久化在fsimage中，如果fsimage发现违反了配额限制，会输出警告。&lt;/p&gt;

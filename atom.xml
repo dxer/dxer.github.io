@@ -784,6 +784,34 @@
   </entry>
   
   <entry>
+    <title>【Hadoop学习】Hadoop配额</title>
+    <link href="http://dxer.github.io/2015/11/23/hadoop_quota/"/>
+    <id>http://dxer.github.io/2015/11/23/hadoop_quota/</id>
+    <published>2015-11-23T06:46:19.000Z</published>
+    <updated>2016-06-12T09:22:30.249Z</updated>
+    
+    <content type="html">&lt;p&gt;在HDFS中，管理员可以为每一个目录设置基于名称或者空间上的配额。可以设置名称配额和空间配额，名称配额和空间配额可以单独设置。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;名称配额（Name-Quota）&quot;&gt;&lt;a href=&quot;#名称配额（Name-Quota）&quot; class=&quot;headerlink&quot; title=&quot;名称配额（Name Quota）&quot;&gt;&lt;/a&gt;名称配额（Name Quota）&lt;/h3&gt;&lt;p&gt;名称配额是在对应的目录下所有文件和目录名称的数量上的限制。当超过这个配额的时候，文件或目录就会创建失败，重命名后名称配额仍然有效。如果重命名操作违反配额的限制，那么重命名会失败，新建的目录不会有任何配额设置，名字配额的上限是Long.Max_Value，如果配额为1，那么这个目录会强制为空，因为目录自身也会占用1个配额。配额的设置是持久化在fsimage中，如果fsimage发现违反了配额限制，会输出警告。&lt;/p&gt;
+&lt;p&gt;只有管理员可以设置名称配额和空间配额。下面的命令设置/清理名称配额：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 设置目录的名称配额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfsadmin -setQuota N &amp;lt;DirName&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 清除目录的名称配额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfsadmin -clrQuota &amp;lt;DirName&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查询目录的配额和当前可用余额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfs -count -q &amp;lt;DirName&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;空间配额（Space-Quota）&quot;&gt;&lt;a href=&quot;#空间配额（Space-Quota）&quot; class=&quot;headerlink&quot; title=&quot;空间配额（Space Quota）&quot;&gt;&lt;/a&gt;空间配额（Space Quota）&lt;/h3&gt;&lt;p&gt;空间配额是目录的空间大小限制。如果超过这个配额，块写入操作会失败。副本也算配额中的一部分。空间配额为0的时候，可以创建文件，但是不能向文件中写入内容。创建空间配额的命令如下:&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 设置目录的空间配额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfsadmin -setSpaceQuota &amp;lt;quota&amp;gt; &amp;lt;dirname&amp;gt;...&amp;lt;dirname&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 清除目录的空间配额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfsadmin -clrSpaceQuota &amp;lt;dirname&amp;gt;...&amp;lt;dirname&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 查询目录的配额和当前可用余额&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hdfs dfs -count -q &amp;lt;DirName&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;其中可以通过&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fs -count -q directory ... directory&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;使用-q选项，可以显示目录的名称配额，剩余名称配额，空间配额，可用空间配额。如果目录没有设置配额，会显示为none和inf。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在HDFS中，管理员可以为每一个目录设置基于名称或者空间上的配额。可以设置名称配额和空间配额，名称配额和空间配额可以单独设置。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【Hadoop学习】YARN学习</title>
     <link href="http://dxer.github.io/2015/11/03/yarn/"/>
     <id>http://dxer.github.io/2015/11/03/yarn/</id>

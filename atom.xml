@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-06-16T05:06:49.635Z</updated>
+  <updated>2016-06-16T05:08:46.951Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hadoop本地库Unable to load native-hadoop library问题解决</title>
+    <title>Hadoop不能加载本地库问题解决</title>
     <link href="http://dxer.github.io/2016/04/05/hadoop_native_lib/"/>
     <id>http://dxer.github.io/2016/04/05/hadoop_native_lib/</id>
     <published>2016-04-05T06:46:19.000Z</published>
-    <updated>2016-06-16T05:06:49.635Z</updated>
+    <updated>2016-06-16T05:08:46.951Z</updated>
     
     <content type="html">&lt;p&gt;在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告&lt;/p&gt;
 &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WARN util.NativeCodeLoader: Unable to load native-hadoop library &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; your platform... &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;using &lt;span class=&quot;built_in&quot;&gt;builtin&lt;/span&gt;-java classes &lt;span class=&quot;built_in&quot;&gt;where&lt;/span&gt; applicable&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;

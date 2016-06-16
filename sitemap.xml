@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/04/05/hadoop_native_lib/</loc>
+    
+    <lastmod>2016-06-16T05:06:49.635Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2015/11/23/hadoop_quota/</loc>
     
     <lastmod>2016-06-12T09:24:01.634Z</lastmod>

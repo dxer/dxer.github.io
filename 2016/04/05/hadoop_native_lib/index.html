@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Hadoop本地库Unable to load native-hadoop library问题解决 · dxer</title><meta name="description" content="Hadoop本地库Unable to load native-hadoop library问题解决 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- google analytics--><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-43614462-1', 'auto');
+ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">Hadoop本地库Unable to load native-hadoop library问题解决</h1><div class="post-time">Apr 5, 2016</div><div class="post-content"><p>在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... </span><br><span class="line">using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>修改下log输出日志的级别，获取更多的信息，在执行hadoop命令之前设置下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HADOOP_ROOT_LOGGER=DEBUG,console</span><br></pre></td></tr></table></figure>
+<p>再执行启动dfs命令，控制台输出了一些debug信息，快看看是啥原因导致这个警告的出现。发现<code>GLIBC_2.14</code>这个东东没有找到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`GLIBC_2.14<span class="string">' not found (required by opt/hadoop/lib/native/libhadoop.so.1.0.0)</span></span><br></pre></td></tr></table></figure>
+<p>glibc是什么东西呢？</p>
+<blockquote>
+<p>glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。</p>
+</blockquote>
+<p>看来这个库在linux系统中很重要呀！！！</p>
+<p>我们先看下我们操作系统的glib版本是什么<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings /lib64/libc.so.6 | grep GLIBC</span><br></pre></td></tr></table></figure></p>
+<p><img src="/pic/20160405/2016040501.jpg" alt=""></p>
+<p>系统是2.12版本的，hadoop需要2.14版本才行，下面来对libc库进行升级。</p>
+<p>下载<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.bjtu.edu.cn/gnu/libc/glibc-2.14.tar.xz</span><br></pre></td></tr></table></figure></p>
+<p>解压<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xvf glibc-2.14.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>编译<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> glibc-2.14</span><br><span class="line">mkdir build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">../configure --prefix=/usr/<span class="built_in">local</span>/glibc-2.14   // 配置glibc并设置当前glibc-2.14安装目录</span><br><span class="line">make -j4</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
+<p>安装完了，我们接下来要去更新系统的lib库，先复制libc-2.14.so到/lib64目录下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/<span class="built_in">local</span>/glibc-2.14/lib/libc-2.14.so /lib64/libc-2.14.so</span><br></pre></td></tr></table></figure></p>
+<p>备份原来的/lib64/libc.so.6</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /lib64/libc.so.6 /lib64/libc.so.6.bak</span><br></pre></td></tr></table></figure>
+<p>备份好了，<code>ls</code>看一下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># ls</span></span><br><span class="line">ls: error <span class="keyword">while</span> loading shared libraries: libc.so.6: cannot open </span><br><span class="line">shared object file: No such file or directory</span><br></pre></td></tr></table></figure></p>
+<p>如下图所示:</p>
+<p><img src="/pic/20160405/2016040502.jpg" alt=""></p>
+<p>oh，No，<code>ls</code>命令不能用啦，咋回事，这还能不能愉快的玩耍啦，不要着急，我们continue吧 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LD_PRELOAD=/lib64/libc-2.14.so ln –s /lib64/libc-2.14.so  /lib64/libc.so.6</span><br></pre></td></tr></table></figure>
+<p>再来看下libc的版本<br><img src="/pic/20160405/2016040503.jpg" alt=""></p>
+<p>Ok，大功告成。</p>
+</div></article></div><div class="tags"><a href="/tags/hadoop/">hadoop</a></div><div class="paginator"><a href="/2016/04/01/hbase-optimize/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/04/05/hadoop_native_lib/index.html" data-title="Hadoop本地库Unable to load native-hadoop library问题解决" data-url="http://dxer.github.io/2016/04/05/hadoop_native_lib/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

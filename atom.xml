@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-06-02T00:31:08.598Z</updated>
+  <updated>2016-06-16T05:06:49.635Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -14,6 +14,55 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hadoop本地库Unable to load native-hadoop library问题解决</title>
+    <link href="http://dxer.github.io/2016/04/05/hadoop_native_lib/"/>
+    <id>http://dxer.github.io/2016/04/05/hadoop_native_lib/</id>
+    <published>2016-04-05T06:46:19.000Z</published>
+    <updated>2016-06-16T05:06:49.635Z</updated>
+    
+    <content type="html">&lt;p&gt;在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WARN util.NativeCodeLoader: Unable to load native-hadoop library &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; your platform... &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;using &lt;span class=&quot;built_in&quot;&gt;builtin&lt;/span&gt;-java classes &lt;span class=&quot;built_in&quot;&gt;where&lt;/span&gt; applicable&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;修改下log输出日志的级别，获取更多的信息，在执行hadoop命令之前设置下&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;export&lt;/span&gt; HADOOP_ROOT_LOGGER=DEBUG,console&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;再执行启动dfs命令，控制台输出了一些debug信息，快看看是啥原因导致这个警告的出现。发现&lt;code&gt;GLIBC_2.14&lt;/code&gt;这个东东没有找到&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;`GLIBC_2.14&lt;span class=&quot;string&quot;&gt;&#39; not found (required by opt/hadoop/lib/native/libhadoop.so.1.0.0)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;glibc是什么东西呢？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;看来这个库在linux系统中很重要呀！！！&lt;/p&gt;
+&lt;p&gt;我们先看下我们操作系统的glib版本是什么&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;strings /lib64/libc.so.6 | grep GLIBC&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20160405/2016040501.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;系统是2.12版本的，hadoop需要2.14版本才行，下面来对libc库进行升级。&lt;/p&gt;
+&lt;p&gt;下载&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget http://mirror.bjtu.edu.cn/gnu/libc/glibc-2.14.tar.xz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;解压&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tar xvf glibc-2.14.tar.gz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;编译&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; glibc-2.14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkdir build&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; build&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;../configure --prefix=/usr/&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;/glibc-2.14   // 配置glibc并设置当前glibc-2.14安装目录&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make -j4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;make install&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;安装完了，我们接下来要去更新系统的lib库，先复制libc-2.14.so到/lib64目录下&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cp /usr/&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;/glibc-2.14/lib/libc-2.14.so /lib64/libc-2.14.so&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;备份原来的/lib64/libc.so.6&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mv /lib64/libc.so.6 /lib64/libc.so.6.bak&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;备份好了，&lt;code&gt;ls&lt;/code&gt;看一下&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;[root@hadoop001 ~]&lt;span class=&quot;comment&quot;&gt;# ls&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ls: error &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; loading shared libraries: libc.so.6: cannot open &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;shared object file: No such file or directory&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;如下图所示:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/pic/20160405/2016040502.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;oh，No，&lt;code&gt;ls&lt;/code&gt;命令不能用啦，咋回事，这还能不能愉快的玩耍啦，不要着急，我们continue吧 &lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;LD_PRELOAD=/lib64/libc-2.14.so ln –s /lib64/libc-2.14.so  /lib64/libc.so.6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;再来看下libc的版本&lt;br&gt;&lt;img src=&quot;/pic/20160405/2016040503.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Ok，大功告成。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;WARN util.NativeCodeLoader: Unable to load native-hadoop library &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; your platform... &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;using &lt;span class=&quot;built_in&quot;&gt;builtin&lt;/span&gt;-java classes &lt;span class=&quot;built_in&quot;&gt;where&lt;/span&gt; applicable&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
+    
+  </entry>
   
   <entry>
     <title>HBase性能优化方法总结</title>

@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>分布式文件系统FastDFS快速入门 · dxer</title><meta name="description" content="分布式文件系统FastDFS快速入门 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- google analytics--><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-43614462-1', 'auto');
+ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是FastDFS？"><span class="toc-text">什么是FastDFS？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastDFS架构"><span class="toc-text">FastDFS架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tracker-server"><span class="toc-text">tracker server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#storage-server"><span class="toc-text">storage server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#client"><span class="toc-text">client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FastDFS的工作流程"><span class="toc-text">FastDFS的工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件上传"><span class="toc-text">文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#选择tracker-server"><span class="toc-text">选择tracker server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择存储group"><span class="toc-text">选择存储group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择storage-server"><span class="toc-text">选择storage server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择storage-path"><span class="toc-text">选择storage path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成file-id"><span class="toc-text">生成file id</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件下载"><span class="toc-text">文件下载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#选择下载服务器"><span class="toc-text">选择下载服务器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步时间管理"><span class="toc-text">同步时间管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快速定位文件"><span class="toc-text">快速定位文件</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">分布式文件系统FastDFS快速入门</h1><div class="post-time">Jun 15, 2016</div><div class="post-content"><h2 id="什么是FastDFS？"><a href="#什么是FastDFS？" class="headerlink" title="什么是FastDFS？"></a>什么是FastDFS？</h2><p>FastDFS是一个开源的轻量级分布式文件系统。它解决了大数据量存储和负载均衡等问题。特别适合以中小文件（建议范围：4KB &lt; file_size <500mb）为载体的在线服务，如相册网站、视频网站等等。 <a="" id="more"></500mb）为载体的在线服务，如相册网站、视频网站等等。></p>
+<h2 id="FastDFS架构"><a href="#FastDFS架构" class="headerlink" title="FastDFS架构"></a>FastDFS架构</h2><p><img src="/pic/20160615/FastDFS架构图1.png" alt=""></p>
+<p>从上图可知，FastDFS架构中有三个角色：<strong>跟踪服务器（tracker server）</strong>、<strong>存储服务器（storage server）
+</strong>和<strong>客户端（client）</strong>。</p>
+<h3 id="tracker-server"><a href="#tracker-server" class="headerlink" title="tracker server"></a>tracker server</h3><p>跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立<group，storage server="">映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。</group，storage></p>
+<h3 id="storage-server"><a href="#storage-server" class="headerlink" title="storage server"></a>storage server</h3><p>存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。</p>
+<p>storage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。</p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><p>客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。</p>
+<h2 id="FastDFS的工作流程"><a href="#FastDFS的工作流程" class="headerlink" title="FastDFS的工作流程"></a>FastDFS的工作流程</h2><h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p><img src="/pic/20160615/fastdfs_upload.jpg" alt="文件上传"></p>
+<p>上传的流程：</p>
+<ol>
+<li>client询问tracker上传到的storage</li>
+<li>tracker返回一台可用的storage</li>
+<li>client直接和storage通信，完成文件上传</li>
+</ol>
+<h4 id="选择tracker-server"><a href="#选择tracker-server" class="headerlink" title="选择tracker server"></a>选择tracker server</h4><p>集群中tracker之间是对等关系，client在上传文件时可以使用任意一个tracker</p>
+<h4 id="选择存储group"><a href="#选择存储group" class="headerlink" title="选择存储group"></a>选择存储group</h4><p>当tracker接收到上传文件的请求的时候，会为该文件分配一个可以存储的group。目前支持选择的group的规则有：</p>
+<ol>
+<li>Round robin，轮询</li>
+<li>Sepcified group，上传的时候指定某个group</li>
+<li>Load balance，生成存储空间较多的group优先</li>
+</ol>
+<h4 id="选择storage-server"><a href="#选择storage-server" class="headerlink" title="选择storage server"></a>选择storage server</h4><p>当选定group后，tracker会在group内选择一个storage server给client，目前支持选择server的规则有：</p>
+<ol>
+<li>Round robin，轮询（默认）</li>
+<li>根据IP地址进行排序，选择第一个服务器（IP地址最小者）</li>
+<li>根据优先级进行排序，上传优先级由storage server来设置，参数为uoload_priority</li>
+</ol>
+<h4 id="选择storage-path"><a href="#选择storage-path" class="headerlink" title="选择storage path"></a>选择storage path</h4><p>当分配好storage server后，客户端将向storage发送写文件请求，storage会将文件分配一个数据存储目录，目前支持选择存储路径选择的规则有：</p>
+<ol>
+<li>Round robin，轮询（默认）</li>
+<li>load balance，选择使用剩余空间最大的存储路径</li>
+</ol>
+<h4 id="生成file-id"><a href="#生成file-id" class="headerlink" title="生成file id"></a>生成file id</h4><p>选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。<br>文件路径如下：</p>
+<blockquote>
+<p>group0/M00/00/02/exwf8b8lFJIxx2234841AAAbpQt7xVI473456.txt</p>
+</blockquote>
+<p>组名：group0   磁盘： M00   目录：00/02   文件名：exwf8b8lFJIxx2234841AAAbpQt7xVI473456.txt</p>
+<p>文件索引信息包括：<strong>组名，虚拟磁盘路径，数据两级目录，文件名</strong>。</p>
+<ul>
+<li><strong>组名：</strong>文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。</li>
+<li><strong>虚拟磁盘路径：</strong>存储服务器配置的虚拟路径，与磁盘选项store_path*对应。</li>
+<li><strong>数据两级目录：</strong>存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。</li>
+<li><strong>文件名：与文件上传时不同。</strong>是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。</li>
+</ul>
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><p><img src="/pic/20160615/fastdfs_download.jpg" alt=""></p>
+<p>文件下载流程：</p>
+<ol>
+<li>client询问tracker要下载文件的所在的storage，参数为文件标识（group,文件名）</li>
+<li>tracker返回一台可用的storage</li>
+<li>client直接和storage通信，下载文件</li>
+</ol>
+<p>client发送下载某个文件的请求到某个tracker，tracker从文件名中解析出文件的group，文件大小，创建时间等信息，然后为该请求选择一个storage用于读请求</p>
+<h4 id="选择下载服务器"><a href="#选择下载服务器" class="headerlink" title="选择下载服务器"></a>选择下载服务器</h4><p>目前支持的规则有：</p>
+<ol>
+<li>轮询方式，可以下载当前文件的任意一个storage server</li>
+<li>从源storage server下载</li>
+</ol>
+<h2 id="同步时间管理"><a href="#同步时间管理" class="headerlink" title="同步时间管理"></a>同步时间管理</h2><p>当一个文件上传成功后，客户端马上发起对该文件下载请求（或删除请求）时，tracker是如何选定一个适用的存储服务器呢？</p>
+<p>其实每个存储服务器都需要定时将自身的信息上报给tracker，这些信息就包括了本地同步时间（即，同步到的最新文件的时间戳）。而tracker根据各个存储服务器的上报情况，就能够知道刚刚上传的文件，在该存储组中是否已完成了同步。</p>
+<h2 id="快速定位文件"><a href="#快速定位文件" class="headerlink" title="快速定位文件"></a>快速定位文件</h2><p>知道FastDFS FID的组成后，我们来看看FastDFS是如何通过这个精巧的FID定位到需要访问的文件。</p>
+<ol>
+<li>通过组名tracker能够很快的定位到客户端需要访问的存储服务器组，并将选择合适的存储服务器提供客户端访问；</li>
+<li>存储服务器根据“文件存储虚拟磁盘路径”和“数据文件两级目录”可以很快定位到文件所在目录，并根据文件名找到客户端需要访问的文件。</li>
+</ol>
+</div></article></div><div class="tags"><a href="/tags/fastdfs/">fastdfs</a></div><div class="paginator"><a href="/2016/04/05/hadoop_native_lib/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/06/15/fastdfs/index.html" data-title="分布式文件系统FastDFS快速入门" data-url="http://dxer.github.io/2016/06/15/fastdfs/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

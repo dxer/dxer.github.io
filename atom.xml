@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-06-16T05:08:46.951Z</updated>
+  <updated>2016-06-17T03:57:00.438Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -14,6 +14,91 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>分布式文件系统FastDFS快速入门</title>
+    <link href="http://dxer.github.io/2016/06/15/fastdfs/"/>
+    <id>http://dxer.github.io/2016/06/15/fastdfs/</id>
+    <published>2016-06-15T06:38:19.000Z</published>
+    <updated>2016-06-17T03:57:00.438Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;什么是FastDFS？&quot;&gt;&lt;a href=&quot;#什么是FastDFS？&quot; class=&quot;headerlink&quot; title=&quot;什么是FastDFS？&quot;&gt;&lt;/a&gt;什么是FastDFS？&lt;/h2&gt;&lt;p&gt;FastDFS是一个开源的轻量级分布式文件系统。它解决了大数据量存储和负载均衡等问题。特别适合以中小文件（建议范围：4KB &amp;lt; file_size &lt;500mb）为载体的在线服务，如相册网站、视频网站等等。 &lt;a=&quot;&quot; id=&quot;more&quot;&gt;&lt;/500mb）为载体的在线服务，如相册网站、视频网站等等。&gt;&lt;/p&gt;
+&lt;h2 id=&quot;FastDFS架构&quot;&gt;&lt;a href=&quot;#FastDFS架构&quot; class=&quot;headerlink&quot; title=&quot;FastDFS架构&quot;&gt;&lt;/a&gt;FastDFS架构&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/pic/20160615/FastDFS架构图1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;从上图可知，FastDFS架构中有三个角色：&lt;strong&gt;跟踪服务器（tracker server）&lt;/strong&gt;、&lt;strong&gt;存储服务器（storage server）
+&lt;/strong&gt;和&lt;strong&gt;客户端（client）&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&quot;tracker-server&quot;&gt;&lt;a href=&quot;#tracker-server&quot; class=&quot;headerlink&quot; title=&quot;tracker server&quot;&gt;&lt;/a&gt;tracker server&lt;/h3&gt;&lt;p&gt;跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立&lt;group，storage server=&quot;&quot;&gt;映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。&lt;/group，storage&gt;&lt;/p&gt;
+&lt;h3 id=&quot;storage-server&quot;&gt;&lt;a href=&quot;#storage-server&quot; class=&quot;headerlink&quot; title=&quot;storage server&quot;&gt;&lt;/a&gt;storage server&lt;/h3&gt;&lt;p&gt;存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。&lt;/p&gt;
+&lt;p&gt;storage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。&lt;/p&gt;
+&lt;h3 id=&quot;client&quot;&gt;&lt;a href=&quot;#client&quot; class=&quot;headerlink&quot; title=&quot;client&quot;&gt;&lt;/a&gt;client&lt;/h3&gt;&lt;p&gt;客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。&lt;/p&gt;
+&lt;h2 id=&quot;FastDFS的工作流程&quot;&gt;&lt;a href=&quot;#FastDFS的工作流程&quot; class=&quot;headerlink&quot; title=&quot;FastDFS的工作流程&quot;&gt;&lt;/a&gt;FastDFS的工作流程&lt;/h2&gt;&lt;h3 id=&quot;文件上传&quot;&gt;&lt;a href=&quot;#文件上传&quot; class=&quot;headerlink&quot; title=&quot;文件上传&quot;&gt;&lt;/a&gt;文件上传&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20160615/fastdfs_upload.jpg&quot; alt=&quot;文件上传&quot;&gt;&lt;/p&gt;
+&lt;p&gt;上传的流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;client询问tracker上传到的storage&lt;/li&gt;
+&lt;li&gt;tracker返回一台可用的storage&lt;/li&gt;
+&lt;li&gt;client直接和storage通信，完成文件上传&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;选择tracker-server&quot;&gt;&lt;a href=&quot;#选择tracker-server&quot; class=&quot;headerlink&quot; title=&quot;选择tracker server&quot;&gt;&lt;/a&gt;选择tracker server&lt;/h4&gt;&lt;p&gt;集群中tracker之间是对等关系，client在上传文件时可以使用任意一个tracker&lt;/p&gt;
+&lt;h4 id=&quot;选择存储group&quot;&gt;&lt;a href=&quot;#选择存储group&quot; class=&quot;headerlink&quot; title=&quot;选择存储group&quot;&gt;&lt;/a&gt;选择存储group&lt;/h4&gt;&lt;p&gt;当tracker接收到上传文件的请求的时候，会为该文件分配一个可以存储的group。目前支持选择的group的规则有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Round robin，轮询&lt;/li&gt;
+&lt;li&gt;Sepcified group，上传的时候指定某个group&lt;/li&gt;
+&lt;li&gt;Load balance，生成存储空间较多的group优先&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;选择storage-server&quot;&gt;&lt;a href=&quot;#选择storage-server&quot; class=&quot;headerlink&quot; title=&quot;选择storage server&quot;&gt;&lt;/a&gt;选择storage server&lt;/h4&gt;&lt;p&gt;当选定group后，tracker会在group内选择一个storage server给client，目前支持选择server的规则有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Round robin，轮询（默认）&lt;/li&gt;
+&lt;li&gt;根据IP地址进行排序，选择第一个服务器（IP地址最小者）&lt;/li&gt;
+&lt;li&gt;根据优先级进行排序，上传优先级由storage server来设置，参数为uoload_priority&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;选择storage-path&quot;&gt;&lt;a href=&quot;#选择storage-path&quot; class=&quot;headerlink&quot; title=&quot;选择storage path&quot;&gt;&lt;/a&gt;选择storage path&lt;/h4&gt;&lt;p&gt;当分配好storage server后，客户端将向storage发送写文件请求，storage会将文件分配一个数据存储目录，目前支持选择存储路径选择的规则有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Round robin，轮询（默认）&lt;/li&gt;
+&lt;li&gt;load balance，选择使用剩余空间最大的存储路径&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;生成file-id&quot;&gt;&lt;a href=&quot;#生成file-id&quot; class=&quot;headerlink&quot; title=&quot;生成file id&quot;&gt;&lt;/a&gt;生成file id&lt;/h4&gt;&lt;p&gt;选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。&lt;br&gt;文件路径如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;group0/M00/00/02/exwf8b8lFJIxx2234841AAAbpQt7xVI473456.txt&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;组名：group0   磁盘： M00   目录：00/02   文件名：exwf8b8lFJIxx2234841AAAbpQt7xVI473456.txt&lt;/p&gt;
+&lt;p&gt;文件索引信息包括：&lt;strong&gt;组名，虚拟磁盘路径，数据两级目录，文件名&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;组名：&lt;/strong&gt;文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;虚拟磁盘路径：&lt;/strong&gt;存储服务器配置的虚拟路径，与磁盘选项store_path*对应。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据两级目录：&lt;/strong&gt;存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文件名：与文件上传时不同。&lt;/strong&gt;是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;文件下载&quot;&gt;&lt;a href=&quot;#文件下载&quot; class=&quot;headerlink&quot; title=&quot;文件下载&quot;&gt;&lt;/a&gt;文件下载&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/pic/20160615/fastdfs_download.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;文件下载流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;client询问tracker要下载文件的所在的storage，参数为文件标识（group,文件名）&lt;/li&gt;
+&lt;li&gt;tracker返回一台可用的storage&lt;/li&gt;
+&lt;li&gt;client直接和storage通信，下载文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;client发送下载某个文件的请求到某个tracker，tracker从文件名中解析出文件的group，文件大小，创建时间等信息，然后为该请求选择一个storage用于读请求&lt;/p&gt;
+&lt;h4 id=&quot;选择下载服务器&quot;&gt;&lt;a href=&quot;#选择下载服务器&quot; class=&quot;headerlink&quot; title=&quot;选择下载服务器&quot;&gt;&lt;/a&gt;选择下载服务器&lt;/h4&gt;&lt;p&gt;目前支持的规则有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;轮询方式，可以下载当前文件的任意一个storage server&lt;/li&gt;
+&lt;li&gt;从源storage server下载&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;同步时间管理&quot;&gt;&lt;a href=&quot;#同步时间管理&quot; class=&quot;headerlink&quot; title=&quot;同步时间管理&quot;&gt;&lt;/a&gt;同步时间管理&lt;/h2&gt;&lt;p&gt;当一个文件上传成功后，客户端马上发起对该文件下载请求（或删除请求）时，tracker是如何选定一个适用的存储服务器呢？&lt;/p&gt;
+&lt;p&gt;其实每个存储服务器都需要定时将自身的信息上报给tracker，这些信息就包括了本地同步时间（即，同步到的最新文件的时间戳）。而tracker根据各个存储服务器的上报情况，就能够知道刚刚上传的文件，在该存储组中是否已完成了同步。&lt;/p&gt;
+&lt;h2 id=&quot;快速定位文件&quot;&gt;&lt;a href=&quot;#快速定位文件&quot; class=&quot;headerlink&quot; title=&quot;快速定位文件&quot;&gt;&lt;/a&gt;快速定位文件&lt;/h2&gt;&lt;p&gt;知道FastDFS FID的组成后，我们来看看FastDFS是如何通过这个精巧的FID定位到需要访问的文件。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;通过组名tracker能够很快的定位到客户端需要访问的存储服务器组，并将选择合适的存储服务器提供客户端访问；&lt;/li&gt;
+&lt;li&gt;存储服务器根据“文件存储虚拟磁盘路径”和“数据文件两级目录”可以很快定位到文件所在目录，并根据文件名找到客户端需要访问的文件。&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;什么是FastDFS？&quot;&gt;&lt;a href=&quot;#什么是FastDFS？&quot; class=&quot;headerlink&quot; title=&quot;什么是FastDFS？&quot;&gt;&lt;/a&gt;什么是FastDFS？&lt;/h2&gt;&lt;p&gt;FastDFS是一个开源的轻量级分布式文件系统。它解决了大数据量存储和负载均衡等问题。特别适合以中小文件（建议范围：4KB &amp;lt; file_size &lt;500MB）为载体的在线服务，如相册网站、视频网站等等。
+    
+    </summary>
+    
+    
+      <category term="fastdfs" scheme="http://dxer.github.io/tags/fastdfs/"/>
+    
+  </entry>
   
   <entry>
     <title>Hadoop不能加载本地库问题解决</title>
@@ -954,9 +1039,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
       <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
   </entry>
   
@@ -984,9 +1069,9 @@
     
       <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
     
-      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
-    
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
     
   </entry>
   
@@ -1364,41 +1449,6 @@
       <category term="session" scheme="http://dxer.github.io/tags/session/"/>
     
       <category term="cookie" scheme="http://dxer.github.io/tags/cookie/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS 6.3忘记root密码的解决办法</title>
-    <link href="http://dxer.github.io/2015/02/26/centos-passwd/"/>
-    <id>http://dxer.github.io/2015/02/26/centos-passwd/</id>
-    <published>2015-02-26T13:53:34.000Z</published>
-    <updated>2015-05-05T06:07:42.755Z</updated>
-    
-    <content type="html">&lt;p&gt;忘记linux系统的登陆密码了，悲剧了，查了好多资料，终于搞定了，来和大家分享下具体操作。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;br&gt;在开机启动的时候按键盘上的“E”键会进入如下界面（我的系统是centos 6.3，其他发行版不一定适用哦）。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20150226/1.jpg&quot; alt=&quot;&quot;&gt;  &lt;/p&gt;
-&lt;p&gt;注：本机是新装的系统，没有升级之类的操作，故选项只有一个，可能是因为只有一个选项的关系，所以需要按一下“E”键才会出现如上界面。多个应该可以直接用方向键直接选择&lt;/p&gt;
-&lt;p&gt;选择相应的内核，再次按“E”，出现下图，选择第二项，再次按“E”键&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20150226/2.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;经过第二步，这个画面可以编辑，在信息的最后加“空格”，然后键入“single”（如图），或者直接输入数字的“1”并回车确定进入下一步。图如下： &lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20150226/3.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;操作完第三步，会出现下图，是不是感觉又回到第二步了呢？并不是，这里按键盘的”B”键，进入引导系统。注意，这儿是“B”键&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20150226/4.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;在下面这个画面中的“#”后输入“passwd root”，重新设置root的密码，密码输入一遍，确认输入一遍，共2遍。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20150226/5.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;注：重置密码成功会有一个修改成功的提示，然后输入reboot重启系统，root密码重置就完成了。&lt;/p&gt;
-&lt;p&gt;ok，大功告成。。。&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      你对本页的描述
-    
-    </summary>
-    
-    
-      <category term="linux" scheme="http://dxer.github.io/tags/linux/"/>
-    
-      <category term="centos" scheme="http://dxer.github.io/tags/centos/"/>
     
   </entry>
   

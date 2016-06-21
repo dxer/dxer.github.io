@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>HBase过滤器总结 · dxer</title><meta name="description" content="HBase过滤器总结 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- google analytics--><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-43614462-1', 'auto');
+ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#比较过滤器"><span class="toc-text">比较过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RowFilter（行过滤器）"><span class="toc-text">RowFilter（行过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FamilyFilter（列族过滤器）"><span class="toc-text">FamilyFilter（列族过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#QualifierFilter（列名过滤器）"><span class="toc-text">QualifierFilter（列名过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ValueFilter（值过滤器）"><span class="toc-text">ValueFilter（值过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DependentColumnFilter（参考列过滤器）"><span class="toc-text">DependentColumnFilter（参考列过滤器）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#专用过滤器"><span class="toc-text">专用过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SingleColumnValueFilter"><span class="toc-text">SingleColumnValueFilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SingleColumnValueExcludeFilter（单列排除过滤器）"><span class="toc-text">SingleColumnValueExcludeFilter（单列排除过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PrefixFilter（前缀过滤器）"><span class="toc-text">PrefixFilter（前缀过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PageFilter（分页过滤器）"><span class="toc-text">PageFilter（分页过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KeyOnlyFilter（行键过滤器）"><span class="toc-text">KeyOnlyFilter（行键过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FirstKeyOnlyFilter（首次行键过滤器）"><span class="toc-text">FirstKeyOnlyFilter（首次行键过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InclusiveStopFilter（包含结束的过滤器）"><span class="toc-text">InclusiveStopFilter（包含结束的过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TimestampFilter（时间戳过滤器）"><span class="toc-text">TimestampFilter（时间戳过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ColumnCountGetFilter（列计数过滤器）"><span class="toc-text">ColumnCountGetFilter（列计数过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ColumnPaginationFilter（列分页过滤器）"><span class="toc-text">ColumnPaginationFilter（列分页过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ColumnPrefixFilter（列前缀过滤器）"><span class="toc-text">ColumnPrefixFilter（列前缀过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RandomRowFilter（随机行过滤器）"><span class="toc-text">RandomRowFilter（随机行过滤器）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附加过滤器"><span class="toc-text">附加过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SkipFilter（跳转过滤器）"><span class="toc-text">SkipFilter（跳转过滤器）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WhileMatchFilter（全匹配过滤器）"><span class="toc-text">WhileMatchFilter（全匹配过滤器）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义过滤器"><span class="toc-text">自定义过滤器</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">HBase过滤器总结</h1><div class="post-time">Jun 21, 2016</div><div class="post-content"><p>HBase过滤器提供了非常强大的特性来帮助用户提高其处理表中数据的效率。用户不仅可以使用HBase中已经定义好的过滤器，还可以自定义过滤器。<br><a id="more"></a></p>
+<p>Get和Scan两个类都支持过滤器。</p>
+<p>CompareFilter中的比较运算符</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LESS</td>
+<td>匹配小于设定值的值</td>
+</tr>
+<tr>
+<td>LESS_OR_EQUAL</td>
+<td>匹配小于或等于设定值的值</td>
+</tr>
+<tr>
+<td>EQUAL</td>
+<td>匹配等于设定值的值</td>
+</tr>
+<tr>
+<td>NOT_EQUAL</td>
+<td>匹配大于设定值不相同的值</td>
+</tr>
+<tr>
+<td>GREATER_OR_EQUAL</td>
+<td>匹配大于或等于设定值的值</td>
+</tr>
+<tr>
+<td>GREATER</td>
+<td>匹配大于设定值的值</td>
+</tr>
+<tr>
+<td>NOT_OP</td>
+<td>排除一切值</td>
+</tr>
+</tbody>
+</table>
+<p>比较器</p>
+<table>
+<thead>
+<tr>
+<th>比较器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BinaryComparator</td>
+<td>使用Bytes.compareTo()比较当前值与阈值</td>
+</tr>
+<tr>
+<td>BinaryPrefixComparator</td>
+<td>与上面的相似，使用Bytes.compareTo()进行匹配，但是是从左端开始前缀匹配</td>
+</tr>
+<tr>
+<td>NullComparator</td>
+<td>不做匹配，只判断当前值是不是null</td>
+</tr>
+<tr>
+<td>BitComparator</td>
+<td>通过BitwiseOp类提供的按位与（AND），或（OR），异或（XOR）操作执行位级比较</td>
+</tr>
+<tr>
+<td>RegexStringComparator</td>
+<td>根据一个正则表达式，在实例化这个比较器的时候去匹配表中数据</td>
+</tr>
+<tr>
+<td>SubstringComparator</td>
+<td>把阈值和表中数据当做String实例，同时通过contains()操作匹配字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="比较过滤器"><a href="#比较过滤器" class="headerlink" title="比较过滤器"></a>比较过滤器</h2><h3 id="RowFilter（行过滤器）"><a href="#RowFilter（行过滤器）" class="headerlink" title="RowFilter（行过滤器）"></a>RowFilter（行过滤器）</h3><p>行过滤器是基于行键来过滤数据</p>
+<h3 id="FamilyFilter（列族过滤器）"><a href="#FamilyFilter（列族过滤器）" class="headerlink" title="FamilyFilter（列族过滤器）"></a>FamilyFilter（列族过滤器）</h3><p>列族过滤器是基于列族来进行过滤数据</p>
+<h3 id="QualifierFilter（列名过滤器）"><a href="#QualifierFilter（列名过滤器）" class="headerlink" title="QualifierFilter（列名过滤器）"></a>QualifierFilter（列名过滤器）</h3><p>列名过滤器用户筛选特定的列</p>
+<h3 id="ValueFilter（值过滤器）"><a href="#ValueFilter（值过滤器）" class="headerlink" title="ValueFilter（值过滤器）"></a>ValueFilter（值过滤器）</h3><p>值过滤器用户筛选某个特定值的单元格。与RegexStringComparator配合使用，可以使用功能强大的表达式来进行筛选。</p>
+<h3 id="DependentColumnFilter（参考列过滤器）"><a href="#DependentColumnFilter（参考列过滤器）" class="headerlink" title="DependentColumnFilter（参考列过滤器）"></a>DependentColumnFilter（参考列过滤器）</h3><p>参考列过滤器不仅仅简单的通过用户指定的信息筛选数据，还允许用户指定一个参考列或是引用列。并使用参考列控制其他列的过滤。</p>
+<h2 id="专用过滤器"><a href="#专用过滤器" class="headerlink" title="专用过滤器"></a>专用过滤器</h2><h3 id="SingleColumnValueFilter"><a href="#SingleColumnValueFilter" class="headerlink" title="SingleColumnValueFilter"></a>SingleColumnValueFilter</h3><p>用一列的值决定是否一行数据是否被过滤</p>
+<h3 id="SingleColumnValueExcludeFilter（单列排除过滤器）"><a href="#SingleColumnValueExcludeFilter（单列排除过滤器）" class="headerlink" title="SingleColumnValueExcludeFilter（单列排除过滤器）"></a>SingleColumnValueExcludeFilter（单列排除过滤器）</h3><p>该过滤器继承SingleColumnValueFilter，反考烈不会包含在结果中。</p>
+<h3 id="PrefixFilter（前缀过滤器）"><a href="#PrefixFilter（前缀过滤器）" class="headerlink" title="PrefixFilter（前缀过滤器）"></a>PrefixFilter（前缀过滤器）</h3><p>筛选出具有特点前缀的行键的数据。扫描操作以字典序查找，当遇到比前缀大的行时，扫描结束。PrefixFilter对get()方法作用不大。前缀过滤器只针对行键。</p>
+<h3 id="PageFilter（分页过滤器）"><a href="#PageFilter（分页过滤器）" class="headerlink" title="PageFilter（分页过滤器）"></a>PageFilter（分页过滤器）</h3><p>可以使用这个过滤器对结果按行分页。当用户创建PageFilter的实例的时候，指定了pageSize，这个参数可以控制每页返回的行数。</p>
+<h3 id="KeyOnlyFilter（行键过滤器）"><a href="#KeyOnlyFilter（行键过滤器）" class="headerlink" title="KeyOnlyFilter（行键过滤器）"></a>KeyOnlyFilter（行键过滤器）</h3><p>只返回每行的行键，不返回值。对于之关注于行键的应用常见来说非常合适，不返回值，可以减少传递到客户端的数据量，能起到一定的优化作用。</p>
+<h3 id="FirstKeyOnlyFilter（首次行键过滤器）"><a href="#FirstKeyOnlyFilter（首次行键过滤器）" class="headerlink" title="FirstKeyOnlyFilter（首次行键过滤器）"></a>FirstKeyOnlyFilter（首次行键过滤器）</h3><p>只想返回的结果集中只包含第一列的数据</p>
+<h3 id="InclusiveStopFilter（包含结束的过滤器）"><a href="#InclusiveStopFilter（包含结束的过滤器）" class="headerlink" title="InclusiveStopFilter（包含结束的过滤器）"></a>InclusiveStopFilter（包含结束的过滤器）</h3><p>开始行被包含在结果中，单终止行被排除在外，使用这个过滤器，也可以将结束行包含在结果中。</p>
+<h3 id="TimestampFilter（时间戳过滤器）"><a href="#TimestampFilter（时间戳过滤器）" class="headerlink" title="TimestampFilter（时间戳过滤器）"></a>TimestampFilter（时间戳过滤器）</h3><p>使用时间戳过滤器可以对扫描结果中对版本进行细粒度的控制。</p>
+<h3 id="ColumnCountGetFilter（列计数过滤器）"><a href="#ColumnCountGetFilter（列计数过滤器）" class="headerlink" title="ColumnCountGetFilter（列计数过滤器）"></a>ColumnCountGetFilter（列计数过滤器）</h3><p>确定每行最多返回多少列，并在遇到一定的列数超过我们锁设置的限制值的时候，结束扫描操作</p>
+<h3 id="ColumnPaginationFilter（列分页过滤器）"><a href="#ColumnPaginationFilter（列分页过滤器）" class="headerlink" title="ColumnPaginationFilter（列分页过滤器）"></a>ColumnPaginationFilter（列分页过滤器）</h3><p>与PageFilter类似，列分页过滤器可以对一行的所有列进行分页。</p>
+<h3 id="ColumnPrefixFilter（列前缀过滤器）"><a href="#ColumnPrefixFilter（列前缀过滤器）" class="headerlink" title="ColumnPrefixFilter（列前缀过滤器）"></a>ColumnPrefixFilter（列前缀过滤器）</h3><p>类似PrefixFilter，列前缀过滤器通过对列名进行前缀匹配过滤</p>
+<h3 id="RandomRowFilter（随机行过滤器）"><a href="#RandomRowFilter（随机行过滤器）" class="headerlink" title="RandomRowFilter（随机行过滤器）"></a>RandomRowFilter（随机行过滤器）</h3><p>随机行过滤器可以让结果中包含随机行。</p>
+<h2 id="附加过滤器"><a href="#附加过滤器" class="headerlink" title="附加过滤器"></a>附加过滤器</h2><h3 id="SkipFilter（跳转过滤器）"><a href="#SkipFilter（跳转过滤器）" class="headerlink" title="SkipFilter（跳转过滤器）"></a>SkipFilter（跳转过滤器）</h3><p>与ValueFilter结合使用，如果发现一行中的某一列不符合条件，那么整行都会被过滤掉。</p>
+<h3 id="WhileMatchFilter（全匹配过滤器）"><a href="#WhileMatchFilter（全匹配过滤器）" class="headerlink" title="WhileMatchFilter（全匹配过滤器）"></a>WhileMatchFilter（全匹配过滤器）</h3><p>如果你想想要在遇到某种条件数据之前的数据时，就可以使用这个过滤器，当遇到不符合设定条件的数据的时候，整个扫描也结束了。</p>
+<h2 id="自定义过滤器"><a href="#自定义过滤器" class="headerlink" title="自定义过滤器"></a>自定义过滤器</h2><p>可以通过实现Filter接口或者直接竭诚FilterBase类来实现自定义过滤器。</p>
+</div></article></div><div class="tags"><a href="/tags/hbase/">hbase</a></div><div class="paginator"><a href="/2016/06/20/hbase_coprocessor/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/06/21/hbase_filter/index.html" data-title="HBase过滤器总结" data-url="http://dxer.github.io/2016/06/21/hbase_filter/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

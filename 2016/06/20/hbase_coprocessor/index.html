@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>HBase协处理器 · dxer</title><meta name="description" content="HBase协处理器 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- google analytics--><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-43614462-1', 'auto');
+ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Observer"><span class="toc-text">Observer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#endpoint"><span class="toc-text">endpoint</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现一个endpoint的步骤"><span class="toc-text">实现一个endpoint的步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协处理器的配置方法"><span class="toc-text">协处理器的配置方法</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">HBase协处理器</h1><div class="post-time">Jun 20, 2016</div><div class="post-content"><p>使用Scan的时候，可以配合各种Filter进行数据的筛选以减少返回的数据量，同样也可以通过选择特定的列族和列来减少返回的数据量。若是能将该特性进一步的优化则HBase会更强大。HBase在0.92版本后引入了协处理器来实现该功能。<br><a id="more"></a></p>
+<p>协处理器允许用户在region服务器上运行自己的代码，更准确的说是允许用户执行region级的操作，并且可以使用与RDBMS中的触发器类似的功能。在客户端，用户不用关系操作具体在哪里执行，HBase的分布式框架会帮助用户把这些工作变得透明。有点类似MapReduce。</p>
+<p>使用协处理器的好处显而易见，可以将运算放到server端，减少通信开销的同时还能有效的提升性能。</p>
+<p>协处理的两种类型</p>
+<ol>
+<li>系统协处理器：可以全局导入region server上的所有数据表</li>
+<li>表协处理器：用户可以指定一张表使用协处理器</li>
+</ol>
+<p>协处理器框架为了更好支持其行为的灵活性，提供了两个不同方面的插件。</p>
+<ul>
+<li>观察者（observer），类似于关系数据库的触发器（主动触发），在一些特定事件发生的时候被执行。这些时间包括一些用户产生的事件，也包括服务器端内部产生的事件。</li>
+<li>终端（endpoint），动态的终端有点像存储过程。除了事件处理之外还需要将用户自定义操作添加到服务器端。用户代码可以被部署到管理数据的服务器端。endpoint通过添加一些远程调用来扩展RPC协议。</li>
+</ul>
+<h2 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h2><p>观察者的设计意图是允许用户通过插入代码来重载协处理器框架的<code>upcall</code>方法，而具体的事情触发的<code>callback</code>方法由HBase的核心代码来指定。协处理器框架处理所有的<code>callback</code>调用细节，协处理器自身只需要插入添加或者改变的功能。</p>
+<p>Observer提供的接口：</p>
+<ul>
+<li>RegionObserver：提供客户端的数据操作时间钩子：Get、Put、Delete和Scan等</li>
+<li>WALObserver：提供WAL相关操作钩子</li>
+<li>MasterObserver：提供DDL类型的操作钩子，如创建、删除、修改数据表等。</li>
+</ul>
+<p>这些接口可以同时使用在同一个地方，按照不同的优先级顺序执行，用户可以任意基于协处理器实现负责的HBase功能层，HBase有很多种时间可以出发观察者方法，这些事件与方法从HBase0.92版本起，都会集成在HBase中。不过这些API可能会由于各种原因有所改动，不同版本的接口改动比较大。</p>
+<h2 id="endpoint"><a href="#endpoint" class="headerlink" title="endpoint"></a>endpoint</h2><p>endpoint是HBase的一种通用扩展。当endpoint安装在集群上时，它扩展了HBase的RPC协议，对客户端应用开放了新方法。就像observer一样，endpoint在RegiionServer上执行，紧挨着你的数据。</p>
+<p>endpoint协处理类似于其他数据库引擎中的存储过程。从客户端看，调用一个endpoint协处理器类似于调用其他HBase命令，只是其功能建立在定义协处理器的定制代码上，通常先创建请求对象，然后把它传给HtableInterface在集群上执行，最后收集结果。</p>
+<p>单个region<br>单个行键调用coprocessorProxy()。返回一个CoprocessorProtocol接口的动态代理，它使用包含给定行键的region作为RPC endpoint，即使给空行键鬼影的行不存在也不影响。</p>
+<p>一段范围的region<br>通过起始行键和终止行键调用coprocessorExec()。表中包含在起始行键到终止行键范围内的所有region都将作为RPCendpoint</p>
+<h3 id="实现一个endpoint的步骤"><a href="#实现一个endpoint的步骤" class="headerlink" title="实现一个endpoint的步骤"></a>实现一个endpoint的步骤</h3><ol>
+<li>扩展CoprocessorProtlcol接口<br>这一步将设定与新endpoint的通信细节，即定义了客户端和服务店的RPC协议</li>
+<li>扩展BaseEndpointCoprocessor类<br>用户必须实现endpoint设计的方法，包括抽象类BaseEndpointCoprocessor，以及之前定义的endpoint协议接口</li>
+</ol>
+<h2 id="协处理器的配置方法"><a href="#协处理器的配置方法" class="headerlink" title="协处理器的配置方法"></a>协处理器的配置方法</h2><ul>
+<li>启用全局aggregation，能操作所有表上的数据，通过修改hbase-site.xml配置文件实现，添加如下示例代码：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.coprocessor,user.region.classes<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hbase.coprocessor.RowCountEndPoint<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>启用表aggregation，只对特定的表生效。通过HBase shell来实现</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.disable指定表</span><br><span class="line">2.添加aggregation: alter 'test', METHOD=&gt;'table_att', 'coprocessor1'=&gt;'|org.acache/hadoop.coprocessor.RowCountEndPoint||'</span><br><span class="line">3.重启指定表： enable 'test'</span><br></pre></td></tr></table></figure>
+<p>协处理器配置格式<br>以”|”分割的几个属性</p>
+<ol>
+<li>file path文件路径</li>
+<li>classname协处理器的类名</li>
+<li>priorty优先级</li>
+<li>arguments参数</li>
+</ol>
+<ul>
+<li>API调用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HTableDescriptor htd = <span class="keyword">new</span> HTableDescriptor(<span class="string">"test"</span>);</span><br><span class="line">htd.setValue(<span class="string">"COPROCESSOR$1"</span>, path.toString() + <span class="string">"|"</span> + RowCountEndpoint.class.getCanonicalName() + <span class="string">"|"</span> +</span><br><span class="line">                                      Coprocessor.PRIORITY_USER);</span><br></pre></td></tr></table></figure>
+<p>协处理器配置的加载顺序：先加载配置文件中定义的协处理器，后加载表描述符中的协处理器</p>
+<p>COPROCESSOR$<number>中的number定义了加载顺序</number></p>
+</div></article></div><div class="tags"><a href="/tags/hbase/">hbase</a></div><div class="paginator"><a href="/2016/06/21/hbase_filter/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2016/06/16/hbase_rowkey/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/06/20/hbase_coprocessor/index.html" data-title="HBase协处理器" data-url="http://dxer.github.io/2016/06/20/hbase_coprocessor/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>

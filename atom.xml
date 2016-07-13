@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-06-21T01:45:58.886Z</updated>
+  <updated>2016-07-13T04:20:10.893Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -14,6 +14,46 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>WebDigger</title>
+    <link href="http://dxer.github.io/2016/07/13/WebDigger/"/>
+    <id>http://dxer.github.io/2016/07/13/WebDigger/</id>
+    <published>2016-07-13T03:52:41.293Z</published>
+    <updated>2016-07-13T04:20:10.893Z</updated>
+    
+    <content type="html">&lt;p&gt;WebDigger是一个采用Java开发的爬虫框架。WebDigger的目标是简化爬虫的开发流程，让开发者只用关心抓取页面的数据提取和数据保存的逻辑。WebDigger也提供注解的方式来配置要抓取的网页数据，以减少代码的开发。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;组件&quot;&gt;&lt;a href=&quot;#组件&quot; class=&quot;headerlink&quot; title=&quot;组件&quot;&gt;&lt;/a&gt;组件&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Digger&lt;br&gt;负责控制数据流在系统中所有组件中流动，并在相应动作发生时触发事件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Scheduler&lt;br&gt;调度器从引擎接受request并将他们入队，以便之后引擎请求他们时提供给引擎。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Downloader&lt;br&gt;下载器负责获取页面数据Response，供Processor模块进行数据提取&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Processor&lt;br&gt;是用于分析response并提取item(需要的抓取的具体的数据)。每个spider的Processor负责处理一个特定(或一些)网站。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Storage&lt;br&gt;负责处理被Processor提取出来的item。主要是用来将item进行持久化操作（保存到文件，打印输出等）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下面是一个抓取豆瓣图书的例子&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;42&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;DBBookSpider&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;Spider&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     * 自定义的processor，负责解析页面书籍的相关信息&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;meta&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(Response response)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        Selector selector = response.getJXDoc().getSelector();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        Map&amp;lt;String, String&amp;gt; fieldMap = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HashMap&amp;lt;String, String&amp;gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        fieldMap.put(&lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;div.info &amp;gt; h2 &amp;gt; a&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        fieldMap.put(&lt;span class=&quot;string&quot;&gt;&quot;pub&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;div.info &amp;gt; div.pub&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        fieldMap.put(&lt;span class=&quot;string&quot;&gt;&quot;score&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;div.info &amp;gt; div.star.clearfix &amp;gt; span.rating_nums&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        fieldMap.put(&lt;span class=&quot;string&quot;&gt;&quot;comments&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;div.info &amp;gt; div.star.clearfix &amp;gt; span.pl&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        fieldMap.put(&lt;span class=&quot;string&quot;&gt;&quot;intro&quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;div.info &amp;gt; p&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        List&amp;lt;Map&amp;lt;String, String&amp;gt;&amp;gt; list = selector.foreach(&lt;span class=&quot;string&quot;&gt;&quot;#subject_list &amp;gt; ul &amp;gt; li&quot;&lt;/span&gt;, fieldMap);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        response.put(&lt;span class=&quot;string&quot;&gt;&quot;list&quot;&lt;/span&gt;, list);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     * 自定义的Storage，这里仅仅是将信息打印输出&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;meta&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;persist&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(Item item)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        List&amp;lt;Map&amp;lt;String, String&amp;gt;&amp;gt; list = (List&amp;lt;Map&amp;lt;String, String&amp;gt;&amp;gt;) item.get(&lt;span class=&quot;string&quot;&gt;&quot;list&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (list != &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; !list.isEmpty()) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; (Map&amp;lt;String, String&amp;gt; map: list) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                System.out.println(JSON.toJSONString(map));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(String[] args)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; DBBookSpider()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                        .addStartUrls(&lt;span class=&quot;string&quot;&gt;&quot;https://book.douban.com/tag/中国文学&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                            &lt;span class=&quot;string&quot;&gt;&quot;https://book.douban.com/tag/中国文学?start=20&amp;amp;type=T&quot;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                            &lt;span class=&quot;string&quot;&gt;&quot;https://book.douban.com/tag/中国文学?start=40&amp;amp;type=T&quot;&lt;/span&gt;).setFollowed(&lt;span class=&quot;keyword&quot;&gt;false&lt;/span&gt;).start(); &lt;span class=&quot;comment&quot;&gt;// 启动爬虫&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;基于注解方式的抓取数据的定义&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;QQTechModel&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;CrawlerModel&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;meta&quot;&gt;@FieldRule&lt;/span&gt;(type = FieldType.CSS, expr = &lt;span class=&quot;string&quot;&gt;&quot;#C-Main-Article-QQ &amp;gt; div.hd &amp;gt; h1&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; String title;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;meta&quot;&gt;@FieldRule&lt;/span&gt;(type = FieldType.CSS, expr = &lt;span class=&quot;string&quot;&gt;&quot;#C-Main-Article-QQ &amp;gt; div.hd &amp;gt; div &amp;gt; div &amp;gt; span.pubTime&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; String pubTime;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;meta&quot;&gt;@FieldRule&lt;/span&gt;(type = FieldType.CSS, expr = &lt;span class=&quot;string&quot;&gt;&quot;#Cnt-Main-Article-QQ&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; String content;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// ... get &amp;amp; set&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;ps： 欢迎有兴趣的同学，一起沟通学习~&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;WebDigger是一个采用Java开发的爬虫框架。WebDigger的目标是简化爬虫的开发流程，让开发者只用关心抓取页面的数据提取和数据保存的逻辑。WebDigger也提供注解的方式来配置要抓取的网页数据，以减少代码的开发。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="爬虫" scheme="http://dxer.github.io/tags/%E7%88%AC%E8%99%AB/"/>
+    
+      <category term="WebDigger" scheme="http://dxer.github.io/tags/WebDigger/"/>
+    
+  </entry>
   
   <entry>
     <title>HBase过滤器总结</title>
@@ -346,6 +386,94 @@
   </entry>
   
   <entry>
+    <title></title>
+    <link href="http://dxer.github.io/2016/05/12/hbase%E7%AE%80%E4%BB%8B/"/>
+    <id>http://dxer.github.io/2016/05/12/hbase简介/</id>
+    <published>2016-05-12T08:02:07.585Z</published>
+    <updated>2016-06-24T01:28:55.233Z</updated>
+    
+    <content type="html">&lt;p&gt;title: “HBase简介” date: 2016-03-19 11:21:38&lt;/p&gt;
+&lt;h1 id=&quot;tags-hbase&quot;&gt;&lt;a href=&quot;#tags-hbase&quot; class=&quot;headerlink&quot; title=&quot;tags: [hbase]&quot;&gt;&lt;/a&gt;tags: [hbase]&lt;/h1&gt;&lt;p&gt;HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;HBase表的特点&quot;&gt;&lt;a href=&quot;#HBase表的特点&quot; class=&quot;headerlink&quot; title=&quot;HBase表的特点&quot;&gt;&lt;/a&gt;HBase表的特点&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;大：一个表可以有有数以十亿行，上百万列&lt;/li&gt;
+&lt;li&gt;面向列：面向列（族）的存储和权限访问，列（族）独立索引&lt;/li&gt;
+&lt;li&gt;稀疏：对于未空（null）的列，并不占用存储空间，因此表可以设计的非常稀疏&lt;/li&gt;
+&lt;li&gt;数据类型单一：HBase中的数据类型都是字符串（string）&lt;/li&gt;
+&lt;li&gt;无模式：每行都有一个可排序的主键和任意多的列，列可以根据需要动态增加，同一张表中不同的行可以截然不同的列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;HBase和关系数据库区别&quot;&gt;&lt;a href=&quot;#HBase和关系数据库区别&quot; class=&quot;headerlink&quot; title=&quot;HBase和关系数据库区别&quot;&gt;&lt;/a&gt;HBase和关系数据库区别&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;数据库类型：HBase中的数据类型都是字符串类型（string）&lt;/li&gt;
+&lt;li&gt;数据操作：HBase只有普通的增删改查等操作，没有表之间的关联查询&lt;/li&gt;
+&lt;li&gt;存储模式：HBase是基于列式存储模式，而RDBMS是基于行式存储的&lt;/li&gt;
+&lt;li&gt;应用场景：HBase适合存储大量数据，查询效率极高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h1&gt;&lt;p&gt;HBase以表的形式存储数据。表有行和列组成。列划分为若干个列族(column family)&lt;/p&gt;
+&lt;h2 id=&quot;RowKey&quot;&gt;&lt;a href=&quot;#RowKey&quot; class=&quot;headerlink&quot; title=&quot;RowKey&quot;&gt;&lt;/a&gt;RowKey&lt;/h2&gt;&lt;p&gt;用来检索记录的主键 主键为任意字符串，最大长度为64kb，按字典顺序存储，在HBase内部保存为字节数组&lt;/p&gt;
+&lt;p&gt;Rowkey是以字典顺序从大到小排序 Rowkey尽量散列设计，保证所有的数据不是在一个Region上，从而避免读写的时候负载会集中在个别Region上。 Rowkey的长度尽量短，如果太长存储开销会增加，影响存储效率，Rowkey字段过长，会导致内存的利用率降低，进而降低索引的命中率&lt;/p&gt;
+&lt;h3 id=&quot;常见Rowkey设计方法：&quot;&gt;&lt;a href=&quot;#常见Rowkey设计方法：&quot; class=&quot;headerlink&quot; title=&quot;常见Rowkey设计方法：&quot;&gt;&lt;/a&gt;常见Rowkey设计方法：&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;反转userId，将userId字符串反转后存储&lt;/li&gt;
+&lt;li&gt;散列userId，对userId进行散列&lt;/li&gt;
+&lt;li&gt;userId取模后进行MD5，区前6位作为前缀加入到userId前面&lt;/li&gt;
+&lt;li&gt;时间使用long型来表示&lt;/li&gt;
+&lt;li&gt;尽量使用编码压缩&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;访问HBase表中的行，只有三种方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通过rowkey&lt;/li&gt;
+&lt;li&gt;通过rowkey的range&lt;/li&gt;
+&lt;li&gt;全表扫描&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;列族（Column-Family）&quot;&gt;&lt;a href=&quot;#列族（Column-Family）&quot; class=&quot;headerlink&quot; title=&quot;列族（Column Family）&quot;&gt;&lt;/a&gt;列族（Column Family）&lt;/h2&gt;&lt;p&gt;列族在创建表的时候声明，一个列族可以包含多个列，列中的数据都是以二进制形式存在，没有数据类型 列族是一些列的集合 一个列族所有成员是有着相同的前缀。用”:”来分割列族和列名&lt;/p&gt;
+&lt;h2 id=&quot;列（Column）&quot;&gt;&lt;a href=&quot;#列（Column）&quot; class=&quot;headerlink&quot; title=&quot;列（Column）&quot;&gt;&lt;/a&gt;列（Column）&lt;/h2&gt;&lt;p&gt;属于某一个column family，columnfamily:columnName，每条记录可动态添加&lt;/p&gt;
+&lt;h2 id=&quot;时间戳和存储单元（TimeStamp-and-Cell）&quot;&gt;&lt;a href=&quot;#时间戳和存储单元（TimeStamp-and-Cell）&quot; class=&quot;headerlink&quot; title=&quot;时间戳和存储单元（TimeStamp and Cell）&quot;&gt;&lt;/a&gt;时间戳和存储单元（TimeStamp and Cell）&lt;/h2&gt;&lt;p&gt;HBase中通过row和columns确定的唯一个存储单元成为cell，每个cell都保存同一份数据的多个版本 在写入数据时，时间戳可以又HBase自动赋值（当前系统时间精确到毫秒），也阔以显示赋值 每个cell中，不同版本的数据按照时间的倒叙排序 {row，Column，version}元组就是HBase中的一个cell&lt;/p&gt;
+&lt;h1 id=&quot;HBase物理模型&quot;&gt;&lt;a href=&quot;#HBase物理模型&quot; class=&quot;headerlink&quot; title=&quot;HBase物理模型&quot;&gt;&lt;/a&gt;HBase物理模型&lt;/h1&gt;&lt;p&gt;HBase存储细节 每个列族存储在HDFS上的一个单独文件夹中 Key和Version number会在每个列族中存储一份 空值不会被保存 HBase 为每个值维护了多级索引，即：&lt;/p&gt;
+&lt;p&gt;&lt;key, column=&quot;&quot; family,=&quot;&quot; name,=&quot;&quot; timestamp=&quot;&quot;&gt;&lt;br&gt;&lt;/key,&gt;&lt;/p&gt;
+&lt;p&gt;物理存储：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Table中所有行都按照row key的字典序排列；&lt;/li&gt;
+&lt;li&gt;Table在行的方向上分割为多个Region；&lt;/li&gt;
+&lt;li&gt;Region按大小分割的，每个表开始只有一个region，随着数据增多，region不断增大，当增大到一个阀值的时候，region就会等分会两个新的region，之后会有越来越多的region；&lt;/li&gt;
+&lt;li&gt;Region是Hbase中分布式存储和负载均衡的最小单元，不同Region分布到不同RegionServer上。&lt;/li&gt;
+&lt;li&gt;Region虽然是分布式存储的最小单元，但并不是存储的最小单元。Region由一个或者多个Store组成，每个store保存一个columns family；每个Strore又由一个memStore和0至多个StoreFile组成，StoreFile包含HFile；memStore存储在内存中，StoreFile存储在HDFS上。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;HBase架构与基本组件&quot;&gt;&lt;a href=&quot;#HBase架构与基本组件&quot; class=&quot;headerlink&quot; title=&quot;HBase架构与基本组件&quot;&gt;&lt;/a&gt;HBase架构与基本组件&lt;/h1&gt;&lt;h2 id=&quot;Client&quot;&gt;&lt;a href=&quot;#Client&quot; class=&quot;headerlink&quot; title=&quot;Client&quot;&gt;&lt;/a&gt;Client&lt;/h2&gt;&lt;p&gt;整个HBase集群的入口 使用HBase RPC机制与HMaster和HRegionServer通信 与HMaster通信进行管理类的操作 与HRegionServer通信进行读写类操作 包含访问HBase的接口，并维护cache来加快对HBase的访问，与HRegionServer交互&lt;/p&gt;
+&lt;h2 id=&quot;ZooKeeper程序协调服务&quot;&gt;&lt;a href=&quot;#ZooKeeper程序协调服务&quot; class=&quot;headerlink&quot; title=&quot;ZooKeeper程序协调服务&quot;&gt;&lt;/a&gt;ZooKeeper程序协调服务&lt;/h2&gt;&lt;p&gt;保证任何时候，集群中只有一个Master（HA） 存储所有Region的寻址入口 实时监控Region server的上线和下线信息。并实时通知HMaster 存储HBase的schema和table元数据&lt;/p&gt;
+&lt;h2 id=&quot;HBase主节点HMaster&quot;&gt;&lt;a href=&quot;#HBase主节点HMaster&quot; class=&quot;headerlink&quot; title=&quot;HBase主节点HMaster&quot;&gt;&lt;/a&gt;HBase主节点HMaster&lt;/h2&gt;&lt;p&gt;管理用户对Table的增删改查操作（表操作） 管理HRegionServer的负载均衡，调整Region分布 在Region split后，负责新Region的分配 在HRegionServer停机后，负责将失效的HRegionServer上的Region迁移 HMaster失效仅会导致所有元数据无法被修改，但是表的数据读写还是可以正常进行&lt;/p&gt;
+&lt;h2 id=&quot;HRegionServer节点&quot;&gt;&lt;a href=&quot;#HRegionServer节点&quot; class=&quot;headerlink&quot; title=&quot;HRegionServer节点&quot;&gt;&lt;/a&gt;HRegionServer节点&lt;/h2&gt;&lt;p&gt;维护HRegion并往HDFS中写数据 当表的大小超过设置值时，split HRegion 在HRegionServer停机后，负责失效HRegionServer上的HRegion迁移&lt;/p&gt;
+&lt;h1 id=&quot;HBase与Zookeeper&quot;&gt;&lt;a href=&quot;#HBase与Zookeeper&quot; class=&quot;headerlink&quot; title=&quot;HBase与Zookeeper&quot;&gt;&lt;/a&gt;HBase与Zookeeper&lt;/h1&gt;&lt;p&gt;HBase元数据存储在Zookeeper中 默认情况下,HBase管理Zookeeper实例，比如，启动或者停止Zookeeper Zookeeper解决HBase单点故障问题 HMaster与HRegionServer启动时会向Zookeeper注册&lt;/p&gt;
+&lt;h1 id=&quot;WAL&quot;&gt;&lt;a href=&quot;#WAL&quot; class=&quot;headerlink&quot; title=&quot;WAL&quot;&gt;&lt;/a&gt;WAL&lt;/h1&gt;&lt;p&gt;WAL是Regionserver在处理插入和删除的过程中用来记录操作内容的一种日志&lt;/p&gt;
+&lt;p&gt;一个表由一个region或者多个region组成，region由regionserver进行管理 每个region包含memstore和storeFile，memstore存储在内存中，storeFile存储在磁盘中&lt;/p&gt;
+&lt;h1 id=&quot;HBase在HDFS中存储&quot;&gt;&lt;a href=&quot;#HBase在HDFS中存储&quot; class=&quot;headerlink&quot; title=&quot;HBase在HDFS中存储&quot;&gt;&lt;/a&gt;HBase在HDFS中存储&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/hbase/.tmp&lt;/code&gt;：临时目录，当对表做创建和删除的时候，会将表move到该目录，然后进行操作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/data&lt;/code&gt;：核心目录，存储HBase表的数据 默认情况下，目录下有两个目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/data/default&lt;/code&gt;: 在用户创建表的时候，没有指定namespace时，表就创建在此目录下&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/data/hbase&lt;/code&gt;：系统内部创建的表，.META.表（region的详细信息）和namespace表（namespace信息）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/hbase.id&lt;/code&gt;：存储的是集群的唯一cluster id（uuid）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/hbase.version&lt;/code&gt;：集群的版本号&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/hbase/oldWALs&lt;/code&gt;: 对应0.94.x版本中.oldlogs目录 当/hbase/WALs目录中的logs没有之后，会将这些logs移动到此目录下，HMaster会定期清理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;HBase使用场景&quot;&gt;&lt;a href=&quot;#HBase使用场景&quot; class=&quot;headerlink&quot; title=&quot;HBase使用场景&quot;&gt;&lt;/a&gt;HBase使用场景&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;大数据量存储，大数据量高并发操作&lt;/li&gt;
+&lt;li&gt;需要对数据随机读写操作&lt;/li&gt;
+&lt;li&gt;读写访问均是非常简单的操作&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;HBase与HDFS对比&quot;&gt;&lt;a href=&quot;#HBase与HDFS对比&quot; class=&quot;headerlink&quot; title=&quot;HBase与HDFS对比&quot;&gt;&lt;/a&gt;HBase与HDFS对比&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;两者都具有良好的容错性和扩展性，都可以扩展到成百上千个节点；&lt;/li&gt;
+&lt;li&gt;HDFS适合批处理场景，不支持数据随机查找，不适合增量数据处理，不支持数据更新&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;title: “HBase简介” date: 2016-03-19 11:21:38&lt;/p&gt;
+&lt;h1 id=&quot;tags-hbase&quot;&gt;&lt;a href=&quot;#tags-hbase&quot; class=&quot;headerlink&quot; title=&quot;tags: [hbase]&quot;&gt;&lt;/a&gt;tags: [hbase]&lt;/h1&gt;&lt;p&gt;HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Hadoop不能加载本地库问题解决</title>
     <link href="http://dxer.github.io/2016/04/05/hadoop_native_lib/"/>
     <id>http://dxer.github.io/2016/04/05/hadoop_native_lib/</id>
@@ -496,110 +624,23 @@
   </entry>
   
   <entry>
-    <title>HBase简介</title>
-    <link href="http://dxer.github.io/2016/03/19/hbase%E7%AE%80%E4%BB%8B/"/>
-    <id>http://dxer.github.io/2016/03/19/hbase简介/</id>
-    <published>2016-03-19T03:21:38.000Z</published>
-    <updated>2016-05-12T08:25:38.218Z</updated>
-    
-    <content type="html">&lt;p&gt;HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;HBase表的特点&quot;&gt;&lt;a href=&quot;#HBase表的特点&quot; class=&quot;headerlink&quot; title=&quot;HBase表的特点&quot;&gt;&lt;/a&gt;HBase表的特点&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;大：一个表可以有有数以十亿行，上百万列&lt;/li&gt;
-&lt;li&gt;面向列：面向列（族）的存储和权限访问，列（族）独立索引&lt;/li&gt;
-&lt;li&gt;稀疏：对于未空（null）的列，并不占用存储空间，因此表可以设计的非常稀疏&lt;/li&gt;
-&lt;li&gt;数据类型单一：HBase中的数据类型都是字符串（string）&lt;/li&gt;
-&lt;li&gt;无模式：每行都有一个可排序的主键和任意多的列，列可以根据需要动态增加，同一张表中不同的行可以截然不同的列&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;HBase和关系数据库区别&quot;&gt;&lt;a href=&quot;#HBase和关系数据库区别&quot; class=&quot;headerlink&quot; title=&quot;HBase和关系数据库区别&quot;&gt;&lt;/a&gt;HBase和关系数据库区别&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;数据库类型：HBase中的数据类型都是字符串类型（string）&lt;/li&gt;
-&lt;li&gt;数据操作：HBase只有普通的增删改查等操作，没有表之间的关联查询&lt;/li&gt;
-&lt;li&gt;存储模式：HBase是基于列式存储模式，而RDBMS是基于行式存储的&lt;/li&gt;
-&lt;li&gt;应用场景：HBase适合存储大量数据，查询效率极高&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h2&gt;&lt;p&gt;HBase以表的形式存储数据。表有行和列组成。列划分为若干个列族(column family)&lt;/p&gt;
-&lt;h3 id=&quot;RowKey&quot;&gt;&lt;a href=&quot;#RowKey&quot; class=&quot;headerlink&quot; title=&quot;RowKey&quot;&gt;&lt;/a&gt;RowKey&lt;/h3&gt;&lt;p&gt;用来检索记录的主键&lt;br&gt;主键为任意字符串，最大长度为64kb，按字典顺序存储，在HBase内部保存为字节数组&lt;/p&gt;
-&lt;p&gt;Rowkey是以字典顺序从大到小排序&lt;br&gt;Rowkey尽量散列设计，保证所有的数据不是在一个Region上，从而避免读写的时候负载会集中在个别Region上。&lt;br&gt;Rowkey的长度尽量短，如果太长存储开销会增加，影响存储效率，Rowkey字段过长，会导致内存的利用率降低，进而降低索引的命中率&lt;/p&gt;
-&lt;h6 id=&quot;常见Rowkey设计方法：&quot;&gt;&lt;a href=&quot;#常见Rowkey设计方法：&quot; class=&quot;headerlink&quot; title=&quot;常见Rowkey设计方法：&quot;&gt;&lt;/a&gt;常见Rowkey设计方法：&lt;/h6&gt;&lt;ul&gt;
-&lt;li&gt;反转userId，将userId字符串反转后存储&lt;/li&gt;
-&lt;li&gt;散列userId，对userId进行散列&lt;/li&gt;
-&lt;li&gt;userId取模后进行MD5，区前6位作为前缀加入到userId前面&lt;/li&gt;
-&lt;li&gt;时间使用long型来表示&lt;/li&gt;
-&lt;li&gt;尽量使用编码压缩&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;访问HBase表中的行，只有三种方式：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;通过rowkey&lt;/li&gt;
-&lt;li&gt;通过rowkey的range&lt;/li&gt;
-&lt;li&gt;全表扫描&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;列族（Column-Family）&quot;&gt;&lt;a href=&quot;#列族（Column-Family）&quot; class=&quot;headerlink&quot; title=&quot;列族（Column Family）&quot;&gt;&lt;/a&gt;列族（Column Family）&lt;/h3&gt;&lt;p&gt;列族在创建表的时候声明，一个列族可以包含多个列，列中的数据都是以二进制形式存在，没有数据类型&lt;br&gt;列族是一些列的集合&lt;br&gt;一个列族所有成员是有着相同的前缀。用”:”来分割列族和列名&lt;/p&gt;
-&lt;h3 id=&quot;列（Column）&quot;&gt;&lt;a href=&quot;#列（Column）&quot; class=&quot;headerlink&quot; title=&quot;列（Column）&quot;&gt;&lt;/a&gt;列（Column）&lt;/h3&gt;&lt;p&gt;属于某一个column family，columnfamily:columnName，每条记录可动态添加&lt;/p&gt;
-&lt;h3 id=&quot;时间戳和存储单元（TimeStamp-and-Cell）&quot;&gt;&lt;a href=&quot;#时间戳和存储单元（TimeStamp-and-Cell）&quot; class=&quot;headerlink&quot; title=&quot;时间戳和存储单元（TimeStamp and Cell）&quot;&gt;&lt;/a&gt;时间戳和存储单元（TimeStamp and Cell）&lt;/h3&gt;&lt;p&gt;HBase中通过row和columns确定的唯一个存储单元成为cell，每个cell都保存同一份数据的多个版本&lt;br&gt;在写入数据时，时间戳可以又HBase自动赋值（当前系统时间精确到毫秒），也阔以显示赋值&lt;br&gt;每个cell中，不同版本的数据按照时间的倒叙排序&lt;br&gt;{row，Column，version}元组就是HBase中的一个cell&lt;/p&gt;
-&lt;h2 id=&quot;HBase物理模型&quot;&gt;&lt;a href=&quot;#HBase物理模型&quot; class=&quot;headerlink&quot; title=&quot;HBase物理模型&quot;&gt;&lt;/a&gt;HBase物理模型&lt;/h2&gt;&lt;p&gt;HBase存储细节&lt;br&gt;每个列族存储在HDFS上的一个单独文件夹中&lt;br&gt;Key和Version number会在每个列族中存储一份&lt;br&gt;空值不会被保存&lt;br&gt;HBase 为每个值维护了多级索引，即：&lt;key, column=&quot;&quot; family,=&quot;&quot; name,=&quot;&quot; timestamp=&quot;&quot;&gt;&lt;/key,&gt;&lt;/p&gt;
-&lt;p&gt;物理存储：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Table中所有行都按照row key的字典序排列；&lt;/li&gt;
-&lt;li&gt;Table在行的方向上分割为多个Region；&lt;/li&gt;
-&lt;li&gt;Region按大小分割的，每个表开始只有一个region，随着数据增多，region不断增大，当增大到一个阀值的时候，region就会等分会两个新的region，之后会有越来越多的region；&lt;/li&gt;
-&lt;li&gt;Region是Hbase中分布式存储和负载均衡的最小单元，不同Region分布到不同RegionServer上。&lt;/li&gt;
-&lt;li&gt;Region虽然是分布式存储的最小单元，但并不是存储的最小单元。Region由一个或者多个Store组成，每个store保存一个columns family；每个Strore又由一个memStore和0至多个StoreFile组成，StoreFile包含HFile；memStore存储在内存中，StoreFile存储在HDFS上。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;HBase架构与基本组件&quot;&gt;&lt;a href=&quot;#HBase架构与基本组件&quot; class=&quot;headerlink&quot; title=&quot;HBase架构与基本组件&quot;&gt;&lt;/a&gt;HBase架构与基本组件&lt;/h2&gt;&lt;h3 id=&quot;Client&quot;&gt;&lt;a href=&quot;#Client&quot; class=&quot;headerlink&quot; title=&quot;Client&quot;&gt;&lt;/a&gt;Client&lt;/h3&gt;&lt;p&gt;整个HBase集群的入口&lt;br&gt;使用HBase RPC机制与HMaster和HRegionServer通信&lt;br&gt;与HMaster通信进行管理类的操作&lt;br&gt;与HRegionServer通信进行读写类操作&lt;br&gt;包含访问HBase的接口，并维护cache来加快对HBase的访问，与HRegionServer交互&lt;/p&gt;
-&lt;h3 id=&quot;ZooKeeper程序协调服务&quot;&gt;&lt;a href=&quot;#ZooKeeper程序协调服务&quot; class=&quot;headerlink&quot; title=&quot;ZooKeeper程序协调服务&quot;&gt;&lt;/a&gt;ZooKeeper程序协调服务&lt;/h3&gt;&lt;p&gt;保证任何时候，集群中只有一个Master（HA）&lt;br&gt;存储所有Region的寻址入口&lt;br&gt;实时监控Region server的上线和下线信息。并实时通知HMaster&lt;br&gt;存储HBase的schema和table元数据&lt;/p&gt;
-&lt;h3 id=&quot;HBase主节点HMaster&quot;&gt;&lt;a href=&quot;#HBase主节点HMaster&quot; class=&quot;headerlink&quot; title=&quot;HBase主节点HMaster&quot;&gt;&lt;/a&gt;HBase主节点HMaster&lt;/h3&gt;&lt;p&gt;管理用户对Table的增删改查操作（表操作）&lt;br&gt;管理HRegionServer的负载均衡，调整Region分布&lt;br&gt;在Region split后，负责新Region的分配&lt;br&gt;在HRegionServer停机后，负责将失效的HRegionServer上的Region迁移&lt;br&gt;HMaster失效仅会导致所有元数据无法被修改，但是表的数据读写还是可以正常进行&lt;/p&gt;
-&lt;h3 id=&quot;HRegionServer节点&quot;&gt;&lt;a href=&quot;#HRegionServer节点&quot; class=&quot;headerlink&quot; title=&quot;HRegionServer节点&quot;&gt;&lt;/a&gt;HRegionServer节点&lt;/h3&gt;&lt;p&gt;维护HRegion并往HDFS中写数据&lt;br&gt;当表的大小超过设置值时，split HRegion&lt;br&gt;在HRegionServer停机后，负责失效HRegionServer上的HRegion迁移&lt;/p&gt;
-&lt;h2 id=&quot;HBase与Zookeeper&quot;&gt;&lt;a href=&quot;#HBase与Zookeeper&quot; class=&quot;headerlink&quot; title=&quot;HBase与Zookeeper&quot;&gt;&lt;/a&gt;HBase与Zookeeper&lt;/h2&gt;&lt;p&gt;HBase元数据存储在Zookeeper中&lt;br&gt;默认情况下,HBase管理Zookeeper实例，比如，启动或者停止Zookeeper&lt;br&gt;Zookeeper解决HBase单点故障问题&lt;br&gt;HMaster与HRegionServer启动时会向Zookeeper注册&lt;/p&gt;
-&lt;h2 id=&quot;WAL&quot;&gt;&lt;a href=&quot;#WAL&quot; class=&quot;headerlink&quot; title=&quot;WAL&quot;&gt;&lt;/a&gt;WAL&lt;/h2&gt;&lt;p&gt;WAL是Regionserver在处理插入和删除的过程中用来记录操作内容的一种日志&lt;/p&gt;
-&lt;p&gt;一个表由一个region或者多个region组成，region由regionserver进行管理&lt;br&gt;每个region包含memstore和storeFile，memstore存储在内存中，storeFile存储在磁盘中&lt;/p&gt;
-&lt;h2 id=&quot;HBase在HDFS中存储&quot;&gt;&lt;a href=&quot;#HBase在HDFS中存储&quot; class=&quot;headerlink&quot; title=&quot;HBase在HDFS中存储&quot;&gt;&lt;/a&gt;HBase在HDFS中存储&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;/hbase/.tmp&lt;/code&gt;：临时目录，当对表做创建和删除的时候，会将表move到该目录，然后进行操作&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/data&lt;/code&gt;：核心目录，存储HBase表的数据&lt;br&gt;默认情况下，目录下有两个目录&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/data/default&lt;/code&gt;:&lt;br&gt;在用户创建表的时候，没有指定namespace时，表就创建在此目录下&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/data/hbase&lt;/code&gt;：系统内部创建的表，.META.表（region的详细信息）和namespace表（namespace信息）&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/hbase.id&lt;/code&gt;：存储的是集群的唯一cluster id（uuid）&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/hbase.version&lt;/code&gt;：集群的版本号&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/hbase/oldWALs&lt;/code&gt;: 对应0.94.x版本中.oldlogs目录&lt;br&gt;当/hbase/WALs目录中的logs没有之后，会将这些logs移动到此目录下，HMaster会定期清理&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;HBase使用场景&quot;&gt;&lt;a href=&quot;#HBase使用场景&quot; class=&quot;headerlink&quot; title=&quot;HBase使用场景&quot;&gt;&lt;/a&gt;HBase使用场景&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;大数据量存储，大数据量高并发操作&lt;/li&gt;
-&lt;li&gt;需要对数据随机读写操作&lt;/li&gt;
-&lt;li&gt;读写访问均是非常简单的操作&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;HBase与HDFS对比&quot;&gt;&lt;a href=&quot;#HBase与HDFS对比&quot; class=&quot;headerlink&quot; title=&quot;HBase与HDFS对比&quot;&gt;&lt;/a&gt;HBase与HDFS对比&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;两者都具有良好的容错性和扩展性，都可以扩展到成百上千个节点；&lt;/li&gt;
-&lt;li&gt;HDFS适合批处理场景，不支持数据随机查找，不适合增量数据处理，不支持数据更新&lt;/li&gt;
-&lt;/ol&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="hbase" scheme="http://dxer.github.io/tags/hbase/"/>
-    
-  </entry>
-  
-  <entry>
     <title>HBase入门</title>
     <link href="http://dxer.github.io/2016/03/18/hbase/"/>
     <id>http://dxer.github.io/2016/03/18/hbase/</id>
     <published>2016-03-18T11:25:38.000Z</published>
-    <updated>2016-05-18T09:51:11.887Z</updated>
+    <updated>2016-07-13T04:19:54.336Z</updated>
     
-    <content type="html">&lt;h2 id=&quot;HBase一些基本概念&quot;&gt;&lt;a href=&quot;#HBase一些基本概念&quot; class=&quot;headerlink&quot; title=&quot;HBase一些基本概念&quot;&gt;&lt;/a&gt;HBase一些基本概念&lt;/h2&gt;&lt;p&gt;1、Row key&lt;br&gt;行主键，在对HBase进行查询时候只能依靠Row key，HBase不支持条件查询等类似于一些主流数据库的查询方式，读取记录只能依赖行主键以及进行全局扫面，可以将行主键想象成主流数据库查询过程中用到的主键（例如，id）。&lt;/p&gt;
-&lt;p&gt;2、Column Family&lt;br&gt;列族，可以将列族想象成日常主流数据库中的表结构的所有列的一个大管家，列族中存储了所有列的名称，整个表包括多少列，列族就包括多少（除去Row key和Timestamp列）。&lt;/p&gt;
-&lt;p&gt;3、Column&lt;br&gt;列，HBase的每个列都隶属于一个列族，以列族名称作为前缀，同一列族中的所有列会聚集在一个存储单元上，同时按照Column key进行排序。&lt;/p&gt;
-&lt;p&gt;4、Timestamp&lt;br&gt;在HBase中，通过row key 和 Colum Family确定一份数据，同一个row key和Colum Family可能有多份不同的数据，HBase通过时间戳来区分这些数据，同时按照时间戳对左右的数据进行排序，最新的数据排在最前面，时间戳默认为系统当前时间（精确到毫秒），同时也可以人为设置该值。&lt;/p&gt;
-&lt;p&gt;5、Value&lt;br&gt;我们在HBase表中精确查询数据时，通过TableName找到表，接着通过Row key找到对应的行，然后通过ColumnKey找到相应的列，最后根据时间戳找到最新的需要查询的值，这个值就是value。&lt;/p&gt;
-&lt;p&gt;6、存储类型&lt;br&gt;在HBase中，表名称是字符串，行键和列名称是二进制值（即就是Java中的Byte[]），时间戳是一个64为的整数（Java中的long类型），最后的查询结果Value是字节数组（Java中的byte[]类型）。&lt;/p&gt;
+    <content type="html">&lt;h1 id=&quot;HBase一些基本概念&quot;&gt;&lt;a href=&quot;#HBase一些基本概念&quot; class=&quot;headerlink&quot; title=&quot;HBase一些基本概念&quot;&gt;&lt;/a&gt;HBase一些基本概念&lt;/h1&gt;&lt;p&gt;1、Row key 行主键，在对HBase进行查询时候只能依靠Row key，HBase不支持条件查询等类似于一些主流数据库的查询方式，读取记录只能依赖行主键以及进行全局扫面，可以将行主键想象成主流数据库查询过程中用到的主键（例如，id）。&lt;/p&gt;
+&lt;p&gt;2、Column Family 列族，可以将列族想象成日常主流数据库中的表结构的所有列的一个大管家，列族中存储了所有列的名称，整个表包括多少列，列族就包括多少（除去Row key和Timestamp列）。&lt;/p&gt;
+&lt;p&gt;3、Column 列，HBase的每个列都隶属于一个列族，以列族名称作为前缀，同一列族中的所有列会聚集在一个存储单元上，同时按照Column key进行排序。&lt;/p&gt;
+&lt;p&gt;4、Timestamp 在HBase中，通过row key 和 Colum Family确定一份数据，同一个row key和Colum Family可能有多份不同的数据，HBase通过时间戳来区分这些数据，同时按照时间戳对左右的数据进行排序，最新的数据排在最前面，时间戳默认为系统当前时间（精确到毫秒），同时也可以人为设置该值。&lt;/p&gt;
+&lt;p&gt;5、Value 我们在HBase表中精确查询数据时，通过TableName找到表，接着通过Row key找到对应的行，然后通过ColumnKey找到相应的列，最后根据时间戳找到最新的需要查询的值，这个值就是value。&lt;/p&gt;
+&lt;p&gt;6、存储类型 在HBase中，表名称是字符串，行键和列名称是二进制值（即就是Java中的Byte[]），时间戳是一个64为的整数（Java中的long类型），最后的查询结果Value是字节数组（Java中的byte[]类型）。&lt;/p&gt;
 &lt;p&gt;7、存储结构&lt;/p&gt;
 &lt;p&gt;在HBase中，整个数据表是按照行键进行排序，每行包括任意数量的列，列和列之间通过列键进行排序，每列包括若干的数据，整个HBase的存储结构可以理解如下：&lt;/p&gt;
-&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Table(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	Row key，List(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		SortedMap(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			Column，list(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			Value，Timestamp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Table(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    Row key，List(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        SortedMap(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            Column，list(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            Value，Timestamp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;HBase数据模型&quot;&gt;&lt;a href=&quot;#HBase数据模型&quot; class=&quot;headerlink&quot; title=&quot;HBase数据模型&quot;&gt;&lt;/a&gt;HBase数据模型&lt;/h2&gt;&lt;ol&gt;
+&lt;h1 id=&quot;HBase数据模型&quot;&gt;&lt;a href=&quot;#HBase数据模型&quot; class=&quot;headerlink&quot; title=&quot;HBase数据模型&quot;&gt;&lt;/a&gt;HBase数据模型&lt;/h1&gt;&lt;ol&gt;
 &lt;li&gt;表（table）：HBase用表组织数据。表名是字符串（String），由可以在文件系统路径里使用的字符组成。&lt;/li&gt;
 &lt;li&gt;行（row）：在表里，数据按行存储。行由行健（rowkey）唯一标识。行健没有数据类型，视为字节数组byte[]。&lt;/li&gt;
 &lt;li&gt;列族（column family）：行里的数据按照列族进行分组，列族也影响到HBase数据的物理存放。因此，他们必须事前定义并且不轻易修改。表中每行拥有相同列族，尽管行不需要在每个列族里存储数据，列族名字是字符串（String），由可以在文件系统路径里使用的字符组成。&lt;/li&gt;
@@ -609,17 +650,17 @@
 &lt;/ol&gt;
 &lt;p&gt;数据坐标&lt;/p&gt;
 &lt;p&gt;行健、列族、列限定符和时间版本&lt;/p&gt;
-&lt;h5 id=&quot;写&quot;&gt;&lt;a href=&quot;#写&quot; class=&quot;headerlink&quot; title=&quot;写&quot;&gt;&lt;/a&gt;写&lt;/h5&gt;&lt;p&gt;执行写入的时候会写到两个文件：预写式日志（write-ahead log，也称HLog）和MemStore。HBase的默认方式是把写入动作记录在这两个地方，以保证数据持久化。只有当这两个地方的变化信息都写入并确认后，才认为写动作完成。&lt;/p&gt;
+&lt;h2 id=&quot;写&quot;&gt;&lt;a href=&quot;#写&quot; class=&quot;headerlink&quot; title=&quot;写&quot;&gt;&lt;/a&gt;写&lt;/h2&gt;&lt;p&gt;执行写入的时候会写到两个文件：预写式日志（write-ahead log，也称HLog）和MemStore。HBase的默认方式是把写入动作记录在这两个地方，以保证数据持久化。只有当这两个地方的变化信息都写入并确认后，才认为写动作完成。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;MemStore&lt;/em&gt;是内存里的写入缓冲区，HBase中数据在永久写入硬盘之前在这里积累。当MemStore填满后，其中的数据会刷写到硬盘，生成一个HFile文件。HFile是HBase使用底层存储格式。HFile对应列族，一个列族可以有多个HFile，但一个HFile不能存储多个列族的数据。在集群的每个节点上，每个列族都有一个MemStore。&lt;/p&gt;
 &lt;p&gt;注：不写入WAL会在RegionServer故障时增加丢失数据的风险。关闭WAL，出现故障时HBase可能无法恢复数据，没有刷写到硬盘的所有写入数据都会丢失。&lt;/p&gt;
-&lt;h4 id=&quot;读&quot;&gt;&lt;a href=&quot;#读&quot; class=&quot;headerlink&quot; title=&quot;读&quot;&gt;&lt;/a&gt;读&lt;/h4&gt;&lt;p&gt;HBase在读操作上使用了LRU（最近最少使用算法）缓存技术。也叫作BlockCache。BlockCache设计用来保存从HFile里读入内存的频繁访问的数据，避免硬盘读。每个列族都有自己的BlockCache。&lt;/p&gt;
+&lt;h3 id=&quot;读&quot;&gt;&lt;a href=&quot;#读&quot; class=&quot;headerlink&quot; title=&quot;读&quot;&gt;&lt;/a&gt;读&lt;/h3&gt;&lt;p&gt;HBase在读操作上使用了LRU（最近最少使用算法）缓存技术。也叫作BlockCache。BlockCache设计用来保存从HFile里读入内存的频繁访问的数据，避免硬盘读。每个列族都有自己的BlockCache。&lt;/p&gt;
 &lt;p&gt;BlockCache中的Block是HBase从硬盘完成一次读取的数据单位。HFile物理存放形式是一个Block的序列外加这些Block的索引。从HBase中读取一个Block需要先将索引上查找一次改Block然后从硬盘读出、Block是建立索引的最小数据单位，也是从硬盘读取的最小数据单位。Block大小按照列族设定，默认是64kb。如果主要用于随机查询，可能需要细粒度的Block索引，小一点儿的Block更好一些。Block变小会导致索引变大，进而消耗更多内存。如果经常执行顺序扫描，一次读取多个Block，大一点的Block更好一些。Block变大意味着索引项变少，索引编写，因此节省内存。&lt;/p&gt;
 &lt;p&gt;从HBase总读出一行，首先会检查MemStore等待修改的队列，然后检查BlockCache看包含改行的Blocj是否最近被访问过，最后访问硬盘上对应的HFile。&lt;/p&gt;
-&lt;h4 id=&quot;删&quot;&gt;&lt;a href=&quot;#删&quot; class=&quot;headerlink&quot; title=&quot;删&quot;&gt;&lt;/a&gt;删&lt;/h4&gt;&lt;p&gt;执行HBase删除命令的时候，实际上数据并不会立即删除，只是会在该数据上打上删除的记录。被标记的记录不能在Get和Scan命令中返回结果。因为HFile文件是不能改变的，直到执行一次大合并，含有这些标记的数据才会被处理，被删除的数据占用的空间才会释放。&lt;/p&gt;
+&lt;h3 id=&quot;删&quot;&gt;&lt;a href=&quot;#删&quot; class=&quot;headerlink&quot; title=&quot;删&quot;&gt;&lt;/a&gt;删&lt;/h3&gt;&lt;p&gt;执行HBase删除命令的时候，实际上数据并不会立即删除，只是会在该数据上打上删除的记录。被标记的记录不能在Get和Scan命令中返回结果。因为HFile文件是不能改变的，直到执行一次大合并，含有这些标记的数据才会被处理，被删除的数据占用的空间才会释放。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;大合并（major compaction）&lt;/em&gt;：处理给定region的一个列族的所有HFile。大合并完成后，这个列族的所有HFile合并成一个文件，可以从Shell中收工出发整个表（或者特定region）的大合并。大合并是HBase清理被删除记录的唯一机会&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;小合并（minor compaction）&lt;/em&gt;：把多个小HFile合并成一个大HFile。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;HBase-Shell命令&quot;&gt;&lt;a href=&quot;#HBase-Shell命令&quot; class=&quot;headerlink&quot; title=&quot;HBase Shell命令&quot;&gt;&lt;/a&gt;HBase Shell命令&lt;/h2&gt;&lt;table&gt;
+&lt;h1 id=&quot;HBase-Shell命令&quot;&gt;&lt;a href=&quot;#HBase-Shell命令&quot; class=&quot;headerlink&quot; title=&quot;HBase Shell命令&quot;&gt;&lt;/a&gt;HBase Shell命令&lt;/h1&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Command&lt;/th&gt;
@@ -713,21 +754,21 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h4 id=&quot;create&quot;&gt;&lt;a href=&quot;#create&quot; class=&quot;headerlink&quot; title=&quot;create&quot;&gt;&lt;/a&gt;create&lt;/h4&gt;&lt;p&gt;创建表&lt;/p&gt;
+&lt;h2 id=&quot;create&quot;&gt;&lt;a href=&quot;#create&quot; class=&quot;headerlink&quot; title=&quot;create&quot;&gt;&lt;/a&gt;create&lt;/h2&gt;&lt;p&gt;创建表&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;#123;NAME =&amp;gt; &amp;apos;f1&amp;apos;, VERSIONS =&amp;gt; 5&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;#123;Name =&amp;gt; &amp;apos;f1&amp;apos;&amp;#125;, &amp;#123;NAME =&amp;gt; &amp;apos;f2&amp;apos;&amp;#125;, &amp;#123;NAME =&amp;gt; &amp;apos;f3&amp;apos;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#等价于：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;create &amp;apos;t1&amp;apos;, &amp;apos;cf&amp;apos;, &amp;apos;cf2&amp;apos;, &amp;apos;cf3&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;list&quot;&gt;&lt;a href=&quot;#list&quot; class=&quot;headerlink&quot; title=&quot;list&quot;&gt;&lt;/a&gt;list&lt;/h4&gt;&lt;p&gt;列出HBase中包含的表名称&lt;/p&gt;
-&lt;h4 id=&quot;put&quot;&gt;&lt;a href=&quot;#put&quot; class=&quot;headerlink&quot; title=&quot;put&quot;&gt;&lt;/a&gt;put&lt;/h4&gt;&lt;p&gt;向指定表中添加值&lt;/p&gt;
+&lt;h2 id=&quot;list&quot;&gt;&lt;a href=&quot;#list&quot; class=&quot;headerlink&quot; title=&quot;list&quot;&gt;&lt;/a&gt;list&lt;/h2&gt;&lt;p&gt;列出HBase中包含的表名称&lt;/p&gt;
+&lt;h2 id=&quot;put&quot;&gt;&lt;a href=&quot;#put&quot; class=&quot;headerlink&quot; title=&quot;put&quot;&gt;&lt;/a&gt;put&lt;/h2&gt;&lt;p&gt;向指定表中添加值&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;put &amp;apos;t1&amp;apos;, &amp;apos;rowkey&amp;apos;, &amp;apos;cf:name&amp;apos;, &amp;apos;test&amp;apos;, ts&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#向t1表的rowkey，列cf:name添加值name，并指定时间戳为ts&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;scan&quot;&gt;&lt;a href=&quot;#scan&quot; class=&quot;headerlink&quot; title=&quot;scan&quot;&gt;&lt;/a&gt;scan&lt;/h4&gt;&lt;p&gt;对表的扫描来获取对应的值&lt;/p&gt;
+&lt;h2 id=&quot;scan&quot;&gt;&lt;a href=&quot;#scan&quot; class=&quot;headerlink&quot; title=&quot;scan&quot;&gt;&lt;/a&gt;scan&lt;/h2&gt;&lt;p&gt;对表的扫描来获取对应的值&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;scan &amp;apos;t1&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;scan &amp;apos;t1&amp;apos;, &amp;#123;COLUMNS =&amp;gt; &amp;apos;cf&amp;apos;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;scan &amp;apos;t1&amp;apos;, &amp;#123;COLUMNS =&amp;gt; &amp;apos;cf&amp;apos;,  LIMIT =&amp;gt; 10&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;get&quot;&gt;&lt;a href=&quot;#get&quot; class=&quot;headerlink&quot; title=&quot;get&quot;&gt;&lt;/a&gt;get&lt;/h4&gt;&lt;p&gt;获取行或者单元的值。&lt;/p&gt;
+&lt;h2 id=&quot;get&quot;&gt;&lt;a href=&quot;#get&quot; class=&quot;headerlink&quot; title=&quot;get&quot;&gt;&lt;/a&gt;get&lt;/h2&gt;&lt;p&gt;获取行或者单元的值。&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;get &amp;apos;t1&amp;apos;, &amp;apos;rowkey&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;get &amp;apos;t1&amp;apos;, &amp;apos;rowkey&amp;apos;, &amp;#123;COLUMN =&amp;gt; &amp;apos;cf:name&amp;apos;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;em&gt;注：COLUMN和COLUMNS是不同的，scan操作中的COLUMNS指定的是表的列族，get操作中的COLUMN指定的是特定的列，COLUMN的值是指上是“列族+列修饰符”&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;注：COLUMN和COLUMNS是不同的，scan操作中的COLUMNS指定的是表的列族，get操作中的COLUMN指定的是特定的列，COLUMN的值是指上是”列族+列修饰符”&lt;/em&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;HBase一些基本概念&quot;&gt;&lt;a href=&quot;#HBase一些基本概念&quot; class=&quot;headerlink&quot; title=&quot;HBase一些基本概念&quot;&gt;&lt;/a&gt;HBase一些基本概念&lt;/h2&gt;&lt;p&gt;1、Row key&lt;br&gt;行主键，在对HBase进行查询时候只能依靠
+      &lt;h1 id=&quot;HBase一些基本概念&quot;&gt;&lt;a href=&quot;#HBase一些基本概念&quot; class=&quot;headerlink&quot; title=&quot;HBase一些基本概念&quot;&gt;&lt;/a&gt;HBase一些基本概念&lt;/h1&gt;&lt;p&gt;1、Row key 行主键，在对HBase进行查询时候只能依靠Row
     
     </summary>
     
@@ -1443,106 +1484,6 @@
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
       <category term="serializable" scheme="http://dxer.github.io/tags/serializable/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JVM垃圾回收</title>
-    <link href="http://dxer.github.io/2015/08/17/jvm/"/>
-    <id>http://dxer.github.io/2015/08/17/jvm/</id>
-    <published>2015-08-17T13:21:38.000Z</published>
-    <updated>2016-05-18T09:44:25.574Z</updated>
-    
-    <content type="html">&lt;p&gt;JVM堆内存被分为两部分&lt;em&gt;年轻代(Young Generation)&lt;/em&gt;和&lt;em&gt;老年代(Old Generation)&lt;/em&gt;。&lt;/p&gt;
-&lt;h5 id=&quot;新生代-Young-Generation&quot;&gt;&lt;a href=&quot;#新生代-Young-Generation&quot; class=&quot;headerlink&quot; title=&quot;新生代(Young Generation)&quot;&gt;&lt;/a&gt;新生代(Young Generation)&lt;/h5&gt;&lt;p&gt;新生代是所有新对象产生的地方。当年轻代的内存空间被用完时，就会触发垃圾回收。这个垃圾回收叫做&lt;em&gt;Minor GC&lt;/em&gt;。新生代分为3个部分&lt;em&gt;Eden区&lt;/em&gt;和&lt;em&gt;Survivor区(FromSpace和ToSpace,两个区域大小相同)&lt;/em&gt;，新生代的大小可以通过&lt;code&gt;-Xmn&lt;/code&gt;来控制，也可以用&lt;code&gt;-XX：SurvivorRatio&lt;/code&gt;来控制Eden和Survivor的比例。&lt;/p&gt;
-&lt;p&gt;新生代的特点&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;大多数新建的对象都在Eden区&lt;/li&gt;
-&lt;li&gt;当Eden区域被填满时，就会执行Minor GC。并把所有存活下来的对象转移到其中一个survivor区&lt;/li&gt;
-&lt;li&gt;Minor GC同样会检查存活下来的对象，并把他们转移到另一个survivor区。这样在一段时间内，总会有一个空的survivor区&lt;/li&gt;
-&lt;li&gt;经过多次GC周期后，仍然存活下来的对象会被转移到老年代内存空间。通常这是在新生代有资格提升到老年代前通过设定年龄阈值来完成的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5 id=&quot;老年代-Old-Generation&quot;&gt;&lt;a href=&quot;#老年代-Old-Generation&quot; class=&quot;headerlink&quot; title=&quot;老年代(Old Generation)&quot;&gt;&lt;/a&gt;老年代(Old Generation)&lt;/h5&gt;&lt;p&gt;老年代内存里包含了长期存活的对象和经过多次Minor GC后依然存活下来的对象。通常会在老年代内存被占满时进行垃圾回收。老年代的垃圾收集叫做Major GC。Major GC会花费更多的时间。旧生带占用大小为&lt;code&gt;-Xmx&lt;/code&gt;值减去&lt;code&gt;-Xmn&lt;/code&gt;对应的值&lt;/p&gt;
-&lt;h5 id=&quot;永久代-Permanent-Generation&quot;&gt;&lt;a href=&quot;#永久代-Permanent-Generation&quot; class=&quot;headerlink&quot; title=&quot;永久代(Permanent Generation)&quot;&gt;&lt;/a&gt;永久代(Permanent Generation)&lt;/h5&gt;&lt;p&gt;永久代包含了JVM需要的应用元数据，这些元数据描述了在应用里使用的类和方法。注意，永久代不是Java堆内存的一部分，有一些JVM没有这一代，主要存放敞亮及类的一些信息，默认最小值为16MB，最大值为64MB，可以通过&lt;code&gt;-XX:PermSize&lt;/code&gt;及&lt;code&gt;-XX:MaxPermSize&lt;/code&gt;来设置最小值和最大值。&lt;/p&gt;
-&lt;p&gt;永久代存放JVM运行时使用的类。永久代同样包含了Java SE库的类和方法。永久代的对象在full GC时进行垃圾收集。&lt;/p&gt;
-&lt;h5 id=&quot;方法区&quot;&gt;&lt;a href=&quot;#方法区&quot; class=&quot;headerlink&quot; title=&quot;方法区&quot;&gt;&lt;/a&gt;方法区&lt;/h5&gt;&lt;p&gt;方法区是永久代空间的一部分，并用来存储类型信息（运行时常量和静态变量）和方法代码和构造函数代码。&lt;/p&gt;
-&lt;h5 id=&quot;内存池&quot;&gt;&lt;a href=&quot;#内存池&quot; class=&quot;headerlink&quot; title=&quot;内存池&quot;&gt;&lt;/a&gt;内存池&lt;/h5&gt;&lt;p&gt;如果JVM实现支持，JVM内存管理会为创建内存池，用来为不变对象创建对象池。字符串池就是内存池类型的一个很好的例子。内存池可以属于堆或者永久代，这取决于JVM内存管理的实现。&lt;/p&gt;
-&lt;h5 id=&quot;运行时常量池&quot;&gt;&lt;a href=&quot;#运行时常量池&quot; class=&quot;headerlink&quot; title=&quot;运行时常量池&quot;&gt;&lt;/a&gt;运行时常量池&lt;/h5&gt;&lt;p&gt;运行时常量池是每个类常量池的运行时代表。它包含了类的运行时常量和静态方法。运行时常量池是方法区的一部分。&lt;/p&gt;
-&lt;h5 id=&quot;Java栈内存&quot;&gt;&lt;a href=&quot;#Java栈内存&quot; class=&quot;headerlink&quot; title=&quot;Java栈内存&quot;&gt;&lt;/a&gt;Java栈内存&lt;/h5&gt;&lt;p&gt;Java栈内存用于运行线程。它们包含了方法里的临时数据、堆里其它对象引用的特定数据。你可以阅读栈内存和堆内存的区别。&lt;/p&gt;
-&lt;h5 id=&quot;Java-堆内存开关&quot;&gt;&lt;a href=&quot;#Java-堆内存开关&quot; class=&quot;headerlink&quot; title=&quot;Java 堆内存开关&quot;&gt;&lt;/a&gt;Java 堆内存开关&lt;/h5&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;VM设置&lt;/th&gt;
-&lt;th&gt;描述&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;-Xms&lt;/td&gt;
-&lt;td&gt;设置JVM启动时堆的初始化大小。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-Xmx&lt;/td&gt;
-&lt;td&gt;设置堆最大值。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-Xmn&lt;/td&gt;
-&lt;td&gt;设置年轻代的空间大小，剩下的为老年代的空间大小。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-XX:PermGen&lt;/td&gt;
-&lt;td&gt;设置永久代内存的初始化大小。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-XX:MaxPermGen&lt;/td&gt;
-&lt;td&gt;设置永久代的最大值。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-XX:SurvivorRatio&lt;/td&gt;
-&lt;td&gt;提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个Survivor区分配2.5m内存。默认比例是8。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-XX:NewRatio&lt;/td&gt;
-&lt;td&gt;提供年老代和年轻代的比例大小。默认值是2。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;大多数时候，上面的选项已经足够使用了。但是如果你还想了解其他的选项，那么请查看JVM选项官方网页。&lt;/p&gt;
-&lt;h5 id=&quot;Java垃圾回收&quot;&gt;&lt;a href=&quot;#Java垃圾回收&quot; class=&quot;headerlink&quot; title=&quot;Java垃圾回收&quot;&gt;&lt;/a&gt;Java垃圾回收&lt;/h5&gt;&lt;p&gt;JVM堆内存主要被分为三块，新生代、老年代、持久代。三代的特点不同，造就了他们所用的GC算法不同，新生代适合那些生命周期较短，频繁创建及销毁的对象，老年代适合生命周期相对较长的对象，持久代在Sun HotSpot中就是指方法区（有些JVM中根本就没有持久代这中说法）。&lt;/p&gt;
-&lt;p&gt;Java垃圾回收会找出没用的对象，把它从内存中移除并释放出内存给以后创建的对象使用。Java程序语言中的一个最大优点是自动垃圾回收，不像其他的程序语言那样需要手动分配和释放内存，比如C语言。&lt;/p&gt;
-&lt;p&gt;垃圾收集器是一个后台运行程序。它管理着内存中的所有对象并找出没被引用的对象。所有的这些未引用的对象都会被删除，回收它们的空间并分配给其他对象。&lt;/p&gt;
-&lt;p&gt;一个基本的垃圾回收过程涉及三个步骤：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;标记：这是第一步。在这一步，垃圾收集器会找出哪些对象正在使用和哪些对象不在使用。&lt;/li&gt;
-&lt;li&gt;正常清除：垃圾收集器清会除不在使用的对象，回收它们的空间分配给其他对象。&lt;/li&gt;
-&lt;li&gt;压缩清除：为了提升性能，压缩清除会在删除没用的对象后，把所有存活的对象移到一起。这样可以提高分配新对象的效率。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;简单标记和清除方法存在两个问题：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;效率很低。因为大多数新建对象都会成为“没用对象”。&lt;/li&gt;
-&lt;li&gt;经过多次垃圾回收周期的对象很有可能在以后的周期也会存活下来。&lt;br&gt;上面简单清除方法的问题在于Java垃圾收集的分代回收的，而且在堆内存里有年轻代和年老代两个区域。我已经在上面解释了Minor GC和Major GC是怎样扫描对象，以及如何把对象从一个分代空间移到另外一个分代空间。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h5 id=&quot;Java垃圾回收类型&quot;&gt;&lt;a href=&quot;#Java垃圾回收类型&quot; class=&quot;headerlink&quot; title=&quot;Java垃圾回收类型&quot;&gt;&lt;/a&gt;Java垃圾回收类型&lt;/h5&gt;&lt;p&gt;这里有五种可以在应用里使用的垃圾回收类型。仅需要使用JVM开关就可以在我们的应用里启用垃圾回收策略。让我们一起来逐一了解：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Serial GC（-XX:+UseSerialGC）：Serial GC使用简单的标记、清除、压缩方法对年轻代和年老代进行垃圾回收，即Minor GC和Major GC。Serial GC在client模式（客户端模式）很有用，比如在简单的独立应用和CPU配置较低的机器。这个模式对占有内存较少的应用很管用。&lt;/li&gt;
-&lt;li&gt;Parallel GC（-XX:+UseParallelGC）：除了会产生N个线程来进行年轻代的垃圾收集外，Parallel GC和Serial GC几乎一样。这里的N是系统CPU的核数。我们可以使用 -XX:ParallelGCThreads=n 这个JVM选项来控制线程数量。并行垃圾收集器也叫throughput收集器。因为它使用了多CPU加快垃圾回收性能。Parallel GC在进行年老代垃圾收集时使用单线程。&lt;/li&gt;
-&lt;li&gt;Parallel Old GC（-XX:+UseParallelOldGC）：和Parallel GC一样。不同之处，Parallel Old GC在年轻代垃圾收集和年老代垃圾回收时都使用多线程收集。&lt;/li&gt;
-&lt;li&gt;并发标记清除（CMS）收集器（-XX:+UseConcMarkSweepGC)：CMS收集器也被称为短暂停顿并发收集器。它是对年老代进行垃圾收集的。CMS收集器通过多线程并发进行垃圾回收，尽量减少垃圾收集造成的停顿。CMS收集器对年轻代进行垃圾回收使用的算法和Parallel收集器一样。这个垃圾收集器适用于不能忍受长时间停顿要求快速响应的应用。可使用 -XX:ParallelCMSThreads=n JVM选项来限制CMS收集器的线程数量。&lt;/li&gt;
-&lt;li&gt;G1垃圾收集器（-XX:+UseG1GC) G1（Garbage First）：垃圾收集器是在Java 7后才可以使用的特性，它的长远目标时代替CMS收集器。G1收集器是一个并行的、并发的和增量式压缩短暂停顿的垃圾收集器。G1收集器和其他的收集器运行方式不一样，不区分年轻代和年老代空间。它把堆空间划分为多个大小相等的区域。当进行垃圾收集时，它会优先收集存活对象较少的区域，因此叫“Garbage First”。你可以在Oracle Garbage-FIrst收集器文档找到更多详细信息。&lt;/li&gt;
-&lt;/ol&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;JVM堆内存被分为两部分&lt;em&gt;年轻代(Young Generation)&lt;/em&gt;和&lt;em&gt;老年代(Old Generation)&lt;/em&gt;。&lt;/p&gt;
-&lt;h5 id=&quot;新生代-Young-Generation&quot;&gt;&lt;a href=&quot;#新生代-Young-Generation
-    
-    </summary>
-    
-    
-      <category term="java" scheme="http://dxer.github.io/tags/java/"/>
-    
-      <category term="jvm" scheme="http://dxer.github.io/tags/jvm/"/>
     
   </entry>
   

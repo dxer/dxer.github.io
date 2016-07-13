@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/07/13/WebDigger/</loc>
+    
+    <lastmod>2016-07-13T04:20:10.893Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2016/03/18/hbase/</loc>
+    
+    <lastmod>2016-07-13T04:19:54.336Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2016/05/12/hbase%E7%AE%80%E4%BB%8B/</loc>
+    
+    <lastmod>2016-06-24T01:28:55.233Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dxer.github.io/2015/04/17/cookie_and_session/</loc>
+    
+    <lastmod>2016-06-24T01:17:45.407Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/2016/06/20/hbase_coprocessor/</loc>
     
     <lastmod>2016-06-21T01:47:05.185Z</lastmod>
@@ -93,23 +121,9 @@
   </url>
   
   <url>
-    <loc>http://dxer.github.io/2016/03/18/hbase/</loc>
-    
-    <lastmod>2016-05-18T09:51:11.887Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://dxer.github.io/2015/08/17/jvm/</loc>
     
     <lastmod>2016-05-18T09:44:25.574Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2015/04/17/cookie_and_session/</loc>
-    
-    <lastmod>2016-05-16T07:57:36.106Z</lastmod>
     
   </url>
   
@@ -124,13 +138,6 @@
     <loc>http://dxer.github.io/about/index.html</loc>
     
     <lastmod>2016-05-13T00:56:42.244Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://dxer.github.io/2016/03/19/hbase%E7%AE%80%E4%BB%8B/</loc>
-    
-    <lastmod>2016-05-12T08:25:38.218Z</lastmod>
     
   </url>
   

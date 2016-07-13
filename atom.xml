@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-07-13T04:23:21.966Z</updated>
+  <updated>2016-07-13T04:50:07.561Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>WebDigger</title>
+    <title>WebDigger爬虫</title>
     <link href="http://dxer.github.io/2016/07/13/WebDigger/"/>
     <id>http://dxer.github.io/2016/07/13/WebDigger/</id>
     <published>2016-07-13T03:52:41.293Z</published>
-    <updated>2016-07-13T04:23:21.966Z</updated>
+    <updated>2016-07-13T04:50:07.561Z</updated>
     
     <content type="html">&lt;p&gt;WebDigger是一个采用Java开发的爬虫框架。WebDigger的目标是简化爬虫的开发流程，让开发者只用关心抓取页面的数据提取和数据保存的逻辑。WebDigger也提供注解的方式来配置要抓取的网页数据，以减少代码的开发。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&quot;组件&quot;&gt;&lt;a href=&quot;#组件&quot; class=&quot;headerlink&quot; title=&quot;组件&quot;&gt;&lt;/a&gt;组件&lt;/h3&gt;&lt;ul&gt;

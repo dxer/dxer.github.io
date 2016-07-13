@@ -19,7 +19,7 @@ ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-
 </li>
 <li><p>Downloader<br>下载器负责获取页面数据Response，供Processor模块进行数据提取</p>
 </li>
-<li><p>Processor<br>是用于分析response并提取item(需要的抓取的具体的数据)。每个spider的Processor负责处理一个特定(或一些)网站。</p>
+<li><p>Processor<br>是用于分析response并提取item(需要的抓取的具体的数据)。每个spider的Processor负责处理一个特定(或一些)网站。网页数据提取支持Jsoup和Xpath的方式。</p>
 </li>
 <li><p>Storage<br>负责处理被Processor提取出来的item。主要是用来将item进行持久化操作（保存到文件，打印输出等）。</p>
 </li>

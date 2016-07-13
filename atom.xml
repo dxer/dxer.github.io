@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-07-13T04:20:10.893Z</updated>
+  <updated>2016-07-13T04:23:21.966Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://dxer.github.io/2016/07/13/WebDigger/"/>
     <id>http://dxer.github.io/2016/07/13/WebDigger/</id>
     <published>2016-07-13T03:52:41.293Z</published>
-    <updated>2016-07-13T04:20:10.893Z</updated>
+    <updated>2016-07-13T04:23:21.966Z</updated>
     
     <content type="html">&lt;p&gt;WebDigger是一个采用Java开发的爬虫框架。WebDigger的目标是简化爬虫的开发流程，让开发者只用关心抓取页面的数据提取和数据保存的逻辑。WebDigger也提供注解的方式来配置要抓取的网页数据，以减少代码的开发。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&quot;组件&quot;&gt;&lt;a href=&quot;#组件&quot; class=&quot;headerlink&quot; title=&quot;组件&quot;&gt;&lt;/a&gt;组件&lt;/h3&gt;&lt;ul&gt;
@@ -30,7 +30,7 @@
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Downloader&lt;br&gt;下载器负责获取页面数据Response，供Processor模块进行数据提取&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Processor&lt;br&gt;是用于分析response并提取item(需要的抓取的具体的数据)。每个spider的Processor负责处理一个特定(或一些)网站。&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Processor&lt;br&gt;是用于分析response并提取item(需要的抓取的具体的数据)。每个spider的Processor负责处理一个特定(或一些)网站。网页数据提取支持Jsoup和Xpath的方式。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Storage&lt;br&gt;负责处理被Processor提取出来的item。主要是用来将item进行持久化操作（保存到文件，打印输出等）。&lt;/p&gt;
 &lt;/li&gt;

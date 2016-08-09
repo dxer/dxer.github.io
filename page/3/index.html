@@ -245,8 +245,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/10/25/hadoop_serializable/" itemprop="url">
-                  【Hadoop学习】Hadoop的序列化
+                <a class="post-title-link" href="/2016/03/18/hbase/" itemprop="url">
+                  HBase入门
                 </a>
               
             
@@ -259,8 +259,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-25T14:46:19+08:00" content="2015-10-25">
-              2015-10-25
+            <time itemprop="dateCreated" datetime="2016-03-18T19:25:38+08:00" content="2016-03-18">
+              2016-03-18
             </time>
           </span>
 
@@ -270,111 +270,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/10/25/hadoop_serializable/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/25/hadoop_serializable/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。<br>将一个对象编码成一个字节流叫做序列化改对象(Serializing)<br>相反的处理过程称为反序列化（Deserializing）<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/10/25/hadoop_serializable/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/08/17/jvm/" itemprop="url">
-                  JVM垃圾回收
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-08-17T21:21:38+08:00" content="2015-08-17">
-              2015-08-17
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/08/17/jvm/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/17/jvm/" itemprop="commentsCount"></span>
+                <a href="/2016/03/18/hbase/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/18/hbase/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -399,83 +296,140 @@
       
         
           
-            <p>JVM堆内存被分为两部分<em>年轻代(Young Generation)</em>和<em>老年代(Old Generation)</em>。</p>
-<h5 id="新生代-Young-Generation"><a href="#新生代-Young-Generation" class="headerlink" title="新生代(Young Generation)"></a>新生代(Young Generation)</h5><p>新生代是所有新对象产生的地方。当年轻代的内存空间被用完时，就会触发垃圾回收。这个垃圾回收叫做<em>Minor GC</em>。新生代分为3个部分<em>Eden区</em>和<em>Survivor区(FromSpace和ToSpace,两个区域大小相同)</em>，新生代的大小可以通过<code>-Xmn</code>来控制，也可以用<code>-XX：SurvivorRatio</code>来控制Eden和Survivor的比例。</p>
-<p>新生代的特点</p>
-<ul>
-<li>大多数新建的对象都在Eden区</li>
-<li>当Eden区域被填满时，就会执行Minor GC。并把所有存活下来的对象转移到其中一个survivor区</li>
-<li>Minor GC同样会检查存活下来的对象，并把他们转移到另一个survivor区。这样在一段时间内，总会有一个空的survivor区</li>
-<li>经过多次GC周期后，仍然存活下来的对象会被转移到老年代内存空间。通常这是在新生代有资格提升到老年代前通过设定年龄阈值来完成的。</li>
-</ul>
-<h5 id="老年代-Old-Generation"><a href="#老年代-Old-Generation" class="headerlink" title="老年代(Old Generation)"></a>老年代(Old Generation)</h5><p>老年代内存里包含了长期存活的对象和经过多次Minor GC后依然存活下来的对象。通常会在老年代内存被占满时进行垃圾回收。老年代的垃圾收集叫做Major GC。Major GC会花费更多的时间。旧生带占用大小为<code>-Xmx</code>值减去<code>-Xmn</code>对应的值</p>
-<h5 id="永久代-Permanent-Generation"><a href="#永久代-Permanent-Generation" class="headerlink" title="永久代(Permanent Generation)"></a>永久代(Permanent Generation)</h5><p>永久代包含了JVM需要的应用元数据，这些元数据描述了在应用里使用的类和方法。注意，永久代不是Java堆内存的一部分，有一些JVM没有这一代，主要存放敞亮及类的一些信息，默认最小值为16MB，最大值为64MB，可以通过<code>-XX:PermSize</code>及<code>-XX:MaxPermSize</code>来设置最小值和最大值。</p>
-<p>永久代存放JVM运行时使用的类。永久代同样包含了Java SE库的类和方法。永久代的对象在full GC时进行垃圾收集。</p>
-<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>方法区是永久代空间的一部分，并用来存储类型信息（运行时常量和静态变量）和方法代码和构造函数代码。</p>
-<h5 id="内存池"><a href="#内存池" class="headerlink" title="内存池"></a>内存池</h5><p>如果JVM实现支持，JVM内存管理会为创建内存池，用来为不变对象创建对象池。字符串池就是内存池类型的一个很好的例子。内存池可以属于堆或者永久代，这取决于JVM内存管理的实现。</p>
-<h5 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h5><p>运行时常量池是每个类常量池的运行时代表。它包含了类的运行时常量和静态方法。运行时常量池是方法区的一部分。</p>
-<h5 id="Java栈内存"><a href="#Java栈内存" class="headerlink" title="Java栈内存"></a>Java栈内存</h5><p>Java栈内存用于运行线程。它们包含了方法里的临时数据、堆里其它对象引用的特定数据。你可以阅读栈内存和堆内存的区别。</p>
-<h5 id="Java-堆内存开关"><a href="#Java-堆内存开关" class="headerlink" title="Java 堆内存开关"></a>Java 堆内存开关</h5><table>
+            <h1 id="HBase一些基本概念"><a href="#HBase一些基本概念" class="headerlink" title="HBase一些基本概念"></a>HBase一些基本概念</h1><p>1、Row key 行主键，在对HBase进行查询时候只能依靠Row key，HBase不支持条件查询等类似于一些主流数据库的查询方式，读取记录只能依赖行主键以及进行全局扫面，可以将行主键想象成主流数据库查询过程中用到的主键（例如，id）。</p>
+<p>2、Column Family 列族，可以将列族想象成日常主流数据库中的表结构的所有列的一个大管家，列族中存储了所有列的名称，整个表包括多少列，列族就包括多少（除去Row key和Timestamp列）。</p>
+<p>3、Column 列，HBase的每个列都隶属于一个列族，以列族名称作为前缀，同一列族中的所有列会聚集在一个存储单元上，同时按照Column key进行排序。</p>
+<p>4、Timestamp 在HBase中，通过row key 和 Colum Family确定一份数据，同一个row key和Colum Family可能有多份不同的数据，HBase通过时间戳来区分这些数据，同时按照时间戳对左右的数据进行排序，最新的数据排在最前面，时间戳默认为系统当前时间（精确到毫秒），同时也可以人为设置该值。</p>
+<p>5、Value 我们在HBase表中精确查询数据时，通过TableName找到表，接着通过Row key找到对应的行，然后通过ColumnKey找到相应的列，最后根据时间戳找到最新的需要查询的值，这个值就是value。</p>
+<p>6、存储类型 在HBase中，表名称是字符串，行键和列名称是二进制值（即就是Java中的Byte[]），时间戳是一个64为的整数（Java中的long类型），最后的查询结果Value是字节数组（Java中的byte[]类型）。</p>
+<p>7、存储结构</p>
+<p>在HBase中，整个数据表是按照行键进行排序，每行包括任意数量的列，列和列之间通过列键进行排序，每列包括若干的数据，整个HBase的存储结构可以理解如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Table(</span><br><span class="line">    Row key，List(</span><br><span class="line">        SortedMap(</span><br><span class="line">            Column，list(</span><br><span class="line">            Value，Timestamp</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="HBase数据模型"><a href="#HBase数据模型" class="headerlink" title="HBase数据模型"></a>HBase数据模型</h1><ol>
+<li>表（table）：HBase用表组织数据。表名是字符串（String），由可以在文件系统路径里使用的字符组成。</li>
+<li>行（row）：在表里，数据按行存储。行由行健（rowkey）唯一标识。行健没有数据类型，视为字节数组byte[]。</li>
+<li>列族（column family）：行里的数据按照列族进行分组，列族也影响到HBase数据的物理存放。因此，他们必须事前定义并且不轻易修改。表中每行拥有相同列族，尽管行不需要在每个列族里存储数据，列族名字是字符串（String），由可以在文件系统路径里使用的字符组成。</li>
+<li>列限定符（column qualifier）：列族里的数据通过列限定符或列来定位。列限定符不必事前定义。列限定符不必在不同行之间保持一致。就像行健一样，类限定符没有数据类型，视为字节数据byte[]。</li>
+<li>单元（cell）：行健、列族和列限定符一起确定一个单元。存储在单元里的数据成为单元值（value）。值没有数据类型，视为字节数组byte[]。</li>
+<li>时间版本（version）：单元值有时间版本。时间版本用时间戳标识，是一个long型。没有指定时间版本时，当前时间戳作为操作的基础。HBase保留单元值时间版本的数量基于列族进行配置。默认3个版本。</li>
+</ol>
+<p>数据坐标</p>
+<p>行健、列族、列限定符和时间版本</p>
+<h2 id="写"><a href="#写" class="headerlink" title="写"></a>写</h2><p>执行写入的时候会写到两个文件：预写式日志（write-ahead log，也称HLog）和MemStore。HBase的默认方式是把写入动作记录在这两个地方，以保证数据持久化。只有当这两个地方的变化信息都写入并确认后，才认为写动作完成。</p>
+<p><em>MemStore</em>是内存里的写入缓冲区，HBase中数据在永久写入硬盘之前在这里积累。当MemStore填满后，其中的数据会刷写到硬盘，生成一个HFile文件。HFile是HBase使用底层存储格式。HFile对应列族，一个列族可以有多个HFile，但一个HFile不能存储多个列族的数据。在集群的每个节点上，每个列族都有一个MemStore。</p>
+<p>注：不写入WAL会在RegionServer故障时增加丢失数据的风险。关闭WAL，出现故障时HBase可能无法恢复数据，没有刷写到硬盘的所有写入数据都会丢失。</p>
+<h3 id="读"><a href="#读" class="headerlink" title="读"></a>读</h3><p>HBase在读操作上使用了LRU（最近最少使用算法）缓存技术。也叫作BlockCache。BlockCache设计用来保存从HFile里读入内存的频繁访问的数据，避免硬盘读。每个列族都有自己的BlockCache。</p>
+<p>BlockCache中的Block是HBase从硬盘完成一次读取的数据单位。HFile物理存放形式是一个Block的序列外加这些Block的索引。从HBase中读取一个Block需要先将索引上查找一次改Block然后从硬盘读出、Block是建立索引的最小数据单位，也是从硬盘读取的最小数据单位。Block大小按照列族设定，默认是64kb。如果主要用于随机查询，可能需要细粒度的Block索引，小一点儿的Block更好一些。Block变小会导致索引变大，进而消耗更多内存。如果经常执行顺序扫描，一次读取多个Block，大一点的Block更好一些。Block变大意味着索引项变少，索引编写，因此节省内存。</p>
+<p>从HBase总读出一行，首先会检查MemStore等待修改的队列，然后检查BlockCache看包含改行的Blocj是否最近被访问过，最后访问硬盘上对应的HFile。</p>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><p>执行HBase删除命令的时候，实际上数据并不会立即删除，只是会在该数据上打上删除的记录。被标记的记录不能在Get和Scan命令中返回结果。因为HFile文件是不能改变的，直到执行一次大合并，含有这些标记的数据才会被处理，被删除的数据占用的空间才会释放。</p>
+<p><em>大合并（major compaction）</em>：处理给定region的一个列族的所有HFile。大合并完成后，这个列族的所有HFile合并成一个文件，可以从Shell中收工出发整个表（或者特定region）的大合并。大合并是HBase清理被删除记录的唯一机会</p>
+<p><em>小合并（minor compaction）</em>：把多个小HFile合并成一个大HFile。</p>
+<hr>
+<h1 id="HBase-Shell命令"><a href="#HBase-Shell命令" class="headerlink" title="HBase Shell命令"></a>HBase Shell命令</h1><table>
 <thead>
 <tr>
-<th>VM设置</th>
+<th>Command</th>
 <th>描述</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>-Xms</td>
-<td>设置JVM启动时堆的初始化大小。</td>
+<td>alter</td>
+<td>修改列族模式</td>
 </tr>
 <tr>
-<td>-Xmx</td>
-<td>设置堆最大值。</td>
+<td>count</td>
+<td>统计表中行的数量</td>
 </tr>
 <tr>
-<td>-Xmn</td>
-<td>设置年轻代的空间大小，剩下的为老年代的空间大小。</td>
+<td>create</td>
+<td>创建表</td>
 </tr>
 <tr>
-<td>-XX:PermGen</td>
-<td>设置永久代内存的初始化大小。</td>
+<td>describe</td>
+<td>显示表相关的详细信息</td>
 </tr>
 <tr>
-<td>-XX:MaxPermGen</td>
-<td>设置永久代的最大值。</td>
+<td>delete</td>
+<td>删除指定对象的值（可以为表，行，列对应的值，另外也可以指定时间戳的值）</td>
 </tr>
 <tr>
-<td>-XX:SurvivorRatio</td>
-<td>提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个Survivor区分配2.5m内存。默认比例是8。</td>
+<td>deleteall</td>
+<td>删除指定行的所有元素值</td>
 </tr>
 <tr>
-<td>-XX:NewRatio</td>
-<td>提供年老代和年轻代的比例大小。默认值是2。</td>
+<td>disable</td>
+<td>使表无效</td>
+</tr>
+<tr>
+<td>enable</td>
+<td>使表有效</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>删除表</td>
+</tr>
+<tr>
+<td>exists</td>
+<td>测试表是否存在</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出HBase Shell的值</td>
+</tr>
+<tr>
+<td>get</td>
+<td>获取行或单元的值</td>
+</tr>
+<tr>
+<td>incr</td>
+<td>增加指定表、行或列的值</td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出HBase中存在的所有表</td>
+</tr>
+<tr>
+<td>put</td>
+<td>向指定的表单元添加值</td>
+</tr>
+<tr>
+<td>tools</td>
+<td>列出HBase所支持的工具</td>
+</tr>
+<tr>
+<td>scan</td>
+<td>通过对表的扫描来获取对应的值</td>
+</tr>
+<tr>
+<td>status</td>
+<td>返回HBase集群的状态信息</td>
+</tr>
+<tr>
+<td>shutdown</td>
+<td>关闭HBase集群（与exit不同）</td>
+</tr>
+<tr>
+<td>truncate</td>
+<td>重新创建指定表</td>
+</tr>
+<tr>
+<td>version</td>
+<td>返回HBase版本信息</td>
 </tr>
 </tbody>
 </table>
-<p>大多数时候，上面的选项已经足够使用了。但是如果你还想了解其他的选项，那么请查看JVM选项官方网页。</p>
-<h5 id="Java垃圾回收"><a href="#Java垃圾回收" class="headerlink" title="Java垃圾回收"></a>Java垃圾回收</h5><p>JVM堆内存主要被分为三块，新生代、老年代、持久代。三代的特点不同，造就了他们所用的GC算法不同，新生代适合那些生命周期较短，频繁创建及销毁的对象，老年代适合生命周期相对较长的对象，持久代在Sun HotSpot中就是指方法区（有些JVM中根本就没有持久代这中说法）。</p>
-<p>Java垃圾回收会找出没用的对象，把它从内存中移除并释放出内存给以后创建的对象使用。Java程序语言中的一个最大优点是自动垃圾回收，不像其他的程序语言那样需要手动分配和释放内存，比如C语言。</p>
-<p>垃圾收集器是一个后台运行程序。它管理着内存中的所有对象并找出没被引用的对象。所有的这些未引用的对象都会被删除，回收它们的空间并分配给其他对象。</p>
-<p>一个基本的垃圾回收过程涉及三个步骤：</p>
-<ol>
-<li>标记：这是第一步。在这一步，垃圾收集器会找出哪些对象正在使用和哪些对象不在使用。</li>
-<li>正常清除：垃圾收集器清会除不在使用的对象，回收它们的空间分配给其他对象。</li>
-<li>压缩清除：为了提升性能，压缩清除会在删除没用的对象后，把所有存活的对象移到一起。这样可以提高分配新对象的效率。</li>
-</ol>
-<p>简单标记和清除方法存在两个问题：</p>
-<ol>
-<li>效率很低。因为大多数新建对象都会成为“没用对象”。</li>
-<li>经过多次垃圾回收周期的对象很有可能在以后的周期也会存活下来。<br>上面简单清除方法的问题在于Java垃圾收集的分代回收的，而且在堆内存里有年轻代和年老代两个区域。我已经在上面解释了Minor GC和Major GC是怎样扫描对象，以及如何把对象从一个分代空间移到另外一个分代空间。</li>
-</ol>
-<h5 id="Java垃圾回收类型"><a href="#Java垃圾回收类型" class="headerlink" title="Java垃圾回收类型"></a>Java垃圾回收类型</h5><p>这里有五种可以在应用里使用的垃圾回收类型。仅需要使用JVM开关就可以在我们的应用里启用垃圾回收策略。让我们一起来逐一了解：</p>
-<ol>
-<li>Serial GC（-XX:+UseSerialGC）：Serial GC使用简单的标记、清除、压缩方法对年轻代和年老代进行垃圾回收，即Minor GC和Major GC。Serial GC在client模式（客户端模式）很有用，比如在简单的独立应用和CPU配置较低的机器。这个模式对占有内存较少的应用很管用。</li>
-<li>Parallel GC（-XX:+UseParallelGC）：除了会产生N个线程来进行年轻代的垃圾收集外，Parallel GC和Serial GC几乎一样。这里的N是系统CPU的核数。我们可以使用 -XX:ParallelGCThreads=n 这个JVM选项来控制线程数量。并行垃圾收集器也叫throughput收集器。因为它使用了多CPU加快垃圾回收性能。Parallel GC在进行年老代垃圾收集时使用单线程。</li>
-<li>Parallel Old GC（-XX:+UseParallelOldGC）：和Parallel GC一样。不同之处，Parallel Old GC在年轻代垃圾收集和年老代垃圾回收时都使用多线程收集。</li>
-<li>并发标记清除（CMS）收集器（-XX:+UseConcMarkSweepGC)：CMS收集器也被称为短暂停顿并发收集器。它是对年老代进行垃圾收集的。CMS收集器通过多线程并发进行垃圾回收，尽量减少垃圾收集造成的停顿。CMS收集器对年轻代进行垃圾回收使用的算法和Parallel收集器一样。这个垃圾收集器适用于不能忍受长时间停顿要求快速响应的应用。可使用 -XX:ParallelCMSThreads=n JVM选项来限制CMS收集器的线程数量。</li>
-<li>G1垃圾收集器（-XX:+UseG1GC) G1（Garbage First）：垃圾收集器是在Java 7后才可以使用的特性，它的长远目标时代替CMS收集器。G1收集器是一个并行的、并发的和增量式压缩短暂停顿的垃圾收集器。G1收集器和其他的收集器运行方式不一样，不区分年轻代和年老代空间。它把堆空间划分为多个大小相等的区域。当进行垃圾收集时，它会优先收集存活对象较少的区域，因此叫“Garbage First”。你可以在Oracle Garbage-FIrst收集器文档找到更多详细信息。</li>
-</ol>
+<h2 id="create"><a href="#create" class="headerlink" title="create"></a>create</h2><p>创建表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">create &apos;t1&apos;, &#123;NAME =&gt; &apos;f1&apos;, VERSIONS =&gt; 5&#125;</span><br><span class="line"></span><br><span class="line">create &apos;t1&apos;, &#123;Name =&gt; &apos;f1&apos;&#125;, &#123;NAME =&gt; &apos;f2&apos;&#125;, &#123;NAME =&gt; &apos;f3&apos;&#125;</span><br><span class="line"></span><br><span class="line">#等价于：</span><br><span class="line"></span><br><span class="line">create &apos;t1&apos;, &apos;cf&apos;, &apos;cf2&apos;, &apos;cf3&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><p>列出HBase中包含的表名称</p>
+<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><p>向指定表中添加值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">put &apos;t1&apos;, &apos;rowkey&apos;, &apos;cf:name&apos;, &apos;test&apos;, ts</span><br><span class="line">#向t1表的rowkey，列cf:name添加值name，并指定时间戳为ts</span><br></pre></td></tr></table></figure>
+<h2 id="scan"><a href="#scan" class="headerlink" title="scan"></a>scan</h2><p>对表的扫描来获取对应的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scan &apos;t1&apos;</span><br><span class="line">scan &apos;t1&apos;, &#123;COLUMNS =&gt; &apos;cf&apos;&#125;</span><br><span class="line">scan &apos;t1&apos;, &#123;COLUMNS =&gt; &apos;cf&apos;,  LIMIT =&gt; 10&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>获取行或者单元的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get &apos;t1&apos;, &apos;rowkey&apos;</span><br><span class="line">get &apos;t1&apos;, &apos;rowkey&apos;, &#123;COLUMN =&gt; &apos;cf:name&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><em>注：COLUMN和COLUMNS是不同的，scan操作中的COLUMNS指定的是表的列族，get操作中的COLUMN指定的是特定的列，COLUMN的值是指上是”列族+列修饰符”</em></p>
 
           
         
@@ -525,8 +479,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/05/07/redis-persistence/" itemprop="url">
-                  redis学习 - 数据持久化
+                <a class="post-title-link" href="/2016/03/11/hive02/" itemprop="url">
+                  Hive入门
                 </a>
               
             
@@ -539,8 +493,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-05-07T14:55:38+08:00" content="2015-05-07">
-              2015-05-07
+            <time itemprop="dateCreated" datetime="2016-03-11T10:14:20+08:00" content="2016-03-11">
+              2016-03-11
             </time>
           </span>
 
@@ -550,8 +504,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/05/07/redis-persistence/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/07/redis-persistence/" itemprop="commentsCount"></span>
+                <a href="/2016/03/11/hive02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/11/hive02/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -575,12 +529,9 @@
 
       
         
-          <p>Redis提供了多种不同级别的持久化方式:</p>
-<ul>
-<li>RDB 持久化可以在指定的时间间隔内产生数据集的时间点快照（point-in-time snapshot）</li>
-<li>AOF持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。AOF文件中的命令全部以Redis协议的格式来保存，新命令会被追加到文件的末尾.Redis还可以在后台对AOF文件进行重写(rewrite)，使得AOF文件的体积不会超过保存数据集状态所需的实际大小。
+          <p>Hive是建立在 Hadoop 上的数据仓库基础构架。它提供了一系列的工具，可以用来进行数据提取转化加载（ETL），这是一种可以存储、查询和分析存储在 Hadoop 中的大规模数据的机制。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/05/07/redis-persistence/#more" rel="contents">
+            <a class="btn" href="/2016/03/11/hive02/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -631,8 +582,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/05/07/redis_master_slave_copy/" itemprop="url">
-                  redis学习 - 主从拷贝
+                <a class="post-title-link" href="/2016/03/07/zookeeper01/" itemprop="url">
+                  zookeeper伪集群模式安装和配置
                 </a>
               
             
@@ -645,8 +596,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-05-07T14:29:19+08:00" content="2015-05-07">
-              2015-05-07
+            <time itemprop="dateCreated" datetime="2016-03-07T10:25:38+08:00" content="2016-03-07">
+              2016-03-07
             </time>
           </span>
 
@@ -656,8 +607,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/05/07/redis_master_slave_copy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/07/redis_master_slave_copy/" itemprop="commentsCount"></span>
+                <a href="/2016/03/07/zookeeper01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/07/zookeeper01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -681,11 +632,9 @@
 
       
         
-          <h2 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h2><ol>
-<li>同一个Master可以拥有多个Slaves。</li>
-<li>Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&gt;Slave-&gt;Slave模式；
+          <p>伪分布式集群：在一台Server中，启动多个ZooKeeper的实例。<br>下面来看看zookeeper怎么进行安装的吧。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/05/07/redis_master_slave_copy/#more" rel="contents">
+            <a class="btn" href="/2016/03/07/zookeeper01/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -736,8 +685,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/04/17/cookie_and_session/" itemprop="url">
-                  cookie与session
+                <a class="post-title-link" href="/2015/12/02/neo4j-cypher/" itemprop="url">
+                  Neo4j - Cypher
                 </a>
               
             
@@ -750,8 +699,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-04-17T10:43:19+08:00" content="2015-04-17">
-              2015-04-17
+            <time itemprop="dateCreated" datetime="2015-12-02T12:17:19+08:00" content="2015-12-02">
+              2015-12-02
             </time>
           </span>
 
@@ -761,8 +710,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/04/17/cookie_and_session/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/17/cookie_and_session/" itemprop="commentsCount"></span>
+                <a href="/2015/12/02/neo4j-cypher/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/02/neo4j-cypher/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -786,9 +735,9 @@
 
       
         
-          <p>会话（session）跟踪式web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是cookie与session。coolie是通过在客户端记录信息确定用户身份，session是通过在服务端记录信息确定用户身份。<br>
+          <p>Neo4j是一种图数据库。它将结构化数据存储在图上而不是传统的数据库表中。 相对于关系数据库来说，图数据库善于处理大量复杂、互连接、低结构化的数据，这些数据变化迅速，需要频繁的查询。在关系数据库中， 这些查询会导致大量的表连接，因此会产生性能上的问题,但是使用Neo4j就可以解决查询时出现的性能衰退问题。 同时Neo4j还提供了非常快的图算法、推荐系统和OLAP风格的分析。下面主要简单记录一下Cypher查询语言的使用方法。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/04/17/cookie_and_session/#more" rel="contents">
+            <a class="btn" href="/2015/12/02/neo4j-cypher/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -839,8 +788,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/02/26/centos-passwd/" itemprop="url">
-                  CentOS 6.3忘记root密码的解决办法
+                <a class="post-title-link" href="/2015/12/02/neo4j-01/" itemprop="url">
+                  Neo4j
                 </a>
               
             
@@ -853,8 +802,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-26T21:53:34+08:00" content="2015-02-26">
-              2015-02-26
+            <time itemprop="dateCreated" datetime="2015-12-02T09:13:19+08:00" content="2015-12-02">
+              2015-12-02
             </time>
           </span>
 
@@ -864,8 +813,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/02/26/centos-passwd/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/26/centos-passwd/" itemprop="commentsCount"></span>
+                <a href="/2015/12/02/neo4j-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/02/neo4j-01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -889,9 +838,9 @@
 
       
         
-          你对本页的描述
+          <p>最近在用图形数据库来完成对项目的支持。在使用过程中觉得这种图形数据库实际上挺有意思的。因此在这里给大家做一个简单的介绍。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/02/26/centos-passwd/">
+            <a class="btn" href="/2015/12/02/neo4j-01/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -925,7 +874,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 

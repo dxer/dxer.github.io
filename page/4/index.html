@@ -89,7 +89,7 @@
 <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="dxer">
-<meta property="og:url" content="http://dxer.github.io/page/2/index.html">
+<meta property="og:url" content="http://dxer.github.io/page/4/index.html">
 <meta property="og:site_name" content="dxer">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -245,8 +245,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/06/15/fastdfs/" itemprop="url">
-                  分布式文件系统FastDFS快速入门
+                <a class="post-title-link" href="/2015/11/23/hadoop_quota/" itemprop="url">
+                  【Hadoop学习】Hadoop配额实战
                 </a>
               
             
@@ -259,8 +259,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T14:38:19+08:00" content="2016-06-15">
-              2016-06-15
+            <time itemprop="dateCreated" datetime="2015-11-23T14:46:19+08:00" content="2015-11-23">
+              2015-11-23
             </time>
           </span>
 
@@ -270,8 +270,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/15/fastdfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/fastdfs/" itemprop="commentsCount"></span>
+                <a href="/2015/11/23/hadoop_quota/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/23/hadoop_quota/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -295,9 +295,9 @@
 
       
         
-          <h2 id="什么是FastDFS？"><a href="#什么是FastDFS？" class="headerlink" title="什么是FastDFS？"></a>什么是FastDFS？</h2><p>FastDFS是一个开源的轻量级分布式文件系统。它解决了大数据量存储和负载均衡等问题。特别适合以中小文件（建议范围：4KB &lt; file_size <500MB）为载体的在线服务，如相册网站、视频网站等等。
+          <p>在HDFS中，管理员可以为每一个目录设置基于名称或者空间上的配额。可以设置名称配额和空间配额，名称配额和空间配额可以单独设置。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/06/15/fastdfs/#more" rel="contents">
+            <a class="btn" href="/2015/11/23/hadoop_quota/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -348,8 +348,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/05/hadoop_native_lib/" itemprop="url">
-                  Hadoop不能加载本地库问题解决
+                <a class="post-title-link" href="/2015/11/03/yarn/" itemprop="url">
+                  【Hadoop学习】YARN学习
                 </a>
               
             
@@ -362,8 +362,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-05T14:46:19+08:00" content="2016-04-05">
-              2016-04-05
+            <time itemprop="dateCreated" datetime="2015-11-03T14:46:19+08:00" content="2015-11-03">
+              2015-11-03
             </time>
           </span>
 
@@ -373,8 +373,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/05/hadoop_native_lib/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/05/hadoop_native_lib/" itemprop="commentsCount"></span>
+                <a href="/2015/11/03/yarn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/03/yarn/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -398,10 +398,9 @@
 
       
         
-          <p>在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... </span><br><span class="line">using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</span><br></pre></td></tr></table></figure>
+          <p>YARN采用Master/Slave架构，ResourceManager为Master，NodeManager为Slave。ResourceManager负责对各个NodeManager上的资源进行统一管理和调度，当用户提交一个应用程序时，需要提供一个用来跟踪和管理这个程序的ApplicationMaster，它负责向ResourceManager申请资源，并要求NodeManager启动可以占用一定资源的任务。由于不同的ApplicationMaster被分布到不同的节点上，因此它们之间不会相互影响。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/05/hadoop_native_lib/#more" rel="contents">
+            <a class="btn" href="/2015/11/03/yarn/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -452,8 +451,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/01/hbase-optimize/" itemprop="url">
-                  HBase性能优化方法总结
+                <a class="post-title-link" href="/2015/11/03/hadoop_ha/" itemprop="url">
+                  【Hadoop学习】Hadoop2.0高可用性
                 </a>
               
             
@@ -466,8 +465,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-01T15:25:38+08:00" content="2016-04-01">
-              2016-04-01
+            <time itemprop="dateCreated" datetime="2015-11-03T14:38:19+08:00" content="2015-11-03">
+              2015-11-03
             </time>
           </span>
 
@@ -477,8 +476,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/01/hbase-optimize/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/01/hbase-optimize/" itemprop="commentsCount"></span>
+                <a href="/2015/11/03/hadoop_ha/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/03/hadoop_ha/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -502,9 +501,9 @@
 
       
         
-          <p>本文主要是从HBase应用程序设计与开发的角度，总结几种常用的性能优化方法。<br>
+          <p>在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/01/hbase-optimize/#more" rel="contents">
+            <a class="btn" href="/2015/11/03/hadoop_ha/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -555,8 +554,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/20/redis-消息队列/" itemprop="url">
-                  Redis-消息队列
+                <a class="post-title-link" href="/2015/11/03/hadoop v1.0 and hadoopv2.0/" itemprop="url">
+                  【Hadoop学习】Hadoop 1.0 & Hadoop 2.0
                 </a>
               
             
@@ -569,8 +568,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-20T11:21:38+08:00" content="2016-03-20">
-              2016-03-20
+            <time itemprop="dateCreated" datetime="2015-11-03T09:29:19+08:00" content="2015-11-03">
+              2015-11-03
             </time>
           </span>
 
@@ -580,8 +579,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/20/redis-消息队列/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/redis-消息队列/" itemprop="commentsCount"></span>
+                <a href="/2015/11/03/hadoop v1.0 and hadoopv2.0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/03/hadoop v1.0 and hadoopv2.0/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -605,13 +604,15 @@
 
       
         
-          <p>在网站开发中，当页面需要进行如发送邮件、发送短信、复杂数据运算等耗时较长的操作时会阻塞页面的渲染。为了避免用户等待太久，应该使用独立的线程来完成这类操作。不过一些编程语言或框架不易实现多线程，这时很容易就会想到通过其他进程来实现。设想有一个进程能够完成发邮件的功能，那么在页面中只需要想办法通知这个进程向指定的地址发送邮件就可以了。</p>
-<p>更多的时候，服务器做的额外的事情，并不需要客户端等待，这时候就可以把这些额外的事情异步去做。处理异步任务的工具很多。主要还是处理通知消息，针对通知消息通常采用的是队列结构。这个异步处理的模型可以抽象为生产者和消费者模型。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/20/redis-消息队列/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <h2 id="Hadoop-1-0"><a href="#Hadoop-1-0" class="headerlink" title="Hadoop 1.0"></a>Hadoop 1.0</h2><p>Hadoop 1.0即第一代Hadoop，由分布式存储系统HDFS和分布式和分布式计算框架MapReduce组成。其中HDFS由一个NameNode和多个DataNode组成MapReduce由一个JobTracker和多个TaskTracker组成，对应的Hadoop版本为Apache Hadoop 0.20.x、1.x、0.21.x、0.22.x和CDH3。</p>
+<h2 id="Hadoop-2-0"><a href="#Hadoop-2-0" class="headerlink" title="Hadoop 2.0"></a>Hadoop 2.0</h2><p>Hadoop 2.0即第二代Hadoop，为了克服Hadooop 1.0中HDFS和MapReduce存在的各种问题而提出的。针对Hadoop 1.0中的单NameNode制约HDFS的扩展性问题，提出了HDFS Federation，它让多个NameNode分管不同的目录进而实现访问隔离和横向扩展，同时解决了NameNode的单点故障问题。针对Hadoop 1.0中的MapReduce在扩展性和多框架支持等方面的不足，它将JobTracker中的资源管理和作业控制功能分开，分别由组件ResourceManager和ApplicationMaster实现，其中，ResourceManager负责所有应用程序的资源分配，ApplicationMaster仅负责管理一个应用程序，着便是全新的通用的资源管理框架YARN。Hadoop 2.0对应的Hadoop的版本为Apache Hadoop 0.23.x、2.x和CDH4。</p>
+<h2 id="MRv1"><a href="#MRv1" class="headerlink" title="MRv1"></a>MRv1</h2><p>MapReduce 1.0计算框架主要由三部分组成，分别是编程模型，数据处理引擎和运行时环境。它的编程模型是将问题抽象成Map和Reduce两个阶段，其中Map阶段将输入数据解析成key/value，迭代调用map()函数处理后，再以key/value的形式输出到本地目录，而Reduce阶段则是将Map阶段输出的数据按照key相同的value进行归约处理，并将最终结果写到HDFS上。它的数据处理引擎由MapTask和ReduceTask组成，分别负责Map阶段逻辑和Reduce阶段逻辑的处理。运行时的环境由一个JobTracker和若干个TaskTracker组成，JobTracker负责资源管理和所有作业的控制，TaskTracker负责接收来自JobTracker的命令并执行它。</p>
+<h2 id="MRv2"><a href="#MRv2" class="headerlink" title="MRv2"></a>MRv2</h2><p>MRv2具有与MRv1相同的编程模型和数据处理引擎，唯一不同的是运行时环境。MRv2是在MRv1基础上经加工之后，运行于资源管理框架YARN之上的计算框架。它由资源管理系统YARN和作业控制进程ApplicationMaster组成，其中YARN负责资源管理和调度，而ApplicationMaster仅负责一个作业的管理。MRv1仅是一个独立的离线计算框架，而MRv2则是运行于YARN之上的MapReduce。</p>
+<h2 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h2><p>YARN是Hadoop 2.0中的资源管理系统，它是一个通用的资源管理模块，可以为各类应用横须进行资源管理和调度。YARN不仅限于MapReduce一种框架使用，也可以供其他框架使用，比如Spark,Storm等。</p>
+<h2 id="HDFS-Federation"><a href="#HDFS-Federation" class="headerlink" title="HDFS Federation"></a>HDFS Federation</h2><p>在Hadoop 2.0中，对HDFS进行改进，是的NameNode可以横向扩展成多个，每个NameNode分管一部分目录，进而产生了HDFS Federation，该机制的引入不仅增强了HDFS的扩展性，也使HDFS具备了隔离性。</p>
+
+          
         
       
     </div>
@@ -659,8 +660,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/19/hbase简介/" itemprop="url">
-                  HBase简介
+                <a class="post-title-link" href="/2015/10/26/secondarynamenode/" itemprop="url">
+                  【Hadoop学习】Secondary NameNode解读
                 </a>
               
             
@@ -673,8 +674,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T11:21:38+08:00" content="2016-03-19">
-              2016-03-19
+            <time itemprop="dateCreated" datetime="2015-10-26T20:18:19+08:00" content="2015-10-26">
+              2015-10-26
             </time>
           </span>
 
@@ -684,8 +685,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/19/hbase简介/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/19/hbase简介/" itemprop="commentsCount"></span>
+                <a href="/2015/10/26/secondarynamenode/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/26/secondarynamenode/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -709,9 +710,9 @@
 
       
         
-          <p>HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。
+          <p>Secondary NameNode从它的名字上来看，给人的感觉是NameNode的备份。但实际上不是这样。那到底Secondary NameNode在HDFS中扮演的是什么角色呢？<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/19/hbase简介/#more" rel="contents">
+            <a class="btn" href="/2015/10/26/secondarynamenode/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -745,7 +746,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 

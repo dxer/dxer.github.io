@@ -89,7 +89,7 @@
 <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="dxer">
-<meta property="og:url" content="http://dxer.github.io/page/2/index.html">
+<meta property="og:url" content="http://dxer.github.io/page/5/index.html">
 <meta property="og:site_name" content="dxer">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -245,8 +245,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/06/15/fastdfs/" itemprop="url">
-                  分布式文件系统FastDFS快速入门
+                <a class="post-title-link" href="/2015/10/25/hadoop_serializable/" itemprop="url">
+                  【Hadoop学习】Hadoop的序列化
                 </a>
               
             
@@ -259,8 +259,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T14:38:19+08:00" content="2016-06-15">
-              2016-06-15
+            <time itemprop="dateCreated" datetime="2015-10-25T14:46:19+08:00" content="2015-10-25">
+              2015-10-25
             </time>
           </span>
 
@@ -270,8 +270,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/15/fastdfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/fastdfs/" itemprop="commentsCount"></span>
+                <a href="/2015/10/25/hadoop_serializable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/25/hadoop_serializable/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -295,9 +295,9 @@
 
       
         
-          <h2 id="什么是FastDFS？"><a href="#什么是FastDFS？" class="headerlink" title="什么是FastDFS？"></a>什么是FastDFS？</h2><p>FastDFS是一个开源的轻量级分布式文件系统。它解决了大数据量存储和负载均衡等问题。特别适合以中小文件（建议范围：4KB &lt; file_size <500MB）为载体的在线服务，如相册网站、视频网站等等。
+          <p>对象的序列化用于将对象编码成一个字节流，以及从字节流中重新构建对象。<br>将一个对象编码成一个字节流叫做序列化改对象(Serializing)<br>相反的处理过程称为反序列化（Deserializing）<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/06/15/fastdfs/#more" rel="contents">
+            <a class="btn" href="/2015/10/25/hadoop_serializable/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -348,8 +348,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/05/hadoop_native_lib/" itemprop="url">
-                  Hadoop不能加载本地库问题解决
+                <a class="post-title-link" href="/2015/08/17/jvm/" itemprop="url">
+                  JVM垃圾回收
                 </a>
               
             
@@ -362,8 +362,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-05T14:46:19+08:00" content="2016-04-05">
-              2016-04-05
+            <time itemprop="dateCreated" datetime="2015-08-17T21:21:38+08:00" content="2015-08-17">
+              2015-08-17
             </time>
           </span>
 
@@ -373,8 +373,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/05/hadoop_native_lib/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/05/hadoop_native_lib/" itemprop="commentsCount"></span>
+                <a href="/2015/08/17/jvm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/17/jvm/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -398,10 +398,189 @@
 
       
         
-          <p>在执行hadoop命令或者启动dfs、yarn的时候总会出现这个警告</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... </span><br><span class="line">using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</span><br></pre></td></tr></table></figure>
+          
+            <p>JVM堆内存被分为两部分<em>年轻代(Young Generation)</em>和<em>老年代(Old Generation)</em>。</p>
+<h5 id="新生代-Young-Generation"><a href="#新生代-Young-Generation" class="headerlink" title="新生代(Young Generation)"></a>新生代(Young Generation)</h5><p>新生代是所有新对象产生的地方。当年轻代的内存空间被用完时，就会触发垃圾回收。这个垃圾回收叫做<em>Minor GC</em>。新生代分为3个部分<em>Eden区</em>和<em>Survivor区(FromSpace和ToSpace,两个区域大小相同)</em>，新生代的大小可以通过<code>-Xmn</code>来控制，也可以用<code>-XX：SurvivorRatio</code>来控制Eden和Survivor的比例。</p>
+<p>新生代的特点</p>
+<ul>
+<li>大多数新建的对象都在Eden区</li>
+<li>当Eden区域被填满时，就会执行Minor GC。并把所有存活下来的对象转移到其中一个survivor区</li>
+<li>Minor GC同样会检查存活下来的对象，并把他们转移到另一个survivor区。这样在一段时间内，总会有一个空的survivor区</li>
+<li>经过多次GC周期后，仍然存活下来的对象会被转移到老年代内存空间。通常这是在新生代有资格提升到老年代前通过设定年龄阈值来完成的。</li>
+</ul>
+<h5 id="老年代-Old-Generation"><a href="#老年代-Old-Generation" class="headerlink" title="老年代(Old Generation)"></a>老年代(Old Generation)</h5><p>老年代内存里包含了长期存活的对象和经过多次Minor GC后依然存活下来的对象。通常会在老年代内存被占满时进行垃圾回收。老年代的垃圾收集叫做Major GC。Major GC会花费更多的时间。旧生带占用大小为<code>-Xmx</code>值减去<code>-Xmn</code>对应的值</p>
+<h5 id="永久代-Permanent-Generation"><a href="#永久代-Permanent-Generation" class="headerlink" title="永久代(Permanent Generation)"></a>永久代(Permanent Generation)</h5><p>永久代包含了JVM需要的应用元数据，这些元数据描述了在应用里使用的类和方法。注意，永久代不是Java堆内存的一部分，有一些JVM没有这一代，主要存放敞亮及类的一些信息，默认最小值为16MB，最大值为64MB，可以通过<code>-XX:PermSize</code>及<code>-XX:MaxPermSize</code>来设置最小值和最大值。</p>
+<p>永久代存放JVM运行时使用的类。永久代同样包含了Java SE库的类和方法。永久代的对象在full GC时进行垃圾收集。</p>
+<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>方法区是永久代空间的一部分，并用来存储类型信息（运行时常量和静态变量）和方法代码和构造函数代码。</p>
+<h5 id="内存池"><a href="#内存池" class="headerlink" title="内存池"></a>内存池</h5><p>如果JVM实现支持，JVM内存管理会为创建内存池，用来为不变对象创建对象池。字符串池就是内存池类型的一个很好的例子。内存池可以属于堆或者永久代，这取决于JVM内存管理的实现。</p>
+<h5 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h5><p>运行时常量池是每个类常量池的运行时代表。它包含了类的运行时常量和静态方法。运行时常量池是方法区的一部分。</p>
+<h5 id="Java栈内存"><a href="#Java栈内存" class="headerlink" title="Java栈内存"></a>Java栈内存</h5><p>Java栈内存用于运行线程。它们包含了方法里的临时数据、堆里其它对象引用的特定数据。你可以阅读栈内存和堆内存的区别。</p>
+<h5 id="Java-堆内存开关"><a href="#Java-堆内存开关" class="headerlink" title="Java 堆内存开关"></a>Java 堆内存开关</h5><table>
+<thead>
+<tr>
+<th>VM设置</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-Xms</td>
+<td>设置JVM启动时堆的初始化大小。</td>
+</tr>
+<tr>
+<td>-Xmx</td>
+<td>设置堆最大值。</td>
+</tr>
+<tr>
+<td>-Xmn</td>
+<td>设置年轻代的空间大小，剩下的为老年代的空间大小。</td>
+</tr>
+<tr>
+<td>-XX:PermGen</td>
+<td>设置永久代内存的初始化大小。</td>
+</tr>
+<tr>
+<td>-XX:MaxPermGen</td>
+<td>设置永久代的最大值。</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio</td>
+<td>提供Eden区和survivor区的空间比例。比如，如果年轻代的大小为10m并且VM开关是-XX:SurvivorRatio=2，那么将会保留5m内存给Eden区和每个Survivor区分配2.5m内存。默认比例是8。</td>
+</tr>
+<tr>
+<td>-XX:NewRatio</td>
+<td>提供年老代和年轻代的比例大小。默认值是2。</td>
+</tr>
+</tbody>
+</table>
+<p>大多数时候，上面的选项已经足够使用了。但是如果你还想了解其他的选项，那么请查看JVM选项官方网页。</p>
+<h5 id="Java垃圾回收"><a href="#Java垃圾回收" class="headerlink" title="Java垃圾回收"></a>Java垃圾回收</h5><p>JVM堆内存主要被分为三块，新生代、老年代、持久代。三代的特点不同，造就了他们所用的GC算法不同，新生代适合那些生命周期较短，频繁创建及销毁的对象，老年代适合生命周期相对较长的对象，持久代在Sun HotSpot中就是指方法区（有些JVM中根本就没有持久代这中说法）。</p>
+<p>Java垃圾回收会找出没用的对象，把它从内存中移除并释放出内存给以后创建的对象使用。Java程序语言中的一个最大优点是自动垃圾回收，不像其他的程序语言那样需要手动分配和释放内存，比如C语言。</p>
+<p>垃圾收集器是一个后台运行程序。它管理着内存中的所有对象并找出没被引用的对象。所有的这些未引用的对象都会被删除，回收它们的空间并分配给其他对象。</p>
+<p>一个基本的垃圾回收过程涉及三个步骤：</p>
+<ol>
+<li>标记：这是第一步。在这一步，垃圾收集器会找出哪些对象正在使用和哪些对象不在使用。</li>
+<li>正常清除：垃圾收集器清会除不在使用的对象，回收它们的空间分配给其他对象。</li>
+<li>压缩清除：为了提升性能，压缩清除会在删除没用的对象后，把所有存活的对象移到一起。这样可以提高分配新对象的效率。</li>
+</ol>
+<p>简单标记和清除方法存在两个问题：</p>
+<ol>
+<li>效率很低。因为大多数新建对象都会成为“没用对象”。</li>
+<li>经过多次垃圾回收周期的对象很有可能在以后的周期也会存活下来。<br>上面简单清除方法的问题在于Java垃圾收集的分代回收的，而且在堆内存里有年轻代和年老代两个区域。我已经在上面解释了Minor GC和Major GC是怎样扫描对象，以及如何把对象从一个分代空间移到另外一个分代空间。</li>
+</ol>
+<h5 id="Java垃圾回收类型"><a href="#Java垃圾回收类型" class="headerlink" title="Java垃圾回收类型"></a>Java垃圾回收类型</h5><p>这里有五种可以在应用里使用的垃圾回收类型。仅需要使用JVM开关就可以在我们的应用里启用垃圾回收策略。让我们一起来逐一了解：</p>
+<ol>
+<li>Serial GC（-XX:+UseSerialGC）：Serial GC使用简单的标记、清除、压缩方法对年轻代和年老代进行垃圾回收，即Minor GC和Major GC。Serial GC在client模式（客户端模式）很有用，比如在简单的独立应用和CPU配置较低的机器。这个模式对占有内存较少的应用很管用。</li>
+<li>Parallel GC（-XX:+UseParallelGC）：除了会产生N个线程来进行年轻代的垃圾收集外，Parallel GC和Serial GC几乎一样。这里的N是系统CPU的核数。我们可以使用 -XX:ParallelGCThreads=n 这个JVM选项来控制线程数量。并行垃圾收集器也叫throughput收集器。因为它使用了多CPU加快垃圾回收性能。Parallel GC在进行年老代垃圾收集时使用单线程。</li>
+<li>Parallel Old GC（-XX:+UseParallelOldGC）：和Parallel GC一样。不同之处，Parallel Old GC在年轻代垃圾收集和年老代垃圾回收时都使用多线程收集。</li>
+<li>并发标记清除（CMS）收集器（-XX:+UseConcMarkSweepGC)：CMS收集器也被称为短暂停顿并发收集器。它是对年老代进行垃圾收集的。CMS收集器通过多线程并发进行垃圾回收，尽量减少垃圾收集造成的停顿。CMS收集器对年轻代进行垃圾回收使用的算法和Parallel收集器一样。这个垃圾收集器适用于不能忍受长时间停顿要求快速响应的应用。可使用 -XX:ParallelCMSThreads=n JVM选项来限制CMS收集器的线程数量。</li>
+<li>G1垃圾收集器（-XX:+UseG1GC) G1（Garbage First）：垃圾收集器是在Java 7后才可以使用的特性，它的长远目标时代替CMS收集器。G1收集器是一个并行的、并发的和增量式压缩短暂停顿的垃圾收集器。G1收集器和其他的收集器运行方式不一样，不区分年轻代和年老代空间。它把堆空间划分为多个大小相等的区域。当进行垃圾收集时，它会优先收集存活对象较少的区域，因此叫“Garbage First”。你可以在Oracle Garbage-FIrst收集器文档找到更多详细信息。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/05/07/redis-persistence/" itemprop="url">
+                  redis学习 - 数据持久化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-05-07T14:55:38+08:00" content="2015-05-07">
+              2015-05-07
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/05/07/redis-persistence/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/07/redis-persistence/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Redis提供了多种不同级别的持久化方式:</p>
+<ul>
+<li>RDB 持久化可以在指定的时间间隔内产生数据集的时间点快照（point-in-time snapshot）</li>
+<li>AOF持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。AOF文件中的命令全部以Redis协议的格式来保存，新命令会被追加到文件的末尾.Redis还可以在后台对AOF文件进行重写(rewrite)，使得AOF文件的体积不会超过保存数据集状态所需的实际大小。
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/05/hadoop_native_lib/#more" rel="contents">
+            <a class="btn" href="/2015/05/07/redis-persistence/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -452,8 +631,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/01/hbase-optimize/" itemprop="url">
-                  HBase性能优化方法总结
+                <a class="post-title-link" href="/2015/05/07/redis_master_slave_copy/" itemprop="url">
+                  redis学习 - 主从拷贝
                 </a>
               
             
@@ -466,8 +645,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-01T15:25:38+08:00" content="2016-04-01">
-              2016-04-01
+            <time itemprop="dateCreated" datetime="2015-05-07T14:29:19+08:00" content="2015-05-07">
+              2015-05-07
             </time>
           </span>
 
@@ -477,8 +656,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/01/hbase-optimize/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/01/hbase-optimize/" itemprop="commentsCount"></span>
+                <a href="/2015/05/07/redis_master_slave_copy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/07/redis_master_slave_copy/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -502,9 +681,11 @@
 
       
         
-          <p>本文主要是从HBase应用程序设计与开发的角度，总结几种常用的性能优化方法。<br>
+          <h2 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h2><ol>
+<li>同一个Master可以拥有多个Slaves。</li>
+<li>Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&gt;Slave-&gt;Slave模式；
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/01/hbase-optimize/#more" rel="contents">
+            <a class="btn" href="/2015/05/07/redis_master_slave_copy/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -555,8 +736,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/20/redis-消息队列/" itemprop="url">
-                  Redis-消息队列
+                <a class="post-title-link" href="/2015/04/17/cookie_and_session/" itemprop="url">
+                  cookie与session
                 </a>
               
             
@@ -569,8 +750,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-20T11:21:38+08:00" content="2016-03-20">
-              2016-03-20
+            <time itemprop="dateCreated" datetime="2015-04-17T10:43:19+08:00" content="2015-04-17">
+              2015-04-17
             </time>
           </span>
 
@@ -580,8 +761,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/20/redis-消息队列/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/redis-消息队列/" itemprop="commentsCount"></span>
+                <a href="/2015/04/17/cookie_and_session/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/17/cookie_and_session/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -605,113 +786,9 @@
 
       
         
-          <p>在网站开发中，当页面需要进行如发送邮件、发送短信、复杂数据运算等耗时较长的操作时会阻塞页面的渲染。为了避免用户等待太久，应该使用独立的线程来完成这类操作。不过一些编程语言或框架不易实现多线程，这时很容易就会想到通过其他进程来实现。设想有一个进程能够完成发邮件的功能，那么在页面中只需要想办法通知这个进程向指定的地址发送邮件就可以了。</p>
-<p>更多的时候，服务器做的额外的事情，并不需要客户端等待，这时候就可以把这些额外的事情异步去做。处理异步任务的工具很多。主要还是处理通知消息，针对通知消息通常采用的是队列结构。这个异步处理的模型可以抽象为生产者和消费者模型。<br>
+          <p>会话（session）跟踪式web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是cookie与session。coolie是通过在客户端记录信息确定用户身份，session是通过在服务端记录信息确定用户身份。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/20/redis-消息队列/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/19/hbase简介/" itemprop="url">
-                  HBase简介
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T11:21:38+08:00" content="2016-03-19">
-              2016-03-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/19/hbase简介/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/19/hbase简介/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>HBase是一个分布式的、面向列的开源数据库。HBase是Apache的Hadoop项目的子项目。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/19/hbase简介/#more" rel="contents">
+            <a class="btn" href="/2015/04/17/cookie_and_session/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -745,7 +822,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 

@@ -1,17 +1,296 @@
-<!DOCTYPE html><html lang="en-lang"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>redis快速入门 · dxer</title><meta name="description" content="redis快速入门 - dxer"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><!-- fonts--><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.lug.ustc.edu.cn/css?family=Source+Sans+Pro:400,600" type="text/css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script><!-- google analytics--><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!doctype html>
 
-ga('create', 'UA-43614462-1', 'auto');
-ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-toggle"><aside><div class="author"><a href="/."><img src="/img/author.png" class="author-img"></a><h2 class="author-name">dxer</h2></div><div class="post-toc"><span class="toc-title">Directory</span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis简介"><span class="toc-text">Redis简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key相关的命令"><span class="toc-text">Key相关的命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exists-key"><span class="toc-text">exists key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#del-key1-key2-…-keyN"><span class="toc-text">del key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#type-key"><span class="toc-text">type key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#keys-pattern"><span class="toc-text">keys pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#randomkey"><span class="toc-text">randomkey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rename-oldkey-newkey"><span class="toc-text">rename oldkey newkey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#renamenx-oldkey-newkey"><span class="toc-text">renamenx oldkey newkey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dbsize"><span class="toc-text">dbsize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expire-key-seconds"><span class="toc-text">expire key seconds</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ttl-key"><span class="toc-text">ttl key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select-db-index"><span class="toc-text">select db-index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#move-key-db-index"><span class="toc-text">move key db-index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flushdb"><span class="toc-text">flushdb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flushall"><span class="toc-text">flushall</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String"><span class="toc-text">String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#string相关命令"><span class="toc-text">string相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#set-key-value"><span class="toc-text">set key value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setnx-key-value"><span class="toc-text">setnx key value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-key"><span class="toc-text">get key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getset-key-value"><span class="toc-text">getset key value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mget-key1-key2-…-keyN"><span class="toc-text">mget key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mset-key1-value1-key2-value2-…-keyN-valueN"><span class="toc-text">mset key1 value1 key2 value2 … keyN valueN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#msetnx-key1-value1-key2-value2-…-keyN-valueN"><span class="toc-text">msetnx key1 value1 key2 value2 … keyN valueN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#incr-key"><span class="toc-text">incr key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#decr-key"><span class="toc-text">decr key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#incrby-key-integer"><span class="toc-text">incrby key integer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#decrby-key-integer"><span class="toc-text">decrby key integer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#append-key-value"><span class="toc-text">append key value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#substr-key-start-end"><span class="toc-text">substr key start end</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-text">List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List的相关命令"><span class="toc-text">List的相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lpush-key-string"><span class="toc-text">lpush key string</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rpush-key-string"><span class="toc-text">rpush key string</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#llen-key"><span class="toc-text">llen key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lrange-key-start-end"><span class="toc-text">lrange key start end</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ltrim-key-start-end"><span class="toc-text">ltrim key start end</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lset-key-index-value"><span class="toc-text">lset key index value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lrem-key-count-value"><span class="toc-text">lrem key count value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lpop-key"><span class="toc-text">lpop key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rpop-key"><span class="toc-text">rpop key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blpop-key1-key2-…-keyN-timeout"><span class="toc-text">blpop key1 key2 … keyN timeout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#brpop-key1-key2-…-keyN-timeout"><span class="toc-text">brpop key1 key2 … keyN timeout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rpoplpush-srckey-destkey"><span class="toc-text">rpoplpush srckey destkey</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set"><span class="toc-text">Set</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sass-key-member"><span class="toc-text">sass key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#srem-key-member"><span class="toc-text">srem key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spop-key"><span class="toc-text">spop key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#smove-srckey-dstkey-member"><span class="toc-text">smove srckey dstkey member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scard-key"><span class="toc-text">scard key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sismember-key-member"><span class="toc-text">sismember key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sinter-key1-key2-…-keyN"><span class="toc-text">sinter key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sinterstore-dstkey-key1-key2-…-keyN"><span class="toc-text">sinterstore dstkey key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sunion-key1-key2-…-keyN"><span class="toc-text">sunion key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sunionstore-dstkey-key1-key2-…-keyN"><span class="toc-text">sunionstore dstkey key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sdiff-key1-key2-…-keyN"><span class="toc-text">sdiff key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sdiffstore-dstkey-key1-key2-…-keyN"><span class="toc-text">sdiffstore dstkey key1 key2 … keyN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#smembers-key"><span class="toc-text">smembers key</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sorted-set"><span class="toc-text">Sorted set</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zadd-key-score-member"><span class="toc-text">zadd key score member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrem-key-member"><span class="toc-text">zrem key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zincrvy-key-incr-member"><span class="toc-text">zincrvy key incr member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrank-key-member"><span class="toc-text">zrank key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrevrank-key-member"><span class="toc-text">zrevrank key member</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrange-key-start-end"><span class="toc-text">zrange key start end</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrevrange-key-start-end"><span class="toc-text">zrevrange key start end</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zrangebyscore-key-min-max"><span class="toc-text">zrangebyscore key min max</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zcout-key-min-max"><span class="toc-text">zcout key min max</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zcard-key"><span class="toc-text">zcard key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zscore-key-element"><span class="toc-text">zscore key element</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zremrangebyrank-key-min-max"><span class="toc-text">zremrangebyrank key min max</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zremrangebyscore-key-min-max"><span class="toc-text">zremrangebyscore key min max</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash"><span class="toc-text">Hash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash相关命令"><span class="toc-text">Hash相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hset-key-field-value"><span class="toc-text">hset key field value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hget-key-field"><span class="toc-text">hget key field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hmget-key-field1-field2-…-fieldN"><span class="toc-text">hmget  key field1 field2 … fieldN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hmset-key-field1-value1-field2-value2…-fieldN-valueN"><span class="toc-text">hmset key field1 value1 field2 value2… fieldN valueN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hincrby-key-field-interger"><span class="toc-text">hincrby key field interger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexists-key-field"><span class="toc-text">hexists key field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hdel-key-field"><span class="toc-text">hdel key field</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hlen-key"><span class="toc-text">hlen key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hkeys-key"><span class="toc-text">hkeys key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hvals-key"><span class="toc-text">hvals key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hgetall"><span class="toc-text">hgetall</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持久化"><span class="toc-text">持久化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主从复制"><span class="toc-text">主从复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事物"><span class="toc-text">事物</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发布订阅（pub-sub）"><span class="toc-text">发布订阅（pub/sub）</span></a></li></ol></div></aside><div class="main"><header><div id="top"><a href="/." class="logo-link">dxer</a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">Tags</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">About</a></li></ul></div></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">redis快速入门</h1><div class="post-time">Jul 2, 2016</div><div class="post-content"><h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2><p>Redis是一款开源的，高性能的键值存储。它常被称为是一款数据结构服务器。Redis的键值可以包含字符串，哈希，列表，集合和有序集合等数据类型。对于这些数据类型，你可以执行原子操作.<br><a id="more"></a></p>
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="NoSQL,redis," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="dxer" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Redis简介Redis是一款开源的，高性能的键值存储。它常被称为是一款数据结构服务器。Redis的键值可以包含字符串，哈希，列表，集合和有序集合等数据类型。对于这些数据类型，你可以执行原子操作.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis快速入门">
+<meta property="og:url" content="http://dxer.github.io/2016/07/02/redis_quick_start/index.html">
+<meta property="og:site_name" content="dxer">
+<meta property="og:description" content="Redis简介Redis是一款开源的，高性能的键值存储。它常被称为是一款数据结构服务器。Redis的键值可以包含字符串，哈希，列表，集合和有序集合等数据类型。对于这些数据类型，你可以执行原子操作.">
+<meta property="og:updated_time" content="2016-07-14T02:19:42.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis快速入门">
+<meta name="twitter:description" content="Redis简介Redis是一款开源的，高性能的键值存储。它常被称为是一款数据结构服务器。Redis的键值可以包含字符串，哈希，列表，集合和有序集合等数据类型。对于这些数据类型，你可以执行原子操作.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> redis快速入门 | dxer </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?824de59e952801cadc44270759e656b9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">dxer</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                redis快速入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-02T09:13:19+08:00" content="2016-07-02">
+              2016-07-02
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/02/redis_quick_start/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/redis_quick_start/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2><p>Redis是一款开源的，高性能的键值存储。它常被称为是一款数据结构服务器。Redis的键值可以包含字符串，哈希，列表，集合和有序集合等数据类型。对于这些数据类型，你可以执行原子操作.<br><a id="more"></a></p>
 <p>为了获得优异的性能，redis采用了内存中（in memory）数据集的方式。同时redis支持数据的持久化，可以每隔一段时间将数据转存到磁盘上（snapshot），也可以在日志尾部追加每一条操作命令（append only file， aof）</p>
 <p>redis支持主从复制（master-slave replication），并且具有非常快速的非阻塞首次同步，网络断开自动重连等功能。</p>
 <p>redis支持的数据类型</p>
@@ -138,11 +417,323 @@ ga('send', 'pageview');</script></head><body><input type="checkbox" id="sidebar-
 <li>Psubscribe</li>
 <li>Publish</li>
 </ul>
-</div></article></div><div class="tags"><a href="/tags/NoSQL/">NoSQL</a><a href="/tags/redis/">redis</a></div><div class="paginator"><a href="/2016/07/13/WebDigger/" class="prev"><i class="fa fa-chevron-left"></i><span> Prev</span></a><a href="/2016/06/21/hbase_filter/" class="next"><span>Next</span><i class="fa fa-chevron-right"></i></a></div></section><footer><section id="comments"><div data-thread-key="http://dxer.github.io/2016/07/02/redis_quick_start/index.html" data-title="redis快速入门" data-url="http://dxer.github.io/2016/07/02/redis_quick_start/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "smarthader" };
-(function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();</script></section><div class="copyright"><p>© 2016<span class="heart"><i class="icon-next-heart fa fa-heart"></i></span><a href="http://dxer.github.io">dxer</a></p></div><div style="display:none"><script src="https://s11.cnzz.com/z_stat.php?id=1254885963&web_id=1254885963" language="JavaScript"></script></div></footer></div><label class="back2top"> <a href="#top"><i class="fa fa-chevron-up"></i></a></label></body></html>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NoSQL/" rel="tag">#NoSQL</a>
+          
+            <a href="/tags/redis/" rel="tag">#redis</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/21/hbase_filter/" rel="next" title="HBase过滤器总结">
+                <i class="fa fa-chevron-left"></i> HBase过滤器总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/13/WebDigger/" rel="prev" title="WebDigger爬虫">
+                WebDigger爬虫 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/02/redis_quick_start/"
+           data-title="redis快速入门" data-url="http://dxer.github.io/2016/07/02/redis_quick_start/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="dxer" />
+          <p class="site-author-name" itemprop="name">dxer</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dxer" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis简介"><span class="nav-number">1.</span> <span class="nav-text">Redis简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key相关的命令"><span class="nav-number">2.</span> <span class="nav-text">Key相关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exists-key"><span class="nav-number">2.1.</span> <span class="nav-text">exists key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#del-key1-key2-…-keyN"><span class="nav-number">2.2.</span> <span class="nav-text">del key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-key"><span class="nav-number">2.3.</span> <span class="nav-text">type key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keys-pattern"><span class="nav-number">2.4.</span> <span class="nav-text">keys pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#randomkey"><span class="nav-number">2.5.</span> <span class="nav-text">randomkey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rename-oldkey-newkey"><span class="nav-number">2.6.</span> <span class="nav-text">rename oldkey newkey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#renamenx-oldkey-newkey"><span class="nav-number">2.7.</span> <span class="nav-text">renamenx oldkey newkey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dbsize"><span class="nav-number">2.8.</span> <span class="nav-text">dbsize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expire-key-seconds"><span class="nav-number">2.9.</span> <span class="nav-text">expire key seconds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ttl-key"><span class="nav-number">2.10.</span> <span class="nav-text">ttl key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-db-index"><span class="nav-number">2.11.</span> <span class="nav-text">select db-index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#move-key-db-index"><span class="nav-number">2.12.</span> <span class="nav-text">move key db-index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flushdb"><span class="nav-number">2.13.</span> <span class="nav-text">flushdb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flushall"><span class="nav-number">2.14.</span> <span class="nav-text">flushall</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-number">3.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string相关命令"><span class="nav-number">4.</span> <span class="nav-text">string相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#set-key-value"><span class="nav-number">4.1.</span> <span class="nav-text">set key value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setnx-key-value"><span class="nav-number">4.2.</span> <span class="nav-text">setnx key value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-key"><span class="nav-number">4.3.</span> <span class="nav-text">get key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getset-key-value"><span class="nav-number">4.4.</span> <span class="nav-text">getset key value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mget-key1-key2-…-keyN"><span class="nav-number">4.5.</span> <span class="nav-text">mget key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mset-key1-value1-key2-value2-…-keyN-valueN"><span class="nav-number">4.6.</span> <span class="nav-text">mset key1 value1 key2 value2 … keyN valueN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msetnx-key1-value1-key2-value2-…-keyN-valueN"><span class="nav-number">4.7.</span> <span class="nav-text">msetnx key1 value1 key2 value2 … keyN valueN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#incr-key"><span class="nav-number">4.8.</span> <span class="nav-text">incr key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decr-key"><span class="nav-number">4.9.</span> <span class="nav-text">decr key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#incrby-key-integer"><span class="nav-number">4.10.</span> <span class="nav-text">incrby key integer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decrby-key-integer"><span class="nav-number">4.11.</span> <span class="nav-text">decrby key integer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#append-key-value"><span class="nav-number">4.12.</span> <span class="nav-text">append key value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#substr-key-start-end"><span class="nav-number">4.13.</span> <span class="nav-text">substr key start end</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List"><span class="nav-number">5.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List的相关命令"><span class="nav-number">6.</span> <span class="nav-text">List的相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lpush-key-string"><span class="nav-number">6.1.</span> <span class="nav-text">lpush key string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpush-key-string"><span class="nav-number">6.2.</span> <span class="nav-text">rpush key string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llen-key"><span class="nav-number">6.3.</span> <span class="nav-text">llen key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lrange-key-start-end"><span class="nav-number">6.4.</span> <span class="nav-text">lrange key start end</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ltrim-key-start-end"><span class="nav-number">6.5.</span> <span class="nav-text">ltrim key start end</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lset-key-index-value"><span class="nav-number">6.6.</span> <span class="nav-text">lset key index value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lrem-key-count-value"><span class="nav-number">6.7.</span> <span class="nav-text">lrem key count value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lpop-key"><span class="nav-number">6.8.</span> <span class="nav-text">lpop key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpop-key"><span class="nav-number">6.9.</span> <span class="nav-text">rpop key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blpop-key1-key2-…-keyN-timeout"><span class="nav-number">6.10.</span> <span class="nav-text">blpop key1 key2 … keyN timeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#brpop-key1-key2-…-keyN-timeout"><span class="nav-number">6.11.</span> <span class="nav-text">brpop key1 key2 … keyN timeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpoplpush-srckey-destkey"><span class="nav-number">6.12.</span> <span class="nav-text">rpoplpush srckey destkey</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set"><span class="nav-number">7.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sass-key-member"><span class="nav-number">7.1.</span> <span class="nav-text">sass key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#srem-key-member"><span class="nav-number">7.2.</span> <span class="nav-text">srem key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spop-key"><span class="nav-number">7.3.</span> <span class="nav-text">spop key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smove-srckey-dstkey-member"><span class="nav-number">7.4.</span> <span class="nav-text">smove srckey dstkey member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scard-key"><span class="nav-number">7.5.</span> <span class="nav-text">scard key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sismember-key-member"><span class="nav-number">7.6.</span> <span class="nav-text">sismember key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sinter-key1-key2-…-keyN"><span class="nav-number">7.7.</span> <span class="nav-text">sinter key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sinterstore-dstkey-key1-key2-…-keyN"><span class="nav-number">7.8.</span> <span class="nav-text">sinterstore dstkey key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sunion-key1-key2-…-keyN"><span class="nav-number">7.9.</span> <span class="nav-text">sunion key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sunionstore-dstkey-key1-key2-…-keyN"><span class="nav-number">7.10.</span> <span class="nav-text">sunionstore dstkey key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdiff-key1-key2-…-keyN"><span class="nav-number">7.11.</span> <span class="nav-text">sdiff key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdiffstore-dstkey-key1-key2-…-keyN"><span class="nav-number">7.12.</span> <span class="nav-text">sdiffstore dstkey key1 key2 … keyN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smembers-key"><span class="nav-number">7.13.</span> <span class="nav-text">smembers key</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sorted-set"><span class="nav-number">8.</span> <span class="nav-text">Sorted set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zadd-key-score-member"><span class="nav-number">8.1.</span> <span class="nav-text">zadd key score member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrem-key-member"><span class="nav-number">8.2.</span> <span class="nav-text">zrem key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zincrvy-key-incr-member"><span class="nav-number">8.3.</span> <span class="nav-text">zincrvy key incr member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrank-key-member"><span class="nav-number">8.4.</span> <span class="nav-text">zrank key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrevrank-key-member"><span class="nav-number">8.5.</span> <span class="nav-text">zrevrank key member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrange-key-start-end"><span class="nav-number">8.6.</span> <span class="nav-text">zrange key start end</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrevrange-key-start-end"><span class="nav-number">8.7.</span> <span class="nav-text">zrevrange key start end</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrangebyscore-key-min-max"><span class="nav-number">8.8.</span> <span class="nav-text">zrangebyscore key min max</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zcout-key-min-max"><span class="nav-number">8.9.</span> <span class="nav-text">zcout key min max</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zcard-key"><span class="nav-number">8.10.</span> <span class="nav-text">zcard key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zscore-key-element"><span class="nav-number">8.11.</span> <span class="nav-text">zscore key element</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zremrangebyrank-key-min-max"><span class="nav-number">8.12.</span> <span class="nav-text">zremrangebyrank key min max</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zremrangebyscore-key-min-max"><span class="nav-number">8.13.</span> <span class="nav-text">zremrangebyscore key min max</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash"><span class="nav-number">9.</span> <span class="nav-text">Hash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash相关命令"><span class="nav-number">10.</span> <span class="nav-text">Hash相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hset-key-field-value"><span class="nav-number">10.1.</span> <span class="nav-text">hset key field value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hget-key-field"><span class="nav-number">10.2.</span> <span class="nav-text">hget key field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hmget-key-field1-field2-…-fieldN"><span class="nav-number">10.3.</span> <span class="nav-text">hmget  key field1 field2 … fieldN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hmset-key-field1-value1-field2-value2…-fieldN-valueN"><span class="nav-number">10.4.</span> <span class="nav-text">hmset key field1 value1 field2 value2… fieldN valueN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hincrby-key-field-interger"><span class="nav-number">10.5.</span> <span class="nav-text">hincrby key field interger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexists-key-field"><span class="nav-number">10.6.</span> <span class="nav-text">hexists key field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdel-key-field"><span class="nav-number">10.7.</span> <span class="nav-text">hdel key field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hlen-key"><span class="nav-number">10.8.</span> <span class="nav-text">hlen key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hkeys-key"><span class="nav-number">10.9.</span> <span class="nav-text">hkeys key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hvals-key"><span class="nav-number">10.10.</span> <span class="nav-text">hvals key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hgetall"><span class="nav-number">10.11.</span> <span class="nav-text">hgetall</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化"><span class="nav-number">11.</span> <span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主从复制"><span class="nav-number">12.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事物"><span class="nav-number">13.</span> <span class="nav-text">事物</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅（pub-sub）"><span class="nav-number">14.</span> <span class="nav-text">发布订阅（pub/sub）</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dxer</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"smarthader"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

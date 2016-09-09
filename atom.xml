@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-07-13T06:51:54.771Z</updated>
+  <updated>2016-09-09T08:28:05.951Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -14,6 +14,45 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hbase-sql</title>
+    <link href="http://dxer.github.io/2016/09/09/hbase-sql/"/>
+    <id>http://dxer.github.io/2016/09/09/hbase-sql/</id>
+    <published>2016-09-09T02:25:38.000Z</published>
+    <updated>2016-09-09T08:28:05.951Z</updated>
+    
+    <content type="html">&lt;h3 id=&quot;hbase-sql&quot;&gt;&lt;a href=&quot;#hbase-sql&quot; class=&quot;headerlink&quot; title=&quot;hbase-sql&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/dxer/hbase-sql&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hbase-sql&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的相关操作（增删改查），从而减少代码的开发呢?&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;hbase-sql是一个基于sql语句，并将sql转化为hbase scan/put/delete操作的工具，对于开发人员，只要编写SQL语句就能实现对hbase的操作，以减少学习和开发成本。&lt;/p&gt;
+&lt;h2 id=&quot;hbase-sql原理&quot;&gt;&lt;a href=&quot;#hbase-sql原理&quot; class=&quot;headerlink&quot; title=&quot;hbase-sql原理&quot;&gt;&lt;/a&gt;hbase-sql原理&lt;/h2&gt;&lt;p&gt;将sql语句通过sql解析器进行解析，获取sql语法节点，然后转换为hbase scan/put/delete等对象，最终调用HBase原生的API进行查询操作&lt;/p&gt;
+&lt;p&gt;hbase-sql实现了使用select，del，insert完成对hbase数据库的查找，删除，插入等操作。&lt;/p&gt;
+&lt;h3 id=&quot;select-查询&quot;&gt;&lt;a href=&quot;#select-查询&quot; class=&quot;headerlink&quot; title=&quot;select 查询&quot;&gt;&lt;/a&gt;select 查询&lt;/h3&gt;&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;// 获取所有列&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// 获取rowkey为&lt;span class=&quot;number&quot;&gt;11111&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; _rowkey_=&lt;span class=&quot;number&quot;&gt;11111&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// 查询info列族中的age列&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; info.age &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; _pre_rowkey_ = &lt;span class=&quot;number&quot;&gt;11&lt;/span&gt; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; _rowkey_ &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; (&lt;span class=&quot;string&quot;&gt;&#39;1111&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;2222&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;java实现如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;HBaseSqlEngine sqlEngine  = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HBaseSqlEngineImpl();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;String sql = &lt;span class=&quot;string&quot;&gt;&quot;select * from user where _rowkey_=1111&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sqlEngine.select(sql);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;del-删除数据&quot;&gt;&lt;a href=&quot;#del-删除数据&quot; class=&quot;headerlink&quot; title=&quot;del 删除数据&quot;&gt;&lt;/a&gt;del 删除数据&lt;/h3&gt;&lt;p&gt;支持删除指定rowkey行的数据，支持删除指定行中某列族中的某个或多个列的数据&lt;/p&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;// 删除指定行数据&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; _rowkey_=&lt;span class=&quot;number&quot;&gt;1111&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// 删除指定指定行的某个列数据&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; _rowkey_ &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; (&lt;span class=&quot;string&quot;&gt;&#39;111&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;22232&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;3333&#39;&lt;/span&gt;) &lt;span class=&quot;keyword&quot;&gt;and&lt;/span&gt; _column_ &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; (&lt;span class=&quot;string&quot;&gt;&#39;info.name&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;info.age&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;java实现如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;HBaseSqlEngine sqlEngine = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HBaseSqlEngineImpl();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;String s = &lt;span class=&quot;string&quot;&gt;&quot;delete from user where _rowkey_ in (&#39;111&#39;,&#39;22232&#39;,&#39;3333&#39;) and _column_ in (&#39;info.name&#39;, &#39;info.age&#39;)&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sqlEngine.del(s);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;insert-插入数据&quot;&gt;&lt;a href=&quot;#insert-插入数据&quot; class=&quot;headerlink&quot; title=&quot;insert 插入数据&quot;&gt;&lt;/a&gt;insert 插入数据&lt;/h3&gt;&lt;p&gt;类似sql insert插入数据的方法，这里需要注意的是，需要插入rowkey，插入数据可以指定插入到某个列族中某个列。&lt;/p&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;user&lt;/span&gt; (_rowkey_, info.name, info.age) &lt;span class=&quot;keyword&quot;&gt;values&lt;/span&gt; (&lt;span class=&quot;string&quot;&gt;&#39;rk-1&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;张三&#39;&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;12&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;java实现如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;HBaseSqlEngine sqlEngine = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; HBaseSqlEngineImpl();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;String s = &lt;span class=&quot;string&quot;&gt;&quot;insert into user (_rowkey_, info.name, info.age) values (&#39;sdfdsfsd&#39;, &#39;fdsfsd&#39;, 12)&quot;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sqlEngine.insert(s);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;ps：欢迎有兴趣的朋友一起交流学习~ &amp;gt; &lt;a href=&quot;https://github.com/dxer/hbase-sql&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;传送门&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;hbase-sql&quot;&gt;&lt;a href=&quot;#hbase-sql&quot; class=&quot;headerlink&quot; title=&quot;hbase-sql&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/dxer/hbase-sql&quot;&gt;hbase-sql&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的相关操作（增删改查），从而减少代码的开发呢?&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="hbase" scheme="http://dxer.github.io/tags/hbase/"/>
+    
+      <category term="sql" scheme="http://dxer.github.io/tags/sql/"/>
+    
+  </entry>
   
   <entry>
     <title>WebDigger爬虫</title>
@@ -1508,61 +1547,6 @@
       <category term="mapreduce" scheme="http://dxer.github.io/tags/mapreduce/"/>
     
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Hadoop学习】Secondary NameNode解读</title>
-    <link href="http://dxer.github.io/2015/10/26/secondarynamenode/"/>
-    <id>http://dxer.github.io/2015/10/26/secondarynamenode/</id>
-    <published>2015-10-26T12:18:19.000Z</published>
-    <updated>2016-05-25T08:17:31.947Z</updated>
-    
-    <content type="html">&lt;p&gt;Secondary NameNode从它的名字上来看，给人的感觉是NameNode的备份。但实际上不是这样。那到底Secondary NameNode在HDFS中扮演的是什么角色呢？&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;从名字上来看Secondary NameNode与NameNode，都包含着NameNode，这两者是不是存在某种关系呢，先来看下NameNode是干什么的。&lt;/p&gt;
-&lt;h3 id=&quot;NameNode&quot;&gt;&lt;a href=&quot;#NameNode&quot; class=&quot;headerlink&quot; title=&quot;NameNode&quot;&gt;&lt;/a&gt;NameNode&lt;/h3&gt;&lt;p&gt;NameNode主要是用来保存HDFS的元数据信息，比如命名空间信息，快信息等。当它运行的时候，这些信息会保存在内存中。同时这部分信息也会持久化到磁盘上。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20151026/nn.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;fsimage:是在NameNode启动时对整个文件系统的快照&lt;/li&gt;
-&lt;li&gt;edits:在NameNode启动后，对文件系统改动序列&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;只有在NameNode重启时，edits才会合并到fsimage文件中，从而得到一个文件系统的最新快照。但是在产品集群中NameNode是很少重启的，这也意味着当NameNode运行了很长时间后，edits文件会变得很大。就会面临如下问题：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;edits文件会变的很大，怎么去管理这个文件是一个挑战&lt;/li&gt;
-&lt;li&gt;NameNode的重启会花费很长时间，因为有很多edits中改动要合并到fsimage文件上。&lt;/li&gt;
-&lt;li&gt;如果NameNode挂掉了，就会丢失了很多改动，因为此时的fsimage文件非常旧。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;这个时候Secondary NameNode就出场了，Secondary NameNode可以来帮助解决上面问题，它的职责就是用来合并NameNode的edits到fsimage中。&lt;/p&gt;
-&lt;h3 id=&quot;Secondary-NameNode&quot;&gt;&lt;a href=&quot;#Secondary-NameNode&quot; class=&quot;headerlink&quot; title=&quot;Secondary NameNode&quot;&gt;&lt;/a&gt;Secondary NameNode&lt;/h3&gt;&lt;p&gt;HDFS文件系统的写操作不是直接被修改到fsimage中，而是edits中，Secondary NameNode节点负责将两者进行整合。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20151026/checkpoint.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;checkpoint过程如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Secondary Namenode请求Namenode停止使用edits文件，暂时将新的写操作记录到一个新文件中，如edits.new。&lt;/li&gt;
-&lt;li&gt;Secondary Namenode节点从Namenode节点获取fsimage和edits文件（采用HTTP GET）&lt;/li&gt;
-&lt;li&gt;Secondary Namenode将fsimage文件载入到内存，逐一执行edits文件中的操作，创建新的fsimage文件&lt;/li&gt;
-&lt;li&gt;Secondary Namenode将新的fsimage文件发送回Namenode（使用HTTP POST）&lt;/li&gt;
-&lt;li&gt;Namenode节点将从Secondary Namenode节点接收的fsimage文件替换旧的fsimage文件，用步骤1产生的edits.new文件替换旧的edits文件（即改名）。同时更新fstime文件来记录检查点执行的时间&lt;br&gt;注：从Hadoop0.21.0开始，辅助Namenode已经放弃不用，由checkpoint节点取而代之，功能不变。新版本同时引入一种新的Namenode，名为BackupNode。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Secondary NameNode的整个目的在HDFS中提供一个Checkpoint Node，它只是NameNode的一个助手节点&lt;/p&gt;
-&lt;p&gt;现在，我们明白Secondary NameNode所做的是在文件系统这设置一个Checkpoint来帮助NameNode更好的工作；它不是取代NameNode，也不是NameNode的备份。&lt;/p&gt;
-&lt;p&gt;Secondary NameNode的检查点进程启动，是由两个配置参数控制的：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;fs.checkpoint.period，指定连续两次检查点的最大时间间隔， 默认值是1小时。&lt;/li&gt;
-&lt;li&gt;fs.checkpoint.size定义了edits日志文件的最大值，一旦超过这个值会导致强制执行检查点（即使没到检查点的最大时间间隔）。默认值是64MB。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;关于NameNode是什么时候将改动写到edit logs中的？&lt;br&gt;这个操作实际上是由DataNode的写操作触发的，当我们往DataNode写文件时，DataNode会跟NameNode通信，告诉NameNode什么文件的第几个block放在它那里，NameNode这个时候会将这些元数据信息写到edit logs文件中。&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Secondary NameNode从它的名字上来看，给人的感觉是NameNode的备份。但实际上不是这样。那到底Secondary NameNode在HDFS中扮演的是什么角色呢？&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
-    
-      <category term="hdfs" scheme="http://dxer.github.io/tags/hdfs/"/>
     
   </entry>
   

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dxer.github.io/2016/09/09/hbase-sql/</loc>
+    
+    <lastmod>2016-09-09T08:28:05.951Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dxer.github.io/tags/index.html</loc>
     
     <lastmod>2016-08-09T08:21:38.205Z</lastmod>

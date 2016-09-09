@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="redis," />
+  <meta name="keywords" content="hbase,sql," />
 
 
 
@@ -86,22 +86,16 @@
 
 
 
-<meta name="description" content="Redis主从拷贝的特点
-同一个Master可以拥有多个Slaves。
-Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；">
+<meta name="description" content="hbase-sql最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis学习 - 主从拷贝">
-<meta property="og:url" content="http://dxer.github.io/2015/05/07/redis_master_slave_copy/index.html">
+<meta property="og:title" content="hbase-sql">
+<meta property="og:url" content="http://dxer.github.io/2016/09/09/hbase-sql/index.html">
 <meta property="og:site_name" content="dxer">
-<meta property="og:description" content="Redis主从拷贝的特点
-同一个Master可以拥有多个Slaves。
-Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；">
-<meta property="og:updated_time" content="2016-04-28T10:34:17.814Z">
+<meta property="og:description" content="hbase-sql最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的">
+<meta property="og:updated_time" content="2016-09-09T08:28:05.951Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis学习 - 主从拷贝">
-<meta name="twitter:description" content="Redis主从拷贝的特点
-同一个Master可以拥有多个Slaves。
-Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&amp;gt;Slave-&amp;gt;Slave模式；">
+<meta name="twitter:title" content="hbase-sql">
+<meta name="twitter:description" content="hbase-sql最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的">
 
 
 
@@ -119,7 +113,7 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
   };
 </script>
 
-  <title> redis学习 - 主从拷贝 | dxer </title>
+  <title> hbase-sql | dxer </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +243,7 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
             
             
               
-                redis学习 - 主从拷贝
+                hbase-sql
               
             
           </h1>
@@ -261,8 +255,8 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-05-07T14:29:19+08:00" content="2015-05-07">
-              2015-05-07
+            <time itemprop="dateCreated" datetime="2016-09-09T10:25:38+08:00" content="2016-09-09">
+              2016-09-09
             </time>
           </span>
 
@@ -272,8 +266,8 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/05/07/redis_master_slave_copy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/07/redis_master_slave_copy/" itemprop="commentsCount"></span>
+                <a href="/2016/09/09/hbase-sql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/hbase-sql/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -296,25 +290,23 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
       
 
       
-        <h2 id="Redis主从拷贝的特点"><a href="#Redis主从拷贝的特点" class="headerlink" title="Redis主从拷贝的特点"></a>Redis主从拷贝的特点</h2><ol>
-<li>同一个Master可以拥有多个Slaves。</li>
-<li>Master下的Slave还可以接受同一架构中其它slave的链接与同步请求，实现数据的级联复制，即Master-&gt;Slave-&gt;Slave模式；<a id="more"></a></li>
-<li>Master以非阻塞的方式同步数据至slave，这将意味着Master会继续处理一个或多个slave的读写请求；<br>4.Slave端同步数据也可以修改为非阻塞是的方式，当slave在执行新的同步时，它仍可以用旧的数据信息来提供查询；否则，当slave与master失去联系时，slave会返回一个错误给客户端；</li>
-<li>主从复制具有可扩展性，即多个slave专门提供只读查询与数据的冗余，Master端专门提供写操作；</li>
-<li>通过配置禁用Master数据持久化机制，将其数据持久化操作交给Slaves完成，避免在Master中要有独立的进程来完成此操作。</li>
-</ol>
-<h2 id="Redis主从拷贝的过程"><a href="#Redis主从拷贝的过程" class="headerlink" title="Redis主从拷贝的过程"></a>Redis主从拷贝的过程</h2><p>slave连接上master之后，slave发送一个SYNC命令到master，master接收到命令之后，无论是第一次同步建立的连接，还是连接断开后的重新连接，master会开启BGSAVE操作，启动一个后台进程，保存一份当前master内存快照，并且开始保存从调用BGSAVE之后的所有写命令，master生成完快照之后，发送内存快照rdb文件给slave。slave接收到master发送过来的rdb文件之后，将清空所有旧数据，加载接收到的rdb文件到内存中，发送完rdb文件给slave之后，开始发送刚刚保存的写操作日志给slave，slave执行这些写操作，至此，主从数据保存一致。发送完写日志之后，master会增量发送之后的写操作给slave，使主从一致。</p>
-<blockquote>
-<p>ps: 当master和slave的连接断开时，slave可以自动重新建立连接。如果master同时收到多个slave发来的同步连接命令，只会使用启动一个进程来写内存快照，然后发送给所有的slave</p>
-</blockquote>
-<h6 id="Master-write-Slave-read机制"><a href="#Master-write-Slave-read机制" class="headerlink" title="Master write, Slave read机制"></a>Master write, Slave read机制</h6><p>redis的主从复制，通过程序实现数据的读写分离，让master负责处理些请求，slave负责处理读请求，通过扩展slave处理更多的并发请求，减轻master端的负载。</p>
-<blockquote>
-<p>ps:在程序中判断用户的读写请求，将write请求发送给master，read请求发送给slave处理</p>
-</blockquote>
-<h2 id="redis主从拷贝配置"><a href="#redis主从拷贝配置" class="headerlink" title="redis主从拷贝配置"></a>redis主从拷贝配置</h2><p>开启主从复制，最简单的方式，连接上从机redis，执行slaveof &lt;主机host&gt; &lt;主机端口&gt;，另外也可以在从机的配置文件中加入slaveof &lt;主机host&gt; &lt;主机端口&gt;，这样从机启动的时候，就会自动连接主机，并且同步数据。</p>
-<blockquote>
-<p>slaveof 192.168.100.126 6379 # 配置主机信息<br>masterauth <master-password> # 如果主机设置了密码，配置密码<br>slave-serve-stale-data yes # 配置当从机正在和主机进行同步的时候是否响应，如果配置是，有可能客户端会读到旧数据，如果配置否，当请求读数据的时候，将会报错SYNC with master in progress<br>slave-read-only yes # 从机是否只读。这边设置可写，不会同步到主机，<br>repl-ping-slave-period 10 # 从机发送ping命令到主机的间隔时间。<br>repl-timeout 60 # 主机响应超时时间，这个包括传输超时，IO超时，ping超时，注意这边时间必须大于上面的间隔时间，要不然会一直报超时错误。<br>repl-disable-tcp-nodelay no # 是否禁用TCP NODELAY。官方对这个配置用法的建议是：<br># By default we optimize for low latency, but in very high traffic conditions<br># or when the master and slaves are many hops away, turning this to “yes” may<br># be a good idea.<br># 默认情况下，我们优化目的是为了低延迟，但是在高传输条件或者主从机分布在路由很多跳之外的，建议禁用掉tcp-nodelay。<br>slave-priority 100 # 如果master不能再正常工作，那么会在多个slave中，选择优先值最小的一个slave提升为master，优先值为0表示不能提升为master</master-password></p>
-</blockquote>
+        <h3 id="hbase-sql"><a href="#hbase-sql" class="headerlink" title="hbase-sql"></a><a href="https://github.com/dxer/hbase-sql" target="_blank" rel="external">hbase-sql</a></h3><p>最近在做一个hbase proxy的的项目，字面意思是hbase代理，其实就是将对hbase数据操作的都经过这个系统进行转发，实现对hbase的代理，由这个系统提供接口对外，该项目中涉及了很多对HBase进行查询和插入的操作，但是随着需求不但增加，每新增一个需求，就要根据需求使用HBase API来开发来完成相应功能的开发。有没有一种办法只是通过配置的方法就可以实现对hbase的相关操作（增删改查），从而减少代码的开发呢?</p>
+<a id="more"></a>
+<p>hbase-sql是一个基于sql语句，并将sql转化为hbase scan/put/delete操作的工具，对于开发人员，只要编写SQL语句就能实现对hbase的操作，以减少学习和开发成本。</p>
+<h2 id="hbase-sql原理"><a href="#hbase-sql原理" class="headerlink" title="hbase-sql原理"></a>hbase-sql原理</h2><p>将sql语句通过sql解析器进行解析，获取sql语法节点，然后转换为hbase scan/put/delete等对象，最终调用HBase原生的API进行查询操作</p>
+<p>hbase-sql实现了使用select，del，insert完成对hbase数据库的查找，删除，插入等操作。</p>
+<h3 id="select-查询"><a href="#select-查询" class="headerlink" title="select 查询"></a>select 查询</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 获取所有列</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span></span><br><span class="line">// 获取rowkey为<span class="number">11111</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> _rowkey_=<span class="number">11111</span></span><br><span class="line">// 查询info列族中的age列</span><br><span class="line"><span class="keyword">select</span> info.age <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> _pre_rowkey_ = <span class="number">11</span> </span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> _rowkey_ <span class="keyword">in</span> (<span class="string">'1111'</span>, <span class="string">'2222'</span>)</span><br></pre></td></tr></table></figure>
+<p>java实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HBaseSqlEngine sqlEngine  = <span class="keyword">new</span> HBaseSqlEngineImpl();</span><br><span class="line">String sql = <span class="string">"select * from user where _rowkey_=1111"</span>;</span><br><span class="line"></span><br><span class="line">sqlEngine.select(sql);</span><br></pre></td></tr></table></figure>
+<h3 id="del-删除数据"><a href="#del-删除数据" class="headerlink" title="del 删除数据"></a>del 删除数据</h3><p>支持删除指定rowkey行的数据，支持删除指定行中某列族中的某个或多个列的数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 删除指定行数据</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> _rowkey_=<span class="number">1111</span></span><br><span class="line">// 删除指定指定行的某个列数据</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> _rowkey_ <span class="keyword">in</span> (<span class="string">'111'</span>,<span class="string">'22232'</span>,<span class="string">'3333'</span>) <span class="keyword">and</span> _column_ <span class="keyword">in</span> (<span class="string">'info.name'</span>, <span class="string">'info.age'</span>)</span><br></pre></td></tr></table></figure>
+<p>java实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HBaseSqlEngine sqlEngine = <span class="keyword">new</span> HBaseSqlEngineImpl();</span><br><span class="line">String s = <span class="string">"delete from user where _rowkey_ in ('111','22232','3333') and _column_ in ('info.name', 'info.age')"</span>;</span><br><span class="line">sqlEngine.del(s);</span><br></pre></td></tr></table></figure>
+<h3 id="insert-插入数据"><a href="#insert-插入数据" class="headerlink" title="insert 插入数据"></a>insert 插入数据</h3><p>类似sql insert插入数据的方法，这里需要注意的是，需要插入rowkey，插入数据可以指定插入到某个列族中某个列。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span> (_rowkey_, info.name, info.age) <span class="keyword">values</span> (<span class="string">'rk-1'</span>, <span class="string">'张三'</span>, <span class="number">12</span>)</span><br></pre></td></tr></table></figure>
+<p>java实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HBaseSqlEngine sqlEngine = <span class="keyword">new</span> HBaseSqlEngineImpl();</span><br><span class="line">String s = <span class="string">"insert into user (_rowkey_, info.name, info.age) values ('sdfdsfsd', 'fdsfsd', 12)"</span>;</span><br><span class="line">sqlEngine.insert(s);</span><br></pre></td></tr></table></figure>
+<p>ps：欢迎有兴趣的朋友一起交流学习~ &gt; <a href="https://github.com/dxer/hbase-sql" target="_blank" rel="external">传送门</a></p>
 
       
     </div>
@@ -336,7 +328,9 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
       
         <div class="post-tags">
           
-            <a href="/tags/redis/" rel="tag">#redis</a>
+            <a href="/tags/hbase/" rel="tag">#hbase</a>
+          
+            <a href="/tags/sql/" rel="tag">#sql</a>
           
         </div>
       
@@ -345,17 +339,13 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/17/cookie_and_session/" rel="next" title="cookie与session">
-                <i class="fa fa-chevron-left"></i> cookie与session
+              <a href="/2016/07/13/WebDigger/" rel="next" title="WebDigger爬虫">
+                <i class="fa fa-chevron-left"></i> WebDigger爬虫
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/05/07/redis-persistence/" rel="prev" title="redis学习 - 数据持久化">
-                redis学习 - 数据持久化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -381,8 +371,8 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/05/07/redis_master_slave_copy/"
-           data-title="redis学习 - 主从拷贝" data-url="http://dxer.github.io/2015/05/07/redis_master_slave_copy/">
+      <div class="ds-thread" data-thread-key="2016/09/09/hbase-sql/"
+           data-title="hbase-sql" data-url="http://dxer.github.io/2016/09/09/hbase-sql/">
       </div>
     
   </div>
@@ -484,7 +474,7 @@ Master下的Slave还可以接受同一架构中其它slave的链接与同步请�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis主从拷贝的特点"><span class="nav-number">1.</span> <span class="nav-text">Redis主从拷贝的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis主从拷贝的过程"><span class="nav-number">2.</span> <span class="nav-text">Redis主从拷贝的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Master-write-Slave-read机制"><span class="nav-number">2.0.0.0.1.</span> <span class="nav-text">Master write, Slave read机制</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis主从拷贝配置"><span class="nav-number">3.</span> <span class="nav-text">redis主从拷贝配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#hbase-sql"><span class="nav-number">1.</span> <span class="nav-text">hbase-sql</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hbase-sql原理"><span class="nav-number"></span> <span class="nav-text">hbase-sql原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select-查询"><span class="nav-number">1.</span> <span class="nav-text">select 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#del-删除数据"><span class="nav-number">2.</span> <span class="nav-text">del 删除数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert-插入数据"><span class="nav-number">3.</span> <span class="nav-text">insert 插入数据</span></a></li></ol></div>
             
           </div>
         </section>

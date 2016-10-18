@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-10-18T08:25:27.195Z</updated>
+  <updated>2016-10-18T08:30:21.963Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hive入门</title>
+    <title>如何在Hive构造Dual表</title>
     <link href="http://dxer.github.io/2016/10/18/hive_dual/"/>
     <id>http://dxer.github.io/2016/10/18/hive_dual/</id>
     <published>2016-10-18T08:21:20.000Z</published>
-    <updated>2016-10-18T08:25:27.195Z</updated>
+    <updated>2016-10-18T08:30:21.963Z</updated>
     
     <content type="html">&lt;p&gt;dual表的概念来自oracle，数据库建立时即与数据字典一起初始化，该表只有一个varchar2类型名为dummy的字段，表数据只有一行“X”，用来查询一些系统信息，如select sysdate from dual; select user from dual;select seq.nextval from dual等。&lt;br&gt;为了能在hive中测试一些时间、数学、聚合函数，可以仿照oracle创建dual表。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ol&gt;

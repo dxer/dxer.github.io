@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://dxer.github.io/"/>
-  <updated>2016-10-18T08:30:21.963Z</updated>
+  <updated>2016-10-18T09:00:16.061Z</updated>
   <id>http://dxer.github.io/</id>
   
   <author>
@@ -16,11 +16,72 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Hive和HBase整合</title>
+    <link href="http://dxer.github.io/2016/10/18/hive&hbase/"/>
+    <id>http://dxer.github.io/2016/10/18/hive&hbase/</id>
+    <published>2016-10-18T08:33:20.000Z</published>
+    <updated>2016-10-18T09:00:16.061Z</updated>
+    
+    <content type="html">&lt;p&gt;Hive和Hbase有各自不同的特征：hive是高延迟、结构化和面向分析的，hbase是低延迟、非结构化和面向编程的。Hive数据仓库在hadoop上是高延迟的。Hive集成Hbase就是为了使用hbase的一些特性。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Hive继承HBase可以有效利用HBase数据库的存储特性，如行更新和列索引等。在集成的过程中注意维持HBase jar包的一致性。Hive集成HBase需要在Hive表和HBase表之间建立映射关系，也就是Hive表的列和列类型与HBase表的列族及列限定词建立关联。每一个在Hive表中的域都存在与HBase中，而在Hive表中不需要包含所有HBase中的列。HBase中的rowkey对应到Hive中为选择一个域使用&lt;code&gt;:key&lt;/code&gt;来对应，列族(cf:)映射到Hive中的其他所有域，列为(cf:cq)。&lt;/p&gt;
+&lt;p&gt;下面来简单实战下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;创建HBase表&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;create &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&amp;#123;NAME =&amp;gt; &lt;span class=&quot;string&quot;&gt;&#39;info&#39;&lt;/span&gt;,VERSIONS =&amp;gt; 1&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;向user表中插入一些数据&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:name&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;zhangsan&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:age&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;25&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;2&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:name&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;lisi&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;2&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:age&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;22&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;3&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:name&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;wangswu&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;put &lt;span class=&quot;string&quot;&gt;&#39;user1&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;3&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;info:age&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;21&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用scan命令来查看下user表中的数据&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;scan &lt;span class=&quot;string&quot;&gt;&#39;user&#39;&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;结果如下&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ROW                                                   COLUMN+CELL&lt;br&gt;1                                                    column=info:age, timestamp=1476773051604, value=25&lt;br&gt;1                                                    column=info:name, timestamp=1476773046344, value=zhangsan&lt;br&gt;2                                                    column=info:age, timestamp=1476773051685, value=22&lt;br&gt;2                                                    column=info:name, timestamp=1476773051661, value=lisi&lt;br&gt;3                                                    column=info:age, timestamp=1476773052632, value=21&lt;br&gt;3                                                    column=info:name, timestamp=1476773051709, value=wangswu&lt;br&gt;3 row(s) in 0.0610 seconds&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建Hive中与HBase中对应的表&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;SET hbase.zookeeper.quorum=hadoop001;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SET zookeeper.znode.parent=/hbase;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ADD jar /opt/bigdata/hive-1.2.1-bin/lib/hive-hbase-handler-1.2.1.jar;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// user1表&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;CREATE EXTERNAL TABLE user1 (&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rowkey string,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;info map&amp;lt;STRING,STRING&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;) STORED BY &lt;span class=&quot;string&quot;&gt;&#39;org.apache.hadoop.hive.hbase.HBaseStorageHandler&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;WITH SERDEPROPERTIES (&lt;span class=&quot;string&quot;&gt;&quot;hbase.columns.mapping&quot;&lt;/span&gt; = &lt;span class=&quot;string&quot;&gt;&quot;:key,info:&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;TBLPROPERTIES (&lt;span class=&quot;string&quot;&gt;&quot;hbase.table.name&quot;&lt;/span&gt; = &lt;span class=&quot;string&quot;&gt;&quot;user1&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// user2表&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;CREATE EXTERNAL TABLE user2 (&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rowkey string,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;name string,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;age int&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;) STORED BY &lt;span class=&quot;string&quot;&gt;&#39;org.apache.hadoop.hive.hbase.HBaseStorageHandler&#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;WITH SERDEPROPERTIES (&lt;span class=&quot;string&quot;&gt;&quot;hbase.columns.mapping&quot;&lt;/span&gt; = &lt;span class=&quot;string&quot;&gt;&quot;:key,info:name,info:age&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;TBLPROPERTIES (&lt;span class=&quot;string&quot;&gt;&quot;hbase.table.name&quot;&lt;/span&gt; = &lt;span class=&quot;string&quot;&gt;&quot;user2&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;查询user1，user2表数据&lt;/p&gt;
+&lt;p&gt;查询user1表数据&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;select * from user1;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;结果如下&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;OK&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1       &amp;#123;&quot;age&quot;:&quot;25&quot;,&quot;name&quot;:&quot;zhangsan&quot;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2       &amp;#123;&quot;age&quot;:&quot;22&quot;,&quot;name&quot;:&quot;lisi&quot;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3       &amp;#123;&quot;age&quot;:&quot;21&quot;,&quot;name&quot;:&quot;wangswu&quot;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Time taken: 0.467 seconds, Fetched: 3 row(s)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;查询user2表数据&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;select * from user2;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;结果如下:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;OK&lt;br&gt;1       zhangsan        25&lt;br&gt;2       lisi    22&lt;br&gt;3       wangswu 21&lt;br&gt;Time taken: 0.087 seconds, Fetched: 3 row(s)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;hive插入数据到hbase&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;INSERT INTO TABLE user1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SELECT &lt;span class=&quot;string&quot;&gt;&#39;4&#39;&lt;/span&gt; AS rowkey,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;map(&lt;span class=&quot;string&quot;&gt;&#39;name&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;lijin&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;age&#39;&lt;/span&gt;,&lt;span class=&quot;string&quot;&gt;&#39;22&#39;&lt;/span&gt;) AS info&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;from dual &lt;span class=&quot;built_in&quot;&gt;limit&lt;/span&gt; 1;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;https://dxer.github.io/2016/10/18/hive_dual/&quot;&gt;在Hive中构造dual表可以参考这里&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Hive和Hbase有各自不同的特征：hive是高延迟、结构化和面向分析的，hbase是低延迟、非结构化和面向编程的。Hive数据仓库在hadoop上是高延迟的。Hive集成Hbase就是为了使用hbase的一些特性。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
+    
+      <category term="hbase" scheme="http://dxer.github.io/tags/hbase/"/>
+    
+      <category term="hive" scheme="http://dxer.github.io/tags/hive/"/>
+    
+  </entry>
+  
+  <entry>
     <title>如何在Hive构造Dual表</title>
     <link href="http://dxer.github.io/2016/10/18/hive_dual/"/>
     <id>http://dxer.github.io/2016/10/18/hive_dual/</id>
     <published>2016-10-18T08:21:20.000Z</published>
-    <updated>2016-10-18T08:30:21.963Z</updated>
+    <updated>2016-10-18T08:31:55.725Z</updated>
     
     <content type="html">&lt;p&gt;dual表的概念来自oracle，数据库建立时即与数据字典一起初始化，该表只有一个varchar2类型名为dummy的字段，表数据只有一行“X”，用来查询一些系统信息，如select sysdate from dual; select user from dual;select seq.nextval from dual等。&lt;br&gt;为了能在hive中测试一些时间、数学、聚合函数，可以仿照oracle创建dual表。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -33,7 +94,7 @@
 &lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;li&gt;将dual.txt文件中数据加载到hive中的dual表&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;hive -e &amp;quot;load data local inpath &amp;#39;/home/hadoop/dual.txt&amp;#39; overwrite into table dual&amp;quot;&lt;/code&gt;&lt;br&gt;或者在hive中，直接执行&lt;br&gt;&lt;code&gt;load data local inpath &amp;#39;/home/hadoop/dual.txt&amp;#39; overwrite into table dual;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;直接在linux命令行下执行：&lt;br&gt;&lt;code&gt;hive -e &amp;quot;load data local inpath &amp;#39;/home/hadoop/dual.txt&amp;#39; overwrite into table dual&amp;quot;&lt;/code&gt;&lt;br&gt;或者在hive中，直接执行&lt;br&gt;&lt;code&gt;load data local inpath &amp;#39;/home/hadoop/dual.txt&amp;#39; overwrite into table dual;&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;li&gt;执行完上面命令之后，回到hive中，尝试下&lt;blockquote&gt;
@@ -1516,48 +1577,6 @@
       <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
     
       <category term="YAR" scheme="http://dxer.github.io/tags/YAR/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Hadoop学习】Hadoop2.0高可用性</title>
-    <link href="http://dxer.github.io/2015/11/03/hadoop_ha/"/>
-    <id>http://dxer.github.io/2015/11/03/hadoop_ha/</id>
-    <published>2015-11-03T06:38:19.000Z</published>
-    <updated>2016-05-25T06:53:29.068Z</updated>
-    
-    <content type="html">&lt;p&gt;在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;在Hadoop2.0中解决了这个问题，在Hadoop2.0中NameNode不再只是一个，可以有多个。每一个都具有相同的职能，一个NameNode是active状态，一个是standby状态。当集群在运行的时候，只有active状态的NameNode是正常工作的，standBy状态的NameNode是处于待命状态，时刻同步active状态NameNode的数据。一旦active状态的NameNode不能工作了，通过手工或者自动切换，standby状态的NameNode就可以转变为active状态了，这样集群还是正常工作了，这样集群就具有高可用性了。&lt;/p&gt;
-&lt;p&gt;Hadoop2.0的HA机制官方介绍了2中方式：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;NFS（Network File System）&lt;/li&gt;
-&lt;li&gt;QJM（Quorum Journal Manager）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;基本原理&quot;&gt;&lt;a href=&quot;#基本原理&quot; class=&quot;headerlink&quot; title=&quot;基本原理&quot;&gt;&lt;/a&gt;基本原理&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/HDFS_HA_arch.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;Hadoop2.0中有两个NameNode，一个是active状态NameNode，一个是standby状态NameNode。两者的状态是可以切换的，但是不能同时都是active状态，最多只有一个active状态。只有active状态的NameNode对外提供服务，standby状态的NameNode不对外服务。active状态的NameNode和standby状态的NameNode之间通过NFS或者JN（journalnode，QJM方式）来同步数据。&lt;/p&gt;
-&lt;p&gt;active状态的NameNode会把最近的操作记录写到本地的edits文件中（edits file），并传输到NFS或者JN中。standby状态的NameNode定期检查，从NFS或者JN中把最近的edit文件读过来，然后把edits文件和fsimage文件合并成一个新的fsimage，合并完成之后会通知active状态NameNode来获取新的fsiamge，active状态NameNode获得到这个新的fsimage文件后，替换掉原来旧的fsimage文件。&lt;/p&gt;
-&lt;h3 id=&quot;NFS方式&quot;&gt;&lt;a href=&quot;#NFS方式&quot; class=&quot;headerlink&quot; title=&quot;NFS方式&quot;&gt;&lt;/a&gt;NFS方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_nfs.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;NFS作为active NameNode和standby NameNode之间数据共享的存储，active状态的 NameNode会把最近的edits文件写到NFS，而standby状态的NameNode从NFS中读取edits文件。这个方式的缺点就是，如果active状态的NameNode或standby状态的NameNode有一个和NFS之间网络有问题是，就会造成它们之间数据的同步出现问题。&lt;/p&gt;
-&lt;h3 id=&quot;QJM方式&quot;&gt;&lt;a href=&quot;#QJM方式&quot; class=&quot;headerlink&quot; title=&quot;QJM方式&quot;&gt;&lt;/a&gt;QJM方式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha_qjm.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;QJM方式可以解决NFS容错机制不足的问题，active状态NameNode和standby状态NameNode之间通过一组journalnode（奇数个，2n+1）来共享数据，active状态NameNode把最近的edits文件写到这组journalnode上，只要有n+1个写入成功就认为这次写入操作是成功的，然后standby状态NameNode就可以从journalnode上读取数据了。QJM方式有容错机制，可以容忍n个journalnode的失败&lt;/p&gt;
-&lt;h3 id=&quot;NameNode故障切换&quot;&gt;&lt;a href=&quot;#NameNode故障切换&quot; class=&quot;headerlink&quot; title=&quot;NameNode故障切换&quot;&gt;&lt;/a&gt;NameNode故障切换&lt;/h3&gt;&lt;p&gt;active和standby状态NameNode可以随时切换，当active挂掉后，可以把standby切换成active状态。&lt;br&gt;故障切换可以通过人工切换和自动切换方式完成。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;人工切换是通过HA管理的命令来改变NameNode的状态&lt;/li&gt;
-&lt;li&gt;自动切换是在active状态NameNode挂掉的时候，standby状态NameNode自动切换成active状态，取代原来的active状态NameNode成为新的active状态NameNode，确保HDFS继续正常工作&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/pic/20151103/ha.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;自动切换需要配置zookeeper。集群中两个NameNode都在zookeeper中注册，当active状态的NameNode出现故障时，zookeeper能检查到这种情况，它就会自动把standby状态的NameNode切换为active状态。&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在Hadoop2.0之前，只有一个NameNode，虽然有SecondaryNameNode（不能迅速切换，需要花费一定时间恢复），还是存在单点问题。NameNode在Hadoop中就好比是人的心脏，不能停止工作。如果NameNode数据丢失或者不能工作，那整个集群就不能恢复了。&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="hadoop" scheme="http://dxer.github.io/tags/hadoop/"/>
-    
-      <category term="bigdata" scheme="http://dxer.github.io/tags/bigdata/"/>
-    
-      <category term="ha" scheme="http://dxer.github.io/tags/ha/"/>
     
   </entry>
   
